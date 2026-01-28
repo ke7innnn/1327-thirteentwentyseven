@@ -136,7 +136,7 @@ function ServiceCard({ service, index }: { service: any, index: number }) {
                 <h3 className="text-3xl md:text-5xl font-heading text-white mb-4 uppercase leading-none">
                     {service.title}
                 </h3>
-                <p className="text-gray-200 font-light text-lg opacity-0 transform translate-y-4 transition-all duration-500 group-hover:opacity-100 group-hover:translate-y-0">
+                <p className="text-gray-200 font-light text-lg transition-colors duration-500">
                     {service.description}
                 </p>
             </div>

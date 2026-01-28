@@ -52,10 +52,10 @@ export default function AboutUs() {
                 style={{ y: yExit, scale: scaleExit, opacity: opacityExit, filter: filterTemplateExit }}
                 className="container mx-auto px-6 relative z-10"
             >
-                <div className="flex flex-col md:flex-row items-start gap-12 md:gap-24">
+                <div className="flex flex-col md:flex-row items-start gap-12 md:gap-24 relative">
 
-                    {/* Text Column (Left) */}
-                    <div className="w-full md:w-1/2 sticky top-40 self-start z-20">
+                    {/* Text Column (Left) - Text Top on Mobile */}
+                    <div className="w-full md:w-1/2 relative md:sticky md:top-40 self-start z-30">
                         <h2 className="text-7xl md:text-9xl font-thin tracking-tighter mb-4 leading-[0.85] font-heading origin-left flex flex-col">
                             <motion.span
                                 style={{ x: xLeft, filter: `blur(${blurValue}px)`, opacity: opacityTitle }}
