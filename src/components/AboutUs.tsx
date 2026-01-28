@@ -58,13 +58,13 @@ export default function AboutUs() {
                     <div className="w-full md:w-1/2 sticky top-40 self-start z-20">
                         <h2 className="text-7xl md:text-9xl font-thin tracking-tighter mb-4 leading-[0.85] font-heading origin-left flex flex-col">
                             <motion.span
-                                style={{ x: xLeft, filter: `blur(${blur}px)`, opacity: opacityTitle }}
+                                style={{ x: xLeft, filter: `blur(${blurValue}px)`, opacity: opacityTitle }}
                                 className="block"
                             >
                                 ABOUT
                             </motion.span>
                             <motion.span
-                                style={{ x: xRight, filter: `blur(${blur}px)`, opacity: opacityTitle }}
+                                style={{ x: xRight, filter: `blur(${blurValue}px)`, opacity: opacityTitle }}
                                 className="block text-[#fdfbcf] font-heading"
                             >
                                 US

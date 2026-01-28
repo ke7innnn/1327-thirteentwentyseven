@@ -1,11 +1,11 @@
 "use client";
 
 import { useTransform, motion, MotionValue } from "framer-motion";
-import { useScrollProgress } from "./ScrollyCanvas";
+import { useMotionValue } from "framer-motion";
 import clsx from "clsx";
 
 export default function Overlay() {
-    const renderIndex = useScrollProgress();
+    const renderIndex = useMotionValue(0);
 
     return (
         <div className="absolute inset-0 pointer-events-none z-10 w-full h-full">
