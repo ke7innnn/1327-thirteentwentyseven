@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+:root {
+  /* Luxury Green Palette - User Requested "Dominant Green" */
+  --background: #105233;
+  /* Deep Forest Green */
+  --foreground: #F2F9F4;
+  /* Soft White */
+
+  /* Green Theme */
+  --color-accent: #105233;
+  /* Brand Green */
+  --color-brand: #105233;
+  --color-highlight: #C9FF23;
+  /* Acid Green for contrast */
+
+  --font-heading: var(--font-sugo);
+  --font-body: 'Calibri', 'Carlito', sans-serif;
+}
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  /* Accent Colors */
+  --color-accent: var(--color-accent);
+  --color-brand: var(--color-brand);
+  --color-highlight: var(--color-highlight);
+
+  --font-heading: var(--font-heading);
+  --font-body: var(--font-body);
+
+  --font-sans: var(--font-body);
+  /* Default sans to body font */
+
+
+  /* Minimal reset */
+  --animate-fade-in: fade-in 0.5s ease-out;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground font-body;
+    background: radial-gradient(circle at 50% 0%, #176B45 0%, #105233 75%, #0B3D26 100%);
+    background-attachment: fixed;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading;
+  }
+}
+
+/* Lenis Recommended CSS */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+@layer utilities {
+  .pause {
+    animation-play-state: paused;
+  }
+}
