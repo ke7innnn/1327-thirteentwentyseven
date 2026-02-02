@@ -8,27 +8,27 @@ const services = [
     {
         title: "Relaxed Fit T-shirts",
         description: "Relaxed Fit t-shirts to give a relaxed vibe and feel 240-270 gsm. Embroidery looks richer in oversized T-shirts.",
-        image: "/servicepics/oversized.jpg"
+        image: "/servicepics/newovwersized.jpg"
     },
     {
         title: "Polo T-shirts",
         description: "Polo neck T-shirts combines the comfort of a T-shirt with a slightly dressier look, 190-200 gsm.",
-        image: "/servicepics/polo.jpg"
+        image: "/servicepics/newpolo.png"
     },
     {
         title: "Aprons",
         description: "In aprons we can customise cut, shape, stitching and embroidery as per requirement. For aprons embroidery is preferred over print.",
-        image: "/servicepics/appron.jpg"
+        image: "/servicepics/apron.png"
     },
     {
         title: "Straight Fit T-shirts",
         description: "The Straight fit T-shirt is our regular everyday T-shirt. Light weight, breathable, nothing too fancy, 140-180gsm.",
-        image: "/servicepics/straightfit.jpg"
+        image: "/servicepics/straightfit.png"
     },
     {
         title: "Caps",
         description: "to match your brand’s style. Customisation : Embroidery",
-        image: "/servicepics/cap.png"
+        image: "/servicepics/newcap.png"
     },
 ];
 

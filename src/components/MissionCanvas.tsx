@@ -30,7 +30,7 @@ export default function MissionCanvas({
                     const img = new Image();
                     // Assumes format ezgif-frame-001.jpg etc. as seen in ls output
                     const p = i.toString().padStart(3, "0");
-                    img.src = `/newvid/ezgif-frame-${p}.jpg`;
+                    img.src = `/missiovid/ezgif-frame-${p}.jpg`;
                     img.onload = () => resolve();
                     img.onerror = () => {
                         console.error(`Failed to load frame ${i}`);

@@ -75,7 +75,7 @@ export default function AboutUs() {
                             className="flex flex-col gap-6"
                         >
                             <ScrollRevealParagraph>
-                                If you grew up watching <span className="text-white font-medium" style={{ fontFamily: "var(--font-carltine)" }}>Fast and Furious</span>,
+                                If you grew up watching <span className="text-white font-medium" style={{ fontFamily: '"Times New Roman", serif' }}>Fast and Furious</span>,
                                 then you know that it's more than just a
                                 number—it's a symbol of community, trust,
                                 respect, and love amongst friends who
@@ -155,7 +155,7 @@ function ScrollRevealParagraph({ children, delay = 0 }: { children: React.ReactN
     return (
         <motion.p
             ref={ref}
-            style={{ y, opacity, fontFamily: "var(--font-carltine)" }}
+            style={{ y, opacity, fontFamily: '"Times New Roman", serif' }}
             className="text-xl md:text-2xl font-light leading-relaxed text-[#E3FCEC]"
         >
             {children}

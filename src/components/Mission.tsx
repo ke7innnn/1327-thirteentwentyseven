@@ -8,7 +8,7 @@ export default function Mission() {
     return (
         <section id="mission" className="relative z-10 bg-transparent text-white border-b-2 border-white/20 p-0">
             {/* Increased scrollDuration to 300vh for a longer scroll experience */}
-            <MissionCanvas numFrames={124} scrollDuration={300}>
+            <MissionCanvas numFrames={164} scrollDuration={300}>
                 {(progress: any) => <Content scrollProgress={progress} />}
             </MissionCanvas>
         </section>
@@ -77,7 +77,7 @@ function Word({ word, index, scrollProgress, totalWords }: { word: string, index
     return (
         <span className="relative inline-block">
             <motion.span
-                style={{ opacity, y, color, fontFamily: "var(--font-carltine)" }}
+                style={{ opacity, y, color, fontFamily: '"Times New Roman", serif' }}
                 className="text-xl md:text-3xl lg:text-4xl font-light tracking-tight inline-block"
             >
                 {word}
