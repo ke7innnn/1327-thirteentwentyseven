@@ -35,8 +35,11 @@ const abril = Abril_Fatface({
 });
 
 export const metadata: Metadata = {
-  title: "Green Luxury Fashion",
+  title: "1327",
   description: "High-end editorial fashion experience.",
+  icons: {
+    icon: "/logo/1327_logo_v2.png",
+  }
 };
 
 export default function RootLayout({
