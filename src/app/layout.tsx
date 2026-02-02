@@ -7,6 +7,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 import Header from "@/components/Header";
 import CinematicGrain from "@/components/ui/CinematicGrain";
 import CustomCursor from "@/components/ui/CustomCursor";
+import DynamicTitle from "@/components/DynamicTitle";
 
 const sugo = localFont({
   src: "../../public/fonts/Sugo-Pro-Display-Regular-trial.ttf",
@@ -61,6 +62,7 @@ export default function RootLayout({
         <SmoothScroll>
           <CinematicGrain />
           <Header />
+          <DynamicTitle />
           {children}
         </SmoothScroll>
       </body>
