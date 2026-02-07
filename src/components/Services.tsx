@@ -13,7 +13,7 @@ const services = [
     {
         title: "Polo T-shirts",
         description: "Polo neck T-shirts combines the comfort of a T-shirt with a slightly dressier look, 190-200 gsm.",
-        image: "/servicepics/newpolo.png"
+        image: "/new%20polo/Gemini_Generated_Image_ehjvfxehjvfxehjv.png"
     },
     {
         title: "Aprons",
