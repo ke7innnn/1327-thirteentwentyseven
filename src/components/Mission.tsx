@@ -26,7 +26,7 @@ function Content({ scrollProgress }: { scrollProgress: any }) {
         <div className="container mx-auto px-6 h-full flex items-center relative z-10">
             {/* Left aligned container occupying partial width (45%) */}
             {/* Added pt-40 to clear header and max-w-xl to ensure text wraps nicely within view */}
-            <div className="w-full md:w-1/2 lg:w-[45%] flex flex-col justify-center h-full pt-40 pb-20">
+            <div className="w-full md:w-1/2 lg:w-[45%] flex flex-col justify-center h-full pt-24 pb-20">
                 <motion.h2
                     style={{ y: yTitle, opacity: opacityTitle, fontFamily: "var(--font-anton)" }}
                     className="text-6xl md:text-8xl font-bold uppercase text-[#fdfbcf] mb-12 font-heading tracking-[0.1em] text-left"
