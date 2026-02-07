@@ -60,7 +60,7 @@ export default function RootLayout({
         )}
       >
         <SmoothScroll>
-          {/* <CinematicGrain /> */}
+          <CinematicGrain />
           <Header />
           <DynamicTitle />
           {children}

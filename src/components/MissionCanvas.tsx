@@ -99,9 +99,25 @@ export default function MissionCanvas({
         // ctx.fillRect(0, 0, width, height); // specific fill not needed if transparent
 
         // Draw image
-        ctx.filter = "none"; // Ensure no previous filter persists
+        // ctx.filter = "none"; // REMOVED: Restore filters
         ctx.globalCompositeOperation = "source-over";
         ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+
+        // Stylish Gradient Overlay - RESTORED
+        const gradient = ctx.createLinearGradient(0, 0, 0, height);
+        gradient.addColorStop(0, "rgba(10, 31, 10, 0.8)");   // Darker top for header
+        gradient.addColorStop(0.3, "rgba(10, 31, 10, 0.4)"); // Lighter upper-mid
+        gradient.addColorStop(0.7, "rgba(10, 31, 10, 0.4)"); // Lighter lower-mid
+        gradient.addColorStop(1, "rgba(10, 31, 10, 0.9)");   // Dark base
+
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, width, height);
+
+        // Add a subtle color tint to unify with brand - RESTORED
+        ctx.fillStyle = "rgba(201, 255, 35, 0.05)"; // Very faint brand green tint
+        ctx.globalCompositeOperation = "overlay";
+        ctx.fillRect(0, 0, width, height);
+        ctx.globalCompositeOperation = "source-over"; // Reset
 
     };
 

@@ -80,8 +80,4 @@ html.lenis body {
   .pause {
     animation-play-state: paused;
   }
-
-  canvas {
-    filter: none !important;
-  }
 }
