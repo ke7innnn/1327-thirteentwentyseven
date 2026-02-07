@@ -36,10 +36,10 @@ export default function AboutUs() {
     // Exit Animation: "Lingering Parallax"
     // Content moves DOWN (positive Y) as user scrolls out (0.8 -> 1)
     // This makes it appear to move slower than the scroll, staying "behind" the incoming Services section
-    const yExit = useTransform(scrollYProgress, [0.7, 1], [0, 300]);
-    const scaleExit = useTransform(scrollYProgress, [0.7, 1], [1, 0.8]);
-    const opacityExit = useTransform(scrollYProgress, [0.7, 1], [1, 0]);
-    const blurExit = useTransform(scrollYProgress, [0.7, 1], [0, 20]);
+    const yExit = useTransform(scrollYProgress, [0.9, 1], [0, 300]);
+    const scaleExit = useTransform(scrollYProgress, [0.9, 1], [1, 0.95]); // Reduced scale down
+    const opacityExit = useTransform(scrollYProgress, [0.9, 1], [1, 0]);
+    const blurExit = useTransform(scrollYProgress, [0.9, 1], [0, 5]); // Reduced blur
     const filterTemplateExit = useTransform(blurExit, (v) => `blur(${v}px)`);
 
     return (
@@ -52,7 +52,7 @@ export default function AboutUs() {
                 style={{ y: yExit, scale: scaleExit, opacity: opacityExit, filter: filterTemplateExit }}
                 className="container mx-auto px-6 relative z-10"
             >
-                <div className="flex flex-col md:flex-row items-start gap-12 md:gap-24 relative">
+                <div className="flex flex-col md:flex-row items-start gap-40 md:gap-24 relative">
 
                     {/* Text Column (Left) - Text Top on Mobile */}
                     <div className="w-full md:w-1/2 relative md:sticky md:top-40 self-start z-30">

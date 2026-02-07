@@ -41,7 +41,8 @@ export default function Services() {
     // Horizontal Scroll Range
     // Tuned to -85% to ensure the last card (now 5 items) comes fully into view
     // Shifted start to 0.1 to let the title "be there" before movement starts
-    const x = useTransform(scrollYProgress, [0.1, 1], ["1%", "-85%"]);
+    // Adjusted to end at 0.85 to allow the last card to be fully visible before fade out
+    const x = useTransform(scrollYProgress, [0.1, 0.85], ["1%", "-85%"]);
 
     // Title Animation: Removed Staggered Entrance
     // User requested "Our Services" to "already be here".
@@ -62,7 +63,7 @@ export default function Services() {
     const filterExit = useTransform(blurExit, (v) => `blur(${v}px)`);
 
     return (
-        <section ref={targetRef} className="relative z-20 h-[450vh] bg-[#105233] text-white">
+        <section ref={targetRef} className="relative z-20 h-[550vh] bg-[#105233] text-white">
             {/* 
                 Top Gradient Extension: Creates a smooth transition from the previous section (Green)
                 Extends upwards (-top-25vh) to blend the green background into BACKGROUND GREEN (#105233) before the hard edge.
