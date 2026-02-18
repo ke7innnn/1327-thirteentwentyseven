@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRef } from "react";
 import { EASING, DURATION, viewportConfig, hoverLift } from "@/lib/motion";
 import ScrollReveal from "./ScrollReveal";
+import BrandCarousel from "./BrandCarousel";
 
 const clients = [
     "/clients/client-1.png",
@@ -66,6 +67,11 @@ export default function HappyClients() {
                         OUR HAPPY CLIENTS
                     </h3>
                 </ScrollReveal>
+
+                {/* Brand Logo Carousel */}
+                <div className="mt-12 mb-8">
+                    <BrandCarousel />
+                </div>
             </div>
 
             {/* Skewing Marquee Container with Entrance Animation */}

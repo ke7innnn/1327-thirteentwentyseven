@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local"; // Replaces 'next/font/google'
-import { Abril_Fatface, Anton } from "next/font/google";
+import { Abril_Fatface, Anton, Bodoni_Moda } from "next/font/google";
 import "./globals.css";
 import clsx from "clsx";
 import SmoothScroll from "@/components/SmoothScroll";
@@ -35,6 +35,12 @@ const abril = Abril_Fatface({
   display: "swap",
 });
 
+const bodoni = Bodoni_Moda({
+  subsets: ["latin"],
+  variable: "--font-bodoni",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "1327",
   description: "High-end editorial fashion experience.",
@@ -56,6 +62,7 @@ export default function RootLayout({
           abril.variable,
           carltine.variable,
           anton.variable,
+          bodoni.variable,
           "antialiased text-white overflow-x-hidden selection:bg-[#C9FF23] selection:text-black font-body"
         )}
       >
