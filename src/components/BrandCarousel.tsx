@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
 
 const logos = [
     "/client logo/BERLIN BREW LOGO-1.png",
@@ -29,18 +28,10 @@ export default function BrandCarousel() {
                 WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
             }}
         >
-            <motion.div
-                className="flex items-center gap-12 md:gap-16"
+            {/* CSS animation instead of framer-motion animate */}
+            <div
+                className="flex items-center gap-12 md:gap-16 animate-infinite-scroll"
                 style={{ width: "max-content" }}
-                animate={{ x: ["0%", "-50%"] }}
-                transition={{
-                    x: {
-                        duration: 30,
-                        ease: "linear",
-                        repeat: Infinity,
-                        repeatType: "loop",
-                    },
-                }}
             >
                 {allLogos.map((src, index) => (
                     <div
@@ -53,11 +44,12 @@ export default function BrandCarousel() {
                             alt="Brand Logo"
                             fill
                             className="object-contain"
+                            loading="lazy"
                             unoptimized
                         />
                     </div>
                 ))}
-            </motion.div>
+            </div>
         </div>
     );
 }

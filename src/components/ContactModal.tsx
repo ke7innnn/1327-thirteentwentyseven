@@ -53,8 +53,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                             onClick={(e) => e.stopPropagation()}
                             className="bg-[#105233] border border-white/10 w-full max-w-lg rounded-sm shadow-2xl relative overflow-hidden"
                         >
-                            {/* Paper Texture Overlay */}
-                            <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] mix-blend-overlay"></div>
+
 
                             {/* Close Button */}
                             <button

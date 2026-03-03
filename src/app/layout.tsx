@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local"; // Replaces 'next/font/google'
-import { Abril_Fatface, Anton, Bodoni_Moda } from "next/font/google";
+import localFont from "next/font/local";
+import { Bodoni_Moda } from "next/font/google";
 import "./globals.css";
 import clsx from "clsx";
 import SmoothScroll from "@/components/SmoothScroll";
@@ -12,26 +12,6 @@ import DynamicTitle from "@/components/DynamicTitle";
 const sugo = localFont({
   src: "../../public/fonts/Sugo-Pro-Display-Regular-trial.ttf",
   variable: "--font-sugo",
-  display: "swap",
-});
-
-const carltine = localFont({
-  src: "../../public/fonts/CarltineRegular.ttf",
-  variable: "--font-carltine",
-  display: "swap",
-});
-
-const anton = Anton({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-anton",
-  display: "swap",
-});
-
-const abril = Abril_Fatface({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-abril",
   display: "swap",
 });
 
@@ -59,9 +39,6 @@ export default function RootLayout({
       <body
         className={clsx(
           sugo.variable,
-          abril.variable,
-          carltine.variable,
-          anton.variable,
           bodoni.variable,
           "antialiased text-white overflow-x-hidden selection:bg-[#C9FF23] selection:text-black font-body"
         )}

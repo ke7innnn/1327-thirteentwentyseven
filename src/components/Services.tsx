@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import Image from "next/image";
 
@@ -27,7 +27,7 @@ const services = [
     },
     {
         title: "Caps",
-        description: "to match your brand’s style. Customisation : Embroidery",
+        description: "to match your brand's style. Customisation : Embroidery",
         image: "/servicepics/newcap.png"
     },
 ];
@@ -38,34 +38,16 @@ export default function Services() {
         target: targetRef,
     });
 
-    // Horizontal Scroll Range
-    // Tuned to -85% to ensure the last card (now 5 items) comes fully into view
-    // Shifted start to 0.1 to let the title "be there" before movement starts
-    // Adjusted to end at 0.85 to allow the last card to be fully visible before fade out
-    const xRaw = useTransform(scrollYProgress, [0.1, 0.85], ["1%", "-85%"]);
-    const x = useSpring(xRaw, { stiffness: 80, damping: 30, mass: 0.5 });
-
-    // Title Animation: Removed Staggered Entrance
-    // User requested "Our Services" to "already be here".
-    // Removed x1, x2, x3 transforms. Title is now static/standard.
-
-    // Title is always visible - no fade out
-    // No exit animation - content stays visible until user scrolls past
+    // Direct transform — no useSpring wrapper (spring recalculates on every frame)
+    const x = useTransform(scrollYProgress, [0.1, 0.85], ["1%", "-85%"]);
 
     return (
         <section ref={targetRef} className="relative z-20 h-[550vh] bg-[#105233] text-white">
-            {/* 
-                Top Gradient Extension: Creates a smooth transition from the previous section (Green)
-                Extends upwards (-top-25vh) to blend the green background into BACKGROUND GREEN (#105233) before the hard edge.
-                Updated to match Brand Green theme.
-            */}
             <div className="absolute -top-[25vh] left-0 right-0 h-[25vh] bg-gradient-to-t from-[#105233] to-transparent pointer-events-none" />
-
-
 
             <div className="sticky top-0 flex h-screen items-center overflow-hidden">
 
-                {/* Section Header - always visible, no fade */}
+                {/* Section Header */}
                 <div className="absolute top-10 left-6 md:top-20 md:left-20 z-20 mix-blend-normal origin-left">
                     <h3 className="text-sm md:text-base font-bold uppercase tracking-[0.2em] text-[#fdfbcf] mb-2 font-heading">
                         Our Services
@@ -77,13 +59,12 @@ export default function Services() {
                     </h2>
                 </div>
 
-                <motion.div style={{ x }} className="flex gap-12 pl-[50vw] md:pl-[40vw]">
+                <motion.div style={{ x }} className="flex gap-12 pl-[50vw] md:pl-[40vw] will-change-transform">
                     {services.map((service, index) => (
                         <ServiceCard key={index} service={service} index={index} />
                     ))}
                 </motion.div>
             </div>
-
 
         </section>
     );
@@ -97,7 +78,8 @@ function ServiceCard({ service, index }: { service: any, index: number }) {
                     src={service.image}
                     alt={service.title}
                     fill
-                    className="object-cover opacity-100 transition-opacity duration-500"
+                    className="object-cover"
+                    loading="lazy"
                 />
             </div>
 

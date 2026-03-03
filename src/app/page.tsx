@@ -1,8 +1,5 @@
 "use client";
 
-import ScrollyCanvas from "@/components/ScrollyCanvas";
-
-
 import Mission from "@/components/Mission";
 import AboutUs from "@/components/AboutUs";
 import Services from "@/components/Services";

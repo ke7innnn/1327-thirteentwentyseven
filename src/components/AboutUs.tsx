@@ -1,9 +1,9 @@
 "use client";
 
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import { useRef } from "react";
-import { EASING, DURATION, STAGGER, viewportConfig, staggerContainer, staggerItem, hoverLift, hoverScale } from "@/lib/motion";
+import { EASING } from "@/lib/motion";
 
 export default function AboutUs() {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -15,7 +15,7 @@ export default function AboutUs() {
 
     const y1 = useTransform(scrollYProgress, [0, 1], [0, -150]);
     const y2 = useTransform(scrollYProgress, [0, 1], [0, 150]);
-    const rotate1 = useTransform(scrollYProgress, [0, 1], [0, 5]); // Slight rotation based on scroll
+    const rotate1 = useTransform(scrollYProgress, [0, 1], [0, 5]);
     const rotate2 = useTransform(scrollYProgress, [0, 1], [0, -5]);
 
     const images = [
@@ -25,46 +25,38 @@ export default function AboutUs() {
         "/aboutus/about-4.png",
     ];
 
-    // Converging Title Animation
-    // ABOUT comes from Left, US comes from Right
-    // Both unblur and fade in
+    // Title: converging from left/right — NO blur
     const xLeft = useTransform(scrollYProgress, [0, 0.4], [-100, 0]);
     const xRight = useTransform(scrollYProgress, [0, 0.4], [100, 0]);
-    const blurValue = useTransform(scrollYProgress, [0, 0.3], [10, 0]);
     const opacityTitle = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
 
-    // Exit Animation: "Lingering Parallax"
-    // Content moves DOWN (positive Y) as user scrolls out (0.8 -> 1)
-    // This makes it appear to move slower than the scroll, staying "behind" the incoming Services section
+    // Exit: simple fade + parallax (no blur, no scale)
     const yExit = useTransform(scrollYProgress, [0.9, 1], [0, 300]);
-    const scaleExit = useTransform(scrollYProgress, [0.9, 1], [1, 0.95]); // Reduced scale down
     const opacityExit = useTransform(scrollYProgress, [0.9, 1], [1, 0]);
-    const blurExit = useTransform(scrollYProgress, [0.9, 1], [0, 5]); // Reduced blur
-    const filterTemplateExit = useTransform(blurExit, (v) => `blur(${v}px)`);
 
     return (
         <section
             id="about"
             ref={containerRef}
-            className="relative z-10 py-32 bg-transparent text-white overflow-hidden perspective-[2000px]"
+            className="relative z-10 py-32 bg-transparent text-white overflow-hidden"
         >
             <motion.div
-                style={{ y: yExit, scale: scaleExit, opacity: opacityExit, filter: filterTemplateExit }}
+                style={{ y: yExit, opacity: opacityExit }}
                 className="container mx-auto px-6 relative z-10"
             >
                 <div className="flex flex-col md:flex-row items-start gap-40 md:gap-24 relative">
 
-                    {/* Text Column (Left) - Text Top on Mobile */}
+                    {/* Text Column (Left) */}
                     <div className="w-full md:w-1/2 relative md:sticky md:top-40 self-start z-30">
                         <h2 className="text-7xl md:text-9xl font-thin tracking-tighter mb-4 leading-[0.85] font-heading origin-left flex flex-col">
                             <motion.span
-                                style={{ x: xLeft, filter: `blur(${blurValue}px)`, opacity: opacityTitle }}
+                                style={{ x: xLeft, opacity: opacityTitle }}
                                 className="block"
                             >
                                 ABOUT
                             </motion.span>
                             <motion.span
-                                style={{ x: xRight, filter: `blur(${blurValue}px)`, opacity: opacityTitle }}
+                                style={{ x: xRight, opacity: opacityTitle }}
                                 className="block text-[#fdfbcf] font-heading"
                             >
                                 US
@@ -91,7 +83,7 @@ export default function AboutUs() {
                     </div>
 
                     {/* Image Grid Column (Right) */}
-                    <div className="w-full md:w-1/2 grid grid-cols-2 gap-8 relative perspective-[1000px]">
+                    <div className="w-full md:w-1/2 grid grid-cols-2 gap-8 relative">
                         {/* Column 1 */}
                         <motion.div style={{ y: y1, rotate: rotate1 }} className="flex flex-col gap-8">
                             {images.filter((_, i) => i % 2 === 0).map((src, index) => (
@@ -110,35 +102,26 @@ export default function AboutUs() {
                 </div>
             </motion.div>
 
-            {/* Smooth Transition Gradient to Green (Services Section) */}
+            {/* Smooth Transition Gradient */}
             <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-b from-transparent to-[#105233] pointer-events-none z-20" />
         </section>
     );
 }
 
 function ParallaxImage({ src, index }: { src: string, index: number }) {
-    // Small random rotation for organic feel
-    const randomRotation = [0.5, -0.5, 0.8, -0.8][index % 4];
-
     return (
-        <motion.div
-            whileHover={{
-                y: -4,
-                scale: 1.02,
-                rotateZ: randomRotation,
-                boxShadow: "0 20px 40px rgba(0, 0, 0, 0.4)",
-            }}
-            transition={{ duration: 0.3, ease: EASING }}
-            className="relative aspect-[3/4] w-full overflow-hidden rounded-sm border-[5px] border-white/90 group transition-all duration-700 shadow-2xl shadow-black/50"
+        <div
+            className="relative aspect-[3/4] w-full overflow-hidden rounded-sm border-[5px] border-white/90 group transition-transform duration-700 shadow-2xl shadow-black/50 hover:-translate-y-1 hover:scale-[1.02]"
         >
             <Image
                 src={src}
                 alt={`About 1327`}
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-110"
+                loading="lazy"
             />
             <div className="absolute inset-0 bg-[#0A1F0A]/20 transition-opacity duration-500 group-hover:opacity-0" />
-        </motion.div>
+        </div>
     )
 }
 
