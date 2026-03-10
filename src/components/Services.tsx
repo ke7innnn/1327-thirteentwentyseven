@@ -8,27 +8,32 @@ const services = [
     {
         title: "Relaxed Fit T-shirts",
         description: "Relaxed Fit t-shirts to give a relaxed vibe and feel 240-270 gsm. Embroidery looks richer in oversized T-shirts.",
-        image: "/servicepics/newovwersized.jpg"
+        image: "/servicepics/newovwersized.jpg",
+        alt: "Custom relaxed fit oversized t-shirts by 1327 Mumbai"
     },
     {
         title: "Polo T-shirts",
         description: "Polo neck T-shirts combines the comfort of a T-shirt with a slightly dressier look, 190-200 gsm.",
-        image: "/servicepics/polo.png"
+        image: "/servicepics/polo.png",
+        alt: "Custom embroidered polo t-shirts by 1327 Thirteen Twenty Seven"
     },
     {
         title: "Aprons",
         description: "In aprons we can customise cut, shape, stitching and embroidery as per requirement. For aprons embroidery is preferred over print.",
-        image: "/servicepics/apron.png"
+        image: "/servicepics/apron.png",
+        alt: "Custom embroidered aprons for restaurants by 1327 Mumbai"
     },
     {
         title: "Straight Fit T-shirts",
         description: "The Straight fit T-shirt is our regular everyday T-shirt. Light weight, breathable, nothing too fancy, 140-180gsm.",
-        image: "/servicepics/straightfit.png"
+        image: "/servicepics/straightfit.png",
+        alt: "Custom straight fit corporate t-shirts by 1327"
     },
     {
         title: "Caps",
         description: "to match your brand's style. Customisation : Embroidery",
-        image: "/servicepics/newcap.png"
+        image: "/servicepics/newcap.png",
+        alt: "Custom embroidered branded caps by 1327 Malad Mumbai"
     },
 ];
 
@@ -42,7 +47,7 @@ export default function Services() {
     const x = useTransform(scrollYProgress, [0.1, 0.85], ["1%", "-85%"]);
 
     return (
-        <section ref={targetRef} className="relative z-20 h-[550vh] bg-[#105233] text-white">
+        <section ref={targetRef} aria-label="Our Services — Custom Apparel by 1327" className="relative z-20 h-[550vh] bg-[#105233] text-white">
             <div className="absolute -top-[25vh] left-0 right-0 h-[25vh] bg-gradient-to-t from-[#105233] to-transparent pointer-events-none" />
 
             <div className="sticky top-0 flex h-screen items-center overflow-hidden">
@@ -76,7 +81,7 @@ function ServiceCard({ service, index }: { service: any, index: number }) {
             <div className="absolute inset-0 z-0 transition-transform duration-700 group-hover:scale-110">
                 <Image
                     src={service.image}
-                    alt={service.title}
+                    alt={service.alt}
                     fill
                     className="object-cover"
                     loading="lazy"

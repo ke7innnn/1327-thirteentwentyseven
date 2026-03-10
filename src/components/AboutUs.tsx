@@ -19,10 +19,10 @@ export default function AboutUs() {
     const rotate2 = useTransform(scrollYProgress, [0, 1], [0, -5]);
 
     const images = [
-        "/aboutus/about-1.png",
-        "/aboutus/about-2.png",
-        "/aboutus/about-3.png",
-        "/aboutus/about-4.png",
+        { src: "/aboutus/about-1.png", alt: "1327 custom branded t-shirts showcase" },
+        { src: "/aboutus/about-2.png", alt: "Custom embroidery work by 1327 Mumbai" },
+        { src: "/aboutus/about-3.png", alt: "1327 team crafting uniforms in Malad West" },
+        { src: "/aboutus/about-4.png", alt: "Premium custom apparel by 1327 Thirteen Twenty Seven" },
     ];
 
     // Title: converging from left/right — NO blur
@@ -38,6 +38,7 @@ export default function AboutUs() {
         <section
             id="about"
             ref={containerRef}
+            aria-label="About 1327 Thirteen Twenty Seven"
             className="relative z-10 py-32 bg-transparent text-white overflow-hidden"
         >
             <motion.div
@@ -86,15 +87,15 @@ export default function AboutUs() {
                     <div className="w-full md:w-1/2 grid grid-cols-2 gap-8 relative">
                         {/* Column 1 */}
                         <motion.div style={{ y: y1, rotate: rotate1 }} className="flex flex-col gap-8">
-                            {images.filter((_, i) => i % 2 === 0).map((src, index) => (
-                                <ParallaxImage key={`col1-${index}`} src={src} index={index} />
+                            {images.filter((_, i) => i % 2 === 0).map((img, index) => (
+                                <ParallaxImage key={`col1-${index}`} src={img.src} alt={img.alt} index={index} />
                             ))}
                         </motion.div>
 
                         {/* Column 2 */}
                         <motion.div style={{ y: y2, rotate: rotate2 }} className="flex flex-col gap-8 mt-24">
-                            {images.filter((_, i) => i % 2 !== 0).map((src, index) => (
-                                <ParallaxImage key={`col2-${index}`} src={src} index={index} />
+                            {images.filter((_, i) => i % 2 !== 0).map((img, index) => (
+                                <ParallaxImage key={`col2-${index}`} src={img.src} alt={img.alt} index={index} />
                             ))}
                         </motion.div>
                     </div>
@@ -108,14 +109,14 @@ export default function AboutUs() {
     );
 }
 
-function ParallaxImage({ src, index }: { src: string, index: number }) {
+function ParallaxImage({ src, alt, index }: { src: string, alt: string, index: number }) {
     return (
         <div
             className="relative aspect-[3/4] w-full overflow-hidden rounded-sm border-[5px] border-white/90 group transition-transform duration-700 shadow-2xl shadow-black/50 hover:-translate-y-1 hover:scale-[1.02]"
         >
             <Image
                 src={src}
-                alt={`About 1327`}
+                alt={alt}
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-110"
                 loading="lazy"

@@ -7,7 +7,7 @@ import ScrollReveal from "./ScrollReveal";
 
 export default function Footer() {
     return (
-        <footer id="contact" className="relative z-10 py-20 bg-black text-white">
+        <footer id="contact" aria-label="Contact 1327 Thirteen Twenty Seven" className="relative z-10 py-20 bg-black text-white">
             <div className="container mx-auto px-6">
                 <ScrollReveal offset={["start end", "center center"]}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-40">
