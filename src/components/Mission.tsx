@@ -4,6 +4,8 @@ import { useScroll, useTransform, useMotionValueEvent, motion } from "framer-mot
 import { useRef, useMemo, useEffect, useState, useCallback } from "react";
 
 const TOTAL_FRAMES = 240;
+// Batch size for progressive loading — first batch loads instantly, rest load in background
+const FIRST_BATCH = 20;
 
 function getFramePath(index: number): string {
     const num = String(index + 1).padStart(3, "0");
@@ -33,66 +35,18 @@ export default function Mission() {
 
 function FrameCanvas({ scrollProgress }: { scrollProgress: any }) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const imagesRef = useRef<HTMLImageElement[]>([]);
+    const imagesRef = useRef<(HTMLImageElement | null)[]>(new Array(TOTAL_FRAMES).fill(null));
+    const lastDrawnFrame = useRef(-1);
+    const rafId = useRef(0);
+    const pendingFrame = useRef(-1);
     const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
-    const loadedCountRef = useRef(0);
-    const [ready, setReady] = useState(false);
 
-    // Preload all frames on mount
-    useEffect(() => {
-        const images: HTMLImageElement[] = [];
-        let mounted = true;
-
-        for (let i = 0; i < TOTAL_FRAMES; i++) {
-            const img = new Image();
-            img.src = getFramePath(i);
-            img.onload = () => {
-                if (!mounted) return;
-                loadedCountRef.current++;
-                if (loadedCountRef.current >= TOTAL_FRAMES) {
-                    setReady(true);
-                }
-            };
-            images.push(img);
-        }
-        imagesRef.current = images;
-
-        // Draw the first frame immediately once it's loaded
-        const firstImg = images[0];
-        if (firstImg.complete) {
-            drawFrame(0);
-        } else {
-            firstImg.onload = () => {
-                if (!mounted) return;
-                loadedCountRef.current++;
-                drawFrame(0);
-                if (loadedCountRef.current >= TOTAL_FRAMES) {
-                    setReady(true);
-                }
-            };
-        }
-
-        return () => { mounted = false; };
-    }, []);
-
-    // Handle canvas resize
-    useEffect(() => {
-        function handleResize() {
-            setCanvasSize({
-                width: window.innerWidth,
-                height: window.innerHeight
-            });
-        }
-        handleResize();
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
-
-    // Draw a frame with cover-style scaling
+    // Draw a frame with cover-style scaling (memoised, no deps)
     const drawFrame = useCallback((frameIndex: number) => {
+        if (frameIndex === lastDrawnFrame.current) return; // skip if already drawn
         const canvas = canvasRef.current;
         if (!canvas) return;
-        const ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext("2d", { alpha: false });
         if (!ctx) return;
 
         const img = imagesRef.current[frameIndex];
@@ -110,13 +64,112 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: any }) {
         const sx = (iw - sw) / 2;
         const sy = (ih - sh) / 2;
 
-        ctx.clearRect(0, 0, cw, ch);
         ctx.drawImage(img, sx, sy, sw, sh, 0, 0, cw, ch);
+        lastDrawnFrame.current = frameIndex;
     }, []);
 
-    // Redraw on resize
+    // RAF-throttled draw: only one draw per animation frame
+    const scheduleDrawFrame = useCallback((frameIndex: number) => {
+        pendingFrame.current = frameIndex;
+        if (rafId.current) return; // already scheduled
+        rafId.current = requestAnimationFrame(() => {
+            rafId.current = 0;
+            if (pendingFrame.current >= 0) {
+                drawFrame(pendingFrame.current);
+            }
+        });
+    }, [drawFrame]);
+
+    // Preload frames progressively: first batch eagerly, then rest in idle callbacks
+    useEffect(() => {
+        let mounted = true;
+        const images = imagesRef.current;
+
+        // Load a single frame and return a promise
+        const loadImage = (i: number): Promise<void> => {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.decoding = "async";
+                img.src = getFramePath(i);
+                img.onload = () => {
+                    if (mounted) {
+                        images[i] = img;
+                        // Draw frame 0 as soon as it's loaded
+                        if (i === 0) drawFrame(0);
+                    }
+                    resolve();
+                };
+                img.onerror = () => resolve();
+            });
+        };
+
+        // Load first batch eagerly (critical frames the user sees first)
+        const loadFirstBatch = async () => {
+            const promises: Promise<void>[] = [];
+            for (let i = 0; i < Math.min(FIRST_BATCH, TOTAL_FRAMES); i++) {
+                promises.push(loadImage(i));
+            }
+            await Promise.all(promises);
+        };
+
+        // Load remaining frames in small batches using requestIdleCallback / setTimeout
+        const loadRemainingFrames = () => {
+            let i = FIRST_BATCH;
+            const BATCH = 10;
+
+            const loadBatch = () => {
+                if (!mounted || i >= TOTAL_FRAMES) return;
+                const end = Math.min(i + BATCH, TOTAL_FRAMES);
+                for (let j = i; j < end; j++) {
+                    loadImage(j);
+                }
+                i = end;
+                // Use requestIdleCallback if available, else setTimeout
+                if (typeof requestIdleCallback !== "undefined") {
+                    requestIdleCallback(loadBatch);
+                } else {
+                    setTimeout(loadBatch, 16);
+                }
+            };
+            loadBatch();
+        };
+
+        loadFirstBatch().then(loadRemainingFrames);
+
+        return () => {
+            mounted = false;
+            if (rafId.current) cancelAnimationFrame(rafId.current);
+        };
+    }, [drawFrame]);
+
+    // Handle canvas resize with debounce
+    useEffect(() => {
+        let timeout: ReturnType<typeof setTimeout>;
+        function handleResize() {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                setCanvasSize({
+                    width: window.innerWidth,
+                    height: window.innerHeight
+                });
+            }, 100);
+        }
+        // Set initial size immediately
+        setCanvasSize({
+            width: window.innerWidth,
+            height: window.innerHeight
+        });
+        window.addEventListener("resize", handleResize, { passive: true });
+        return () => {
+            clearTimeout(timeout);
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
+
+    // Redraw current frame on resize
     useEffect(() => {
         if (canvasSize.width > 0) {
+            lastDrawnFrame.current = -1; // force redraw
             drawFrame(0);
         }
     }, [canvasSize, drawFrame]);
@@ -126,7 +179,7 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: any }) {
 
     useMotionValueEvent(frameIndex, "change", (latest) => {
         const index = Math.min(TOTAL_FRAMES - 1, Math.max(0, Math.round(latest)));
-        drawFrame(index);
+        scheduleDrawFrame(index);
     });
 
     return (
