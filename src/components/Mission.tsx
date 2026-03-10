@@ -211,20 +211,17 @@ function Content({ scrollProgress }: { scrollProgress: any }) {
     }, []);
 
     return (
-        <div className="container mx-auto px-6 h-full flex flex-col md:flex-row items-center justify-center md:justify-between relative z-10 gap-6 md:gap-16 py-16 md:py-0">
-            {/* Title */}
-            <div className="w-full md:w-5/12 flex flex-col justify-center md:items-start flex-shrink-0">
+        <div className="container mx-auto px-6 h-full flex flex-col md:flex-row items-center justify-center md:items-center relative z-10 gap-10 md:gap-16 pt-20 md:pt-0">
+            {/* Left Column: Title and Paragraph */}
+            <div className="w-full md:w-7/12 flex flex-col justify-center items-start gap-8 flex-shrink-0">
                 <motion.h2
                     style={{ y: yTitle, opacity: opacityTitle, fontFamily: "var(--font-bodoni)" }}
-                    className="text-5xl sm:text-6xl md:text-8xl font-bold uppercase text-[#fdfbcf] font-heading tracking-[0.1em] text-left leading-none"
+                    className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-bold uppercase text-[#fdfbcf] font-heading tracking-[0.05em] text-left leading-none"
                 >
                     Our Mission
                 </motion.h2>
-            </div>
 
-            {/* Paragraph — word chunks instead of per-word */}
-            <div className="w-full md:w-6/12 flex flex-col justify-center overflow-y-auto max-h-[55vh] md:max-h-none">
-                <div className="flex flex-wrap gap-x-2 gap-y-1 md:gap-x-4 md:gap-y-2 leading-relaxed text-left">
+                <div className="flex flex-wrap gap-x-2 gap-y-1 md:gap-x-3 md:gap-y-2 leading-relaxed text-left w-full md:w-[90%] lg:w-[85%]">
                     {wordChunks.map((chunk, i) => (
                         <WordChunk
                             key={i}
@@ -235,6 +232,28 @@ function Content({ scrollProgress }: { scrollProgress: any }) {
                         />
                     ))}
                 </div>
+            </div>
+
+            {/* Right Column: Scroll Indicator */}
+            <div className="w-full md:w-5/12 flex flex-col flex-1 items-center justify-center mt-10 md:mt-0">
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5, duration: 1.5 }}
+                    className="flex flex-col items-center gap-6 text-[#fdfbcf]/80"
+                >
+                    <span className="uppercase tracking-[0.4em] font-mono text-sm font-bold rotate-90 mb-8 whitespace-nowrap">Scroll Down</span>
+
+                    <motion.div
+                        animate={{ y: [0, 15, 0] }}
+                        transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
+                        className="rounded-full border border-[#fdfbcf]/50 p-4 flex items-center justify-center backdrop-blur-sm bg-black/10"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
+                        </svg>
+                    </motion.div>
+                </motion.div>
             </div>
         </div>
     )
