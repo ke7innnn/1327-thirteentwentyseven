@@ -38,7 +38,7 @@ export const metadata: Metadata = {
 
   title: "1327 — Custom T-Shirts & Uniforms | Mumbai",
   description:
-    "1327 (Thirteen Twenty Seven) crafts premium custom t-shirts, polo shirts, caps, aprons & uniforms for businesses in Mumbai. Embroidery & printing. MOQ 50 pcs. Born in Malad.",
+    "1327 crafts custom t-shirts, caps, aprons & uniforms for businesses in Mumbai. Embroidery & printing. MOQ 50 pcs. Born in Malad.",
 
   keywords: [
     "1327",

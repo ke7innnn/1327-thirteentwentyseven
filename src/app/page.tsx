@@ -15,6 +15,7 @@ export default function Home() {
       <h1 className="sr-only">
         1327 Thirteen Twenty Seven — Custom T-Shirts, Uniforms &amp; Apparel in Mumbai, Malad
       </h1>
+      <p className="sr-only">1327 Thirteen Twenty Seven — Custom T-Shirts, Uniforms &amp; Apparel in Mumbai, Malad.</p>
       <Mission />
       <AboutUs />
       <Services />
