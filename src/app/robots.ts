@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
                 disallow: ["/api/", "/_next/"],
             },
         ],
-        sitemap: "https://1327thirteentwentyseven.com/sitemap.xml",
+        sitemap: "https://www.1327.in/sitemap.xml",
     };
 }

@@ -34,7 +34,7 @@ export const viewport: Viewport = {
 // SEO: Metadata — Title, Description, OG, Twitter, Keywords, Icons
 // ============================================================================
 export const metadata: Metadata = {
-  metadataBase: new URL("https://1327thirteentwentyseven.com"),
+  metadataBase: new URL("https://www.1327.in"),
 
   title: "1327 — Custom T-Shirts & Uniforms | Mumbai",
   description:
@@ -84,7 +84,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://1327thirteentwentyseven.com",
+    url: "https://www.1327.in",
     siteName: "1327 — Thirteen Twenty Seven",
     title: "1327 — Custom T-Shirts & Uniforms | Mumbai",
     description:
@@ -121,14 +121,13 @@ export const metadata: Metadata = {
     },
   },
 
-  // Verification — replace with your real IDs when you have them
-  // verification: {
-  //   google: "YOUR_GOOGLE_VERIFICATION_ID",
-  //   other: { "msvalidate.01": "YOUR_BING_VERIFICATION_ID" },
-  // },
+  // Verification
+  verification: {
+    google: "aH2PVpnwXFPh1TH88SLFuvRJFUu1Y0YWa2u1TahyHVs",
+  },
 
   alternates: {
-    canonical: "https://1327thirteentwentyseven.com",
+    canonical: "https://www.1327.in",
   },
 };
 
@@ -141,8 +140,8 @@ function JsonLd() {
     "@type": "Organization",
     name: "1327 — Thirteen Twenty Seven",
     alternateName: "1327 Community",
-    url: "https://1327thirteentwentyseven.com",
-    logo: "https://1327thirteentwentyseven.com/logo/1327_logo_v2.png",
+    url: "https://www.1327.in",
+    logo: "https://www.1327.in/logo/1327_logo_v2.png",
     description:
       "Premium custom t-shirts, uniforms, caps, aprons & apparel for businesses in Mumbai. Embroidery and printing specialists.",
     founder: {
@@ -166,14 +165,14 @@ function JsonLd() {
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "@id": "https://1327thirteentwentyseven.com/#localbusiness",
+    "@id": "https://www.1327.in/#localbusiness",
     name: "1327 — Thirteen Twenty Seven",
-    image: "https://1327thirteentwentyseven.com/logo/1327_logo_v2.png",
+    image: "https://www.1327.in/logo/1327_logo_v2.png",
     description:
       "Custom t-shirts, polo shirts, caps, aprons and uniforms manufacturer in Malad West, Mumbai. Embroidery and printing specialists.",
     telephone: "+91-8082845721",
     email: "1327thecommunity@gmail.com",
-    url: "https://1327thirteentwentyseven.com",
+    url: "https://www.1327.in",
     address: {
       "@type": "PostalAddress",
       streetAddress: "Orlem, Malad West",
@@ -204,7 +203,7 @@ function JsonLd() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "1327 — Thirteen Twenty Seven",
-    url: "https://1327thirteentwentyseven.com",
+    url: "https://www.1327.in",
     description:
       "Custom t-shirts, uniforms and apparel for businesses in Mumbai.",
   };
@@ -216,7 +215,7 @@ function JsonLd() {
       name: "Custom Relaxed Fit T-Shirts",
       description:
         "Relaxed Fit t-shirts, 240-270 GSM. Embroidery looks richer in oversized T-shirts. Bulk orders starting at 50 pcs.",
-      provider: { "@id": "https://1327thirteentwentyseven.com/#localbusiness" },
+      provider: { "@id": "https://www.1327.in/#localbusiness" },
       areaServed: "Mumbai",
       serviceType: "Custom Apparel Manufacturing",
     },
@@ -226,7 +225,7 @@ function JsonLd() {
       name: "Custom Polo T-Shirts",
       description:
         "Polo neck T-shirts combining comfort with a dressier look, 190-200 GSM. Custom embroidery and printing.",
-      provider: { "@id": "https://1327thirteentwentyseven.com/#localbusiness" },
+      provider: { "@id": "https://www.1327.in/#localbusiness" },
       areaServed: "Mumbai",
       serviceType: "Custom Apparel Manufacturing",
     },
@@ -236,7 +235,7 @@ function JsonLd() {
       name: "Custom Aprons",
       description:
         "Customised aprons — cut, shape, stitching and embroidery as per requirement. MOQ 30 pcs.",
-      provider: { "@id": "https://1327thirteentwentyseven.com/#localbusiness" },
+      provider: { "@id": "https://www.1327.in/#localbusiness" },
       areaServed: "Mumbai",
       serviceType: "Custom Apparel Manufacturing",
     },
@@ -245,8 +244,8 @@ function JsonLd() {
       "@type": "Service",
       name: "Custom Straight Fit T-Shirts",
       description:
-        "Regular everyday straight fit T-shirts. Light weight, breathable, 140-180 GSM.",
-      provider: { "@id": "https://1327thirteentwentyseven.com/#localbusiness" },
+        "Regular everyday straight fit T-shirts. Light weight, breathable, nothing too fancy, 140-180 GSM.",
+      provider: { "@id": "https://www.1327.in/#localbusiness" },
       areaServed: "Mumbai",
       serviceType: "Custom Apparel Manufacturing",
     },
@@ -256,7 +255,7 @@ function JsonLd() {
       name: "Custom Caps",
       description:
         "Custom embroidered caps to match your brand's style. Bulk orders starting at 30 pcs.",
-      provider: { "@id": "https://1327thirteentwentyseven.com/#localbusiness" },
+      provider: { "@id": "https://www.1327.in/#localbusiness" },
       areaServed: "Mumbai",
       serviceType: "Custom Apparel Manufacturing",
     },
