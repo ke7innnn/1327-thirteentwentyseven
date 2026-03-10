@@ -10,7 +10,7 @@ export default function Footer() {
         <footer id="contact" aria-label="Contact 1327 Thirteen Twenty Seven" className="relative z-10 py-20 bg-black text-white">
             <div className="container mx-auto px-6">
                 <ScrollReveal offset={["start end", "center center"]}>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-40">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-20">
 
                         {/* Contact Section */}
                         <div className="space-y-8">
@@ -34,6 +34,20 @@ export default function Footer() {
                                     </a>
                                 </div>
                             </div>
+                        </div>
+
+                        {/* Quick Links Section (For SEO Internal Links) */}
+                        <div>
+                            <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-[#fdfbcf] mb-8">
+                                Quick Links
+                            </h3>
+                            <nav className="flex flex-col space-y-4">
+                                <a href="#mission" className="text-lg text-gray-300 hover:text-[#fdfbcf] transition-colors font-light">Our Mission</a>
+                                <a href="#about" className="text-lg text-gray-300 hover:text-[#fdfbcf] transition-colors font-light">About Us</a>
+                                <a href="#services" className="text-lg text-gray-300 hover:text-[#fdfbcf] transition-colors font-light">What We Offer</a>
+                                <a href="#clients" className="text-lg text-gray-300 hover:text-[#fdfbcf] transition-colors font-light">Happy Clients</a>
+                                <a href="#notes" className="text-lg text-gray-300 hover:text-[#fdfbcf] transition-colors font-light">Orders & MOQs</a>
+                            </nav>
                         </div>
 
                         {/* Socials Section */}
