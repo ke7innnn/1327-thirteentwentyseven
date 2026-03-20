@@ -30,19 +30,19 @@ export default function BrandCarousel() {
         >
             {/* CSS animation instead of framer-motion animate */}
             <div
-                className="flex items-center gap-12 md:gap-16 animate-infinite-scroll"
+                className="flex items-center gap-8 md:gap-16 animate-infinite-scroll will-change-transform"
                 style={{ width: "max-content" }}
             >
                 {allLogos.map((logo, index) => (
                     <div
                         key={index}
-                        className="relative flex-shrink-0"
-                        style={{ width: "200px", height: "110px" }}
+                        className="relative flex-shrink-0 w-[120px] h-[70px] md:w-[200px] md:h-[110px]"
                     >
                         <Image
                             src={logo.src}
                             alt={logo.alt}
                             fill
+                            sizes="(max-width: 768px) 120px, 200px"
                             className="object-contain"
                             loading="lazy"
                             unoptimized
@@ -53,3 +53,4 @@ export default function BrandCarousel() {
         </div>
     );
 }
+

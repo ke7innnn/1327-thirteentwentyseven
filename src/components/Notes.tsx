@@ -1,40 +1,30 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
 import { EASING, DURATION, viewportConfig, staggerContainer, staggerItem } from "@/lib/motion";
 
 export default function Notes() {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start end", "center center"]
-    });
-
-    const yText = useTransform(scrollYProgress, [0, 1], [50, 0]);
-    const yVideo = useTransform(scrollYProgress, [0, 1], [100, 0]);
-    const opacityVideo = useTransform(scrollYProgress, [0, 0.2, 1], [0, 1, 1]);
-
-    const yCard = useTransform(scrollYProgress, [0, 1], [200, 0]);
-
     return (
-        <section id="notes" ref={containerRef} className="relative z-10 py-32 bg-transparent text-white overflow-hidden border-b border-white/10">
+        <section id="notes" className="relative z-10 py-32 bg-transparent text-white overflow-hidden border-b border-white/10">
             <div className="container mx-auto px-6">
                 <div className="flex flex-col md:flex-row items-center gap-12 md:gap-24">
 
-                    {/* Text Column (Left) */}
-                    <motion.div style={{ y: yText }} className="w-full md:w-1/2 relative z-20">
+                    {/* Text Column (Left) — one-shot entrance, no continuous scroll tracking */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 50 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-10% 0px" }}
+                        transition={{ duration: 0.7, ease: EASING }}
+                        className="w-full md:w-1/2 relative z-20"
+                    >
                         <div className="relative max-w-xl mx-auto transform -rotate-1 group">
-                            {/* Tape Effect */}
-                            <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-32 h-10 bg-white/40 backdrop-blur-[2px] shadow-sm rotate-2 z-20 pointer-events-none transform origin-center border-l-2 border-r-2 border-white/20 skew-y-1"></div>
+                            {/* Tape Effect — removed backdrop-blur (kills mobile GPU) */}
+                            <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-32 h-10 bg-white/40 shadow-sm rotate-2 z-20 pointer-events-none transform origin-center border-l-2 border-r-2 border-white/20 skew-y-1"></div>
 
                             {/* Note Paper */}
-                            <motion.div
-                                style={{ y: yCard }}
+                            <div
                                 className="bg-[#fdfbcf] text-[#103010] p-8 md:p-12 rounded-sm shadow-[0_10px_40px_-10px_rgba(0,0,0,0.3)] border border-[#E6D5B8] relative overflow-hidden"
                             >
-
-
 
                                 <motion.h2
                                     initial={{ opacity: 0, y: 20 }}
@@ -73,13 +63,16 @@ export default function Notes() {
                                         To place your order or for more inquiries you can Call or WhatsApp us on the number given.
                                     </motion.p>
                                 </motion.div>
-                            </motion.div>
+                            </div>
                         </div>
                     </motion.div>
 
-                    {/* Video Column (Right) — simplified, no 3D rotation */}
+                    {/* Video Column (Right) — one-shot entrance */}
                     <motion.div
-                        style={{ y: yVideo, opacity: opacityVideo }}
+                        initial={{ opacity: 0, y: 80 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-10% 0px" }}
+                        transition={{ duration: 0.8, ease: EASING, delay: 0.1 }}
                         className="w-full md:w-1/2 relative mt-12 md:mt-0"
                     >
                         {/* WATCH Label */}

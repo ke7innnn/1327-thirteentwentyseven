@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 
 const services = [
@@ -39,12 +39,26 @@ const services = [
 
 export default function Services() {
     const targetRef = useRef<HTMLElement>(null);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const check = () => setIsMobile(window.innerWidth < 768);
+        check();
+        window.addEventListener("resize", check, { passive: true });
+        return () => window.removeEventListener("resize", check);
+    }, []);
+
     const { scrollYProgress } = useScroll({
         target: targetRef,
     });
 
-    // Direct transform — no useSpring wrapper (spring recalculates on every frame)
-    const x = useTransform(scrollYProgress, [0.1, 0.85], ["1%", "-85%"]);
+    // Desktop: end at -65% so last card (Caps) lands centered in viewport
+    // Mobile: Reverted to original -85% behavior per user request
+    const x = useTransform(
+        scrollYProgress,
+        [0.1, 0.85],
+        isMobile ? ["1%", "-85%"] : ["1%", "-65%"]
+    );
 
     return (
         <section ref={targetRef} aria-label="Our Services — Custom Apparel by 1327" className="relative z-20 h-[550vh] bg-[#105233] text-white">
