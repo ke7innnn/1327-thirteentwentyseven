@@ -88,7 +88,7 @@ export default function Notes() {
                             <iframe
                                 width="100%"
                                 height="100%"
-                                src="https://www.youtube.com/embed/_6kwlJx8sCo?si=15aZgj6kFUb9rhY4"
+                                src="https://www.youtube.com/embed/wW5xMjM0rNk?si=JixVJUilbeboumbv"
                                 title="1327 Thirteen Twenty Seven — Custom T-Shirts and Uniforms Showcase"
                                 frameBorder="0"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
