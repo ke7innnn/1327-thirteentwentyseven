@@ -38,7 +38,7 @@ export default function LocationMap() {
                         transition={{ duration: DURATION.slow, ease: EASING }}
                         className="text-4xl md:text-7xl font-thin tracking-tighter text-white font-heading transition-all duration-700"
                     >
-                        BORN IN MALAD
+                        BORN IN MUMBAI
                     </motion.h2>
                     <motion.div
                         initial={{ width: 0 }}
