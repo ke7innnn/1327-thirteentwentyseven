@@ -1,7 +1,8 @@
 "use client";
 
-import { useScroll, useTransform, useMotionValueEvent, motion } from "framer-motion";
+import { useScroll, useTransform, useMotionValueEvent, motion, useSpring, MotionValue } from "framer-motion";
 import { useRef, useMemo, useEffect, useState, useCallback } from "react";
+import ContactModal from "./ContactModal";
 
 const TOTAL_FRAMES = 240;
 // Batch size for progressive loading — first batch loads instantly, rest load in background
@@ -20,20 +21,27 @@ export default function Mission() {
     });
 
     return (
-        <section ref={containerRef} id="mission" className="relative z-10 bg-transparent text-white border-b-2 border-white/20 p-0 h-[200vh]">
-            <div className="sticky top-0 w-full h-screen overflow-hidden">
+        <div ref={containerRef} id="mission" className="relative w-full z-10">
+            {/* Sticky Hero section with sequence animation */}
+            <section className="sticky top-0 w-full h-screen overflow-hidden">
                 {/* Scroll-driven frame animation background */}
                 <FrameCanvas scrollProgress={scrollYProgress} />
                 {/* Dark overlay for text readability */}
                 <div className="absolute inset-0 bg-black/40 z-[1]" />
 
-                <Content scrollProgress={scrollYProgress} />
-            </div>
-        </section>
+                <HeroContent scrollProgress={scrollYProgress} />
+            </section>
+            
+            {/* Spacer to allow scrolling of the sticky section */}
+            <div className="h-[50vh] bg-transparent pointer-events-none" />
+
+            {/* Manifesto Section */}
+            <ManifestoSection />
+        </div>
     );
 }
 
-function FrameCanvas({ scrollProgress }: { scrollProgress: any }) {
+function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const imagesRef = useRef<(HTMLImageElement | null)[]>(new Array(TOTAL_FRAMES).fill(null));
     const lastDrawnFrame = useRef(-1);
@@ -49,8 +57,35 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: any }) {
         const ctx = canvas.getContext("2d", { alpha: false });
         if (!ctx) return;
 
-        const img = imagesRef.current[frameIndex];
-        if (!img || !img.complete || img.naturalWidth === 0) return;
+        // Try to draw the requested frame
+        let img = imagesRef.current[frameIndex];
+        if (!img || !img.complete || img.naturalWidth === 0) {
+            // Find the nearest loaded frame backward and forward to avoid flashing stutters
+            let foundNearest = false;
+            for (let offset = 1; offset < 30; offset++) {
+                const prev = frameIndex - offset;
+                if (prev >= 0) {
+                    const prevImg = imagesRef.current[prev];
+                    if (prevImg && prevImg.complete && prevImg.naturalWidth > 0) {
+                        img = prevImg;
+                        foundNearest = true;
+                        break;
+                    }
+                }
+                const next = frameIndex + offset;
+                if (next < TOTAL_FRAMES) {
+                    const nextImg = imagesRef.current[next];
+                    if (nextImg && nextImg.complete && nextImg.naturalWidth > 0) {
+                        img = nextImg;
+                        foundNearest = true;
+                        break;
+                    }
+                }
+            }
+            if (!foundNearest) return; // wait until at least one frame is loaded
+        }
+
+        if (!img) return;
 
         const cw = canvas.width;
         const ch = canvas.height;
@@ -174,8 +209,16 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: any }) {
         }
     }, [canvasSize, drawFrame]);
 
-    // Map scroll progress (0..1) → frame index (0..239)
-    const frameIndex = useTransform(scrollProgress, [0, 1], [0, TOTAL_FRAMES - 1]);
+    // Add a smooth spring interpolation to the scroll progress
+    const smoothProgress = useSpring(scrollProgress, {
+        damping: 45,
+        stiffness: 200,
+        mass: 0.4,
+        restDelta: 0.001
+    });
+
+    // Map smooth scroll progress (0..1) → frame index (0..239)
+    const frameIndex = useTransform(smoothProgress, [0, 1], [0, TOTAL_FRAMES - 1]);
 
     useMotionValueEvent(frameIndex, "change", (latest) => {
         const index = Math.min(TOTAL_FRAMES - 1, Math.max(0, Math.round(latest)));
@@ -193,92 +236,189 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: any }) {
     );
 }
 
-function Content({ scrollProgress }: { scrollProgress: any }) {
-    const missionText = "We're dedicated to crafting high-quality custom t-shirts and uniforms for businesses, while building a community that values our relationships and partnerships. We're here not just to make apparel, but to create connections and stories that last.";
+function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
+    const [isContactOpen, setIsContactOpen] = useState(false);
 
-    // Title Animation: Fade in and slide up
-    const yTitle = useTransform(scrollProgress, [0, 0.2], [50, 0]);
-    const opacityTitle = useTransform(scrollProgress, [0, 0.2], [0, 1]);
+    // Hero Section Animations: Fades out from 0 to 0.4
+    const opacityHero = useTransform(scrollProgress, [0, 0.4], [1, 0]);
+    const yHero = useTransform(scrollProgress, [0, 0.4], [0, -50]);
+    const pointerEventsHero = useTransform(scrollProgress, (latest: number) => latest > 0.4 ? "none" : "auto");
 
-    // Group words into chunks of 5 (instead of per-word)
-    const wordChunks = useMemo(() => {
-        const words = missionText.split(" ");
-        const chunks: string[][] = [];
-        for (let i = 0; i < words.length; i += 5) {
-            chunks.push(words.slice(i, i + 5));
+    const handleScrollToNext = () => {
+        const nextSec = document.getElementById("manifesto");
+        if (nextSec) {
+            nextSec.scrollIntoView({ behavior: "smooth" });
         }
-        return chunks;
-    }, []);
+    };
 
     return (
-        <div className="container mx-auto px-6 h-full flex flex-col md:flex-row items-center justify-center md:items-center relative z-10 gap-10 md:gap-16 pt-20 md:pt-0">
-            {/* Left Column: Title and Paragraph */}
-            <div className="w-full md:w-7/12 flex flex-col justify-center items-start gap-8 flex-shrink-0">
-                <motion.h2
-                    style={{ y: yTitle, opacity: opacityTitle, fontFamily: "var(--font-bodoni)" }}
-                    className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-bold uppercase text-[#fdfbcf] font-heading tracking-[0.05em] text-left leading-none"
-                >
-                    Our Mission
-                </motion.h2>
-
-                <div className="flex flex-wrap gap-x-2 gap-y-1 md:gap-x-3 md:gap-y-2 leading-relaxed text-left w-full md:w-[90%] lg:w-[85%]">
-                    {wordChunks.map((chunk, i) => (
-                        <WordChunk
-                            key={i}
-                            words={chunk}
-                            index={i}
-                            scrollProgress={scrollProgress}
-                            totalChunks={wordChunks.length}
-                        />
-                    ))}
-                </div>
-            </div>
-
-            {/* Right Column: Scroll Indicator */}
-            <div className="w-full md:w-5/12 flex flex-col flex-1 items-center justify-center mt-10 md:mt-0">
+        <>
+            <div className="absolute inset-0 z-10 w-full h-full flex items-center justify-center">
                 <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.5, duration: 1.5 }}
-                    className="flex flex-col items-center gap-6 text-[#fdfbcf]/80"
+                    style={{ opacity: opacityHero, y: yHero, pointerEvents: pointerEventsHero }}
+                    className="absolute inset-0 w-full h-full flex flex-col justify-between px-6 md:px-16 lg:px-24 py-24 md:py-28 animate-[fadeIn_0.5s_ease-out]"
                 >
-                    <span className="uppercase tracking-[0.4em] font-mono text-sm font-bold rotate-90 mb-8 whitespace-nowrap">Scroll Down</span>
+                    {/* Top Bar */}
+                    <div className="flex justify-between items-center text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-white/50 w-full">
+                        <span className="text-[#1EA86E] font-semibold text-left">Custom Apparel &amp; Uniforms</span>
+                        <span className="text-right">Malad West — Mumbai, IN</span>
+                    </div>
 
-                    <motion.div
-                        animate={{ y: [0, 15, 0] }}
-                        transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
-                        className="rounded-full border border-[#fdfbcf]/50 p-4 flex items-center justify-center backdrop-blur-sm bg-black/10"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
-                        </svg>
-                    </motion.div>
+                    {/* Center Typography & Text */}
+                    <div className="w-full flex justify-start items-center my-auto pt-6">
+                        <h1 className="text-[20vw] md:text-[22vw] font-bold leading-none tracking-tight flex items-center font-heading select-none text-[#F2F9F4]">
+                            <span>13</span>
+                            <span style={{ WebkitTextStroke: "2px rgba(242, 249, 244, 0.8)", color: "transparent" }}>27</span>
+                        </h1>
+                    </div>
+
+                    {/* Bottom Content: Left text, Right buttons */}
+                    <div className="w-full flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 mb-12">
+                        {/* Left: Heading & Description */}
+                        <div className="flex flex-col items-start text-left gap-4 max-w-4xl">
+                            <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-[5rem] xl:text-[5.5rem] font-black uppercase text-white tracking-tight leading-[0.9] font-sans">
+                                <span className="block">Designed for the</span>
+                                <span className="block text-[#1EA86E]">Bold.</span>
+                            </h2>
+                            <p className="text-sm sm:text-base md:text-lg text-white/70 max-w-2xl font-sans leading-relaxed">
+                                Premium custom apparel and uniforms for crews that move like family — cut, printed and embroidered in Mumbai.
+                            </p>
+                        </div>
+
+                        {/* Right: Buttons */}
+                        <div className="flex items-center gap-4 w-full lg:w-auto justify-start lg:justify-end shrink-0">
+                            <button
+                                onClick={() => setIsContactOpen(true)}
+                                className="bg-[#1EA86E] hover:bg-[#168a57] text-black font-mono text-xs md:text-sm font-bold tracking-widest px-6 py-3.5 rounded-sm flex items-center gap-2 transition-all duration-300 transform hover:scale-[1.03] active:scale-[0.98] whitespace-nowrap"
+                            >
+                                REACH OUT ↗
+                            </button>
+                            <button
+                                onClick={handleScrollToNext}
+                                className="border border-white/30 hover:border-white/80 hover:bg-white/5 text-white font-mono text-xs md:text-sm tracking-widest px-6 py-3.5 rounded-sm flex items-center gap-2 transition-all duration-300 whitespace-nowrap"
+                            >
+                                SEE THE WORK ⬇
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Bottom Bar */}
+                    <div className="flex justify-between items-center text-[9px] md:text-xs font-mono tracking-[0.15em] text-white/40 w-full">
+                        <span className="text-left">19.1871° N / 72.8488° E</span>
+                        <div className="flex flex-col items-center gap-1">
+                            <span className="text-[9px] tracking-[0.3em] font-bold">SCROLL</span>
+                            <div className="w-[1px] h-8 bg-white/20 relative overflow-hidden">
+                                <motion.div
+                                    animate={{ y: [-32, 32] }}
+                                    transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+                                    className="absolute left-0 right-0 h-4 bg-[#1EA86E]"
+                                />
+                            </div>
+                        </div>
+                        <span className="text-right">@1327_THIRTEENTWENTYSEVEN</span>
+                    </div>
                 </motion.div>
             </div>
-        </div>
-    )
+
+            <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+        </>
+    );
 }
 
-function WordChunk({ words, index, scrollProgress, totalChunks }: { words: string[], index: number, scrollProgress: any, totalChunks: number }) {
-    const revealStart = 0.1;
-    const revealEnd = 0.8;
-    const totalDuration = revealEnd - revealStart;
+function ManifestoSection() {
+    const containerVariants = {
+        initial: {},
+        animate: {
+            transition: {
+                staggerChildren: 0.12
+            }
+        }
+    };
 
-    const chunkStart = revealStart + (index / totalChunks) * totalDuration;
-    const chunkEnd = chunkStart + 0.08;
-
-    const safeStart = Math.min(chunkStart, 0.95);
-    const safeEnd = Math.min(chunkEnd, 1.0);
-
-    const opacity = useTransform(scrollProgress, [safeStart, safeEnd], [0, 1]);
-    const y = useTransform(scrollProgress, [safeStart, safeEnd], [10, 0]);
+    const itemVariants = {
+        initial: { opacity: 0, y: 50 },
+        animate: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.8,
+                ease: [0.16, 1, 0.3, 1] as const
+            }
+        }
+    };
 
     return (
-        <motion.span
-            style={{ opacity, y, fontFamily: '"Times New Roman", serif' }}
-            className="text-base sm:text-lg md:text-3xl lg:text-4xl font-light tracking-tight inline-block will-change-[transform,opacity]"
+        <section
+            id="manifesto"
+            className="relative z-20 bg-[#eae6df] text-[#0a0a0a] py-24 md:py-32 border-b border-black/10 w-full min-h-screen flex flex-col justify-between"
         >
-            {words.join(" ")}{" "}
-        </motion.span>
-    )
+            <motion.div 
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: true, margin: "-10% 0px" }}
+                variants={containerVariants}
+                className="container mx-auto px-6 md:px-16 lg:px-24 flex flex-col justify-between min-h-[70vh]"
+            >
+                {/* Top Bar */}
+                <motion.div 
+                    variants={itemVariants}
+                    className="flex justify-between items-center text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-black border-b border-black/10 pb-4 mb-8 w-full opacity-50"
+                >
+                    <div className="text-left">
+                        <span className="text-[#105233] font-bold mr-2">&#123; 01 &#125;</span>
+                        <span>Our Mission</span>
+                    </div>
+                    <span className="text-right">The Manifesto</span>
+                </motion.div>
+
+                {/* Central Title */}
+                <div className="w-full flex justify-start items-center my-auto py-12">
+                    <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold uppercase tracking-tight leading-[0.95] text-left text-black max-w-5xl font-sans flex flex-col items-start">
+                        <motion.span variants={itemVariants} className="block">
+                            We don't make
+                        </motion.span>
+                        <motion.span variants={itemVariants} className="block mt-2">
+                            Merch.
+                        </motion.span>
+                        <motion.span variants={itemVariants} className="block mt-2">
+                            We build <span className="text-[#105233]">Identity</span>
+                        </motion.span>
+                        
+                        {/* Horizontal black bar divider */}
+                        <motion.div 
+                            variants={{
+                                initial: { width: 0, opacity: 0 },
+                                animate: { width: "64px", opacity: 1, transition: { duration: 0.6, ease: "easeOut" } }
+                            }}
+                            className="h-1 bg-[#0a0a0a] my-8"
+                        />
+                        
+                        <motion.span 
+                            variants={itemVariants} 
+                            className="block"
+                            style={{ WebkitTextStroke: "1.5px #0a0a0a", color: "transparent" }}
+                        >
+                            Stitch by Stitch.
+                        </motion.span>
+                    </h2>
+                </div>
+
+                {/* Bottom Row */}
+                <motion.div 
+                    variants={itemVariants}
+                    className="w-full grid grid-cols-1 md:grid-cols-12 gap-8 items-end mt-8"
+                >
+                    <div className="md:col-span-4 text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-[#105233] font-bold self-start md:self-end text-left">
+                        / Why We Exist
+                    </div>
+                    <div
+                        style={{ fontFamily: '"Times New Roman", serif' }}
+                        className="md:col-span-8 text-sm sm:text-base md:text-lg lg:text-xl font-light text-black/90 leading-relaxed text-left"
+                    >
+                        Every crew deserves a uniform worth belonging to. We cut premium fabric, obsess over embroidery and skip every shortcut — so your people feel like a team, and your brand becomes impossible to miss.
+                    </div>
+                </motion.div>
+            </motion.div>
+        </section>
+    );
 }

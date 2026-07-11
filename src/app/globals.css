@@ -28,6 +28,7 @@
 
   --font-heading: var(--font-heading);
   --font-body: var(--font-body);
+  --font-mono: var(--font-space-mono), monospace;
 
   --font-sans: var(--font-body);
   /* Default sans to body font */

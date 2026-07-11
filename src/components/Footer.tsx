@@ -1,113 +1,141 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { EASING, DURATION, STAGGER, viewportConfig, staggerContainer, staggerItem } from "@/lib/motion";
-
-import ScrollReveal from "./ScrollReveal";
+import ContactModal from "./ContactModal";
 
 export default function Footer() {
+    const [isContactOpen, setIsContactOpen] = useState(false);
+
     return (
-        <footer id="contact" aria-label="Contact 1327 Thirteen Twenty Seven" className="relative z-10 py-20 bg-black text-white">
-            <div className="container mx-auto px-6">
-                <ScrollReveal offset={["start end", "center center"]}>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-20">
+        <footer id="contact" aria-label="Contact 1327 Thirteen Twenty Seven" className="relative z-10 bg-black text-white py-24 border-t border-white/10 overflow-hidden">
+            <div className="container mx-auto px-6 md:px-16 lg:px-24 relative z-10 flex flex-col gap-16 md:gap-24">
+                
+                {/* Top Section: CTA Title and Button */}
+                <motion.div 
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-5% 0px" }}
+                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                    className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 w-full"
+                >
+                    <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold uppercase font-heading tracking-tight leading-[0.95] text-left text-white max-w-2xl">
+                        <span className="block">Have A Crew</span>
+                        <span className="block text-[#1EA86E]">To Dress?</span>
+                    </h2>
+                    
+                    <button 
+                        onClick={() => setIsContactOpen(true)}
+                        className="bg-[#1EA86E] hover:bg-[#168a57] text-black font-mono text-xs md:text-sm font-bold tracking-widest px-8 py-4 rounded-sm flex items-center gap-2 transition-all duration-300 transform hover:scale-[1.03] active:scale-[0.98] whitespace-nowrap self-start md:self-center"
+                    >
+                        START A CONVERSATION ↗
+                    </button>
+                </motion.div>
 
-                        {/* Contact Section */}
-                        <div className="space-y-8">
-                            <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-[#fdfbcf] mb-8">
-                                Contact
-                            </h3>
+                {/* Divider */}
+                <div className="w-full h-[1px] bg-white/10" />
 
-                            <div className="space-y-6">
-                                <div>
-                                    <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Founder</p>
-                                    <p className="text-xl font-light">Keith Shah</p>
-                                    <a href="tel:+918082845721" className="text-lg text-gray-300 hover:text-[#fdfbcf] transition-colors font-heading mt-1 block">
-                                        +91 8082845721
-                                    </a>
-                                </div>
-
-                                <div>
-                                    <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Email</p>
-                                    <a href="mailto:1327thecommunity@gmail.com" className="text-lg text-gray-300 hover:text-[#fdfbcf] transition-colors font-mono">
-                                        1327thecommunity@gmail.com
-                                    </a>
-                                </div>
-                            </div>
+                {/* Info Grid (4 Columns) */}
+                <motion.div 
+                    initial="initial"
+                    whileInView="animate"
+                    viewport={{ once: true, margin: "-5% 0px" }}
+                    variants={{
+                        initial: { opacity: 0 },
+                        animate: { opacity: 1, transition: { staggerChildren: 0.1 } }
+                    }}
+                    className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 w-full text-left relative z-10"
+                >
+                    {/* Contact */}
+                    <motion.div 
+                        variants={{
+                            initial: { opacity: 0, y: 30 },
+                            animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
+                        }}
+                        className="flex flex-col gap-6"
+                    >
+                        <h3 className="text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-white/40 font-bold">Contact</h3>
+                        <div className="flex flex-col gap-2 font-mono text-xs md:text-sm text-white/60 tracking-wider">
+                            <a href="tel:+918082845721" className="hover:text-[#1EA86E] transition-colors">+91 80828 45721</a>
+                            <a href="mailto:1327thecommunity@gmail.com" className="hover:text-[#1EA86E] transition-colors break-all">1327thecommunity@gmail.com</a>
                         </div>
+                    </motion.div>
 
-                        {/* Quick Links Section (For SEO Internal Links) */}
-                        <div>
-                            <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-[#fdfbcf] mb-8">
-                                Quick Links
-                            </h3>
-                            <nav className="flex flex-col space-y-4">
-                                <a href="#mission" className="text-lg text-gray-300 hover:text-[#fdfbcf] transition-colors font-light">Our Mission</a>
-                                <a href="#about" className="text-lg text-gray-300 hover:text-[#fdfbcf] transition-colors font-light">About Us</a>
-                                <a href="#services" className="text-lg text-gray-300 hover:text-[#fdfbcf] transition-colors font-light">What We Offer</a>
-                                <a href="#clients" className="text-lg text-gray-300 hover:text-[#fdfbcf] transition-colors font-light">Happy Clients</a>
-                                <a href="#notes" className="text-lg text-gray-300 hover:text-[#fdfbcf] transition-colors font-light">Orders & MOQs</a>
-                            </nav>
+                    {/* Social */}
+                    <motion.div 
+                        variants={{
+                            initial: { opacity: 0, y: 30 },
+                            animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
+                        }}
+                        className="flex flex-col gap-6"
+                    >
+                        <h3 className="text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-white/40 font-bold">Social</h3>
+                        <div className="flex flex-col gap-2 font-mono text-xs md:text-sm text-white/60 tracking-wider">
+                            <a href="https://www.instagram.com/1327_thirteentwentyseven/" target="_blank" rel="noopener noreferrer" className="hover:text-[#1EA86E] transition-colors">Instagram — @1327_thirteentwentyseven</a>
+                            <a href="https://www.youtube.com/@1327-thirteentwentyseven" target="_blank" rel="noopener noreferrer" className="hover:text-[#1EA86E] transition-colors">YouTube — @1327-thirteentwentyseven</a>
                         </div>
+                    </motion.div>
 
-                        {/* Socials Section */}
-                        <div>
-                            <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-[#fdfbcf] mb-8">
-                                Follow Us
-                            </h3>
-
-                            <div className="flex flex-col space-y-4">
-                                <SocialLink
-                                    href="https://www.instagram.com/1327_thirteentwentyseven/"
-                                    label="Instagram"
-                                    handle="@1327_thirteentwentyseven"
-                                />
-                                <SocialLink
-                                    href="https://www.youtube.com/@1327-thirteentwentyseven"
-                                    label="YouTube"
-                                    handle="@1327-thirteentwentyseven"
-                                />
-                            </div>
+                    {/* Menu */}
+                    <motion.div 
+                        variants={{
+                            initial: { opacity: 0, y: 30 },
+                            animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
+                        }}
+                        className="flex flex-col gap-6"
+                    >
+                        <h3 className="text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-white/40 font-bold">Menu</h3>
+                        <div className="flex flex-col gap-2 font-mono text-xs md:text-sm text-white/60 tracking-wider">
+                            <a href="#mission" className="hover:text-[#1EA86E] transition-colors">Our Mission</a>
+                            <a href="#about" className="hover:text-[#1EA86E] transition-colors">About Us</a>
+                            <a href="#services" className="hover:text-[#1EA86E] transition-colors">What We Offer</a>
+                            <a href="#clients" className="hover:text-[#1EA86E] transition-colors">Clients</a>
+                            <a href="#notes" className="hover:text-[#1EA86E] transition-colors">Orders &amp; MOQ</a>
                         </div>
+                    </motion.div>
 
-                    </div>
+                    {/* Studio */}
+                    <motion.div 
+                        variants={{
+                            initial: { opacity: 0, y: 30 },
+                            animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
+                        }}
+                        className="flex flex-col gap-6"
+                    >
+                        <h3 className="text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-white/40 font-bold">Studio</h3>
+                        <div className="flex flex-col gap-1 font-mono text-xs md:text-sm text-white/60 tracking-wider">
+                            <p>Malad West, Mumbai</p>
+                            <p>Maharashtra, India</p>
+                        </div>
+                    </motion.div>
+                </motion.div>
 
-                    {/* Copyright */}
-                    <div className="mt-20 pt-8 border-t border-white/5 text-center flex flex-col md:flex-row justify-between items-center text-xs text-gray-600 uppercase tracking-widest">
-                        <p>© <span className="font-heading">2026</span> <span className="font-heading">1327</span> Community. All Rights Reserved.</p>
-                        <p className="mt-2 md:mt-0">Designed for the Bold</p>
-                    </div>
-                </ScrollReveal>
+                {/* Bottom Bar: Copyright and Tagline */}
+                <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-[9px] md:text-xs font-mono tracking-[0.15em] text-white/40 border-t border-white/5 pt-8 w-full relative z-10">
+                    <span className="text-left font-sans">© 2026 1327 - THIRTEEN TWENTY SEVEN</span>
+                    <span className="text-right">DESIGNED FOR THE BOLD  ·  MADE IN MALAD WEST</span>
+                </div>
+
             </div>
+
+            {/* Giant Outlined Logo Background Watermark */}
+            <motion.div 
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 0.03, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute bottom-[-10%] left-1/2 -translate-x-1/2 w-full max-w-7xl h-auto select-none pointer-events-none z-0 flex justify-center items-end overflow-hidden"
+            >
+                <span 
+                    className="text-[25vw] font-bold leading-none tracking-tighter font-heading text-white whitespace-nowrap select-none"
+                    style={{ WebkitTextStroke: "2px #fff", color: "transparent" }}
+                >
+                    1327
+                </span>
+            </motion.div>
+
+            {/* Contact Modal */}
+            <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
         </footer>
     );
-}
-
-function SocialLink({ href, label, handle }: { href: string, label: string, handle: string }) {
-    return (
-        <motion.a
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex items-center justify-between py-4 border-b border-white/10 hover:border-[#fdfbcf] transition-colors"
-            whileHover={{ x: 4 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-        >
-            <span className="text-2xl font-thin group-hover:text-[#fdfbcf] transition-colors duration-300">{label}</span>
-            <motion.span
-                className="text-xs text-gray-500 font-mono group-hover:text-[#fdfbcf] transition-colors flex items-center gap-2"
-                initial={{ opacity: 0.7 }}
-                whileHover={{ opacity: 1 }}
-            >
-                {handle}
-                <motion.span
-                    initial={{ opacity: 0, x: -5 }}
-                    whileHover={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.2 }}
-                >
-                    →
-                </motion.span>
-            </motion.span>
-        </motion.a>
-    )
 }
