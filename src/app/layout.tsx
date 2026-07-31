@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
-import { Bodoni_Moda, Space_Mono } from "next/font/google";
+import { Bodoni_Moda, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import clsx from "clsx";
 import SmoothScroll from "@/components/SmoothScroll";
@@ -21,9 +21,9 @@ const bodoni = Bodoni_Moda({
   display: "swap",
 });
 
-const spaceMono = Space_Mono({
+const premiumMono = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["400", "500", "600", "700", "800"],
   variable: "--font-space-mono",
   display: "swap",
 });
@@ -313,7 +313,7 @@ export default function RootLayout({
         className={clsx(
           sugo.variable,
           bodoni.variable,
-          spaceMono.variable,
+          premiumMono.variable,
           "antialiased text-white overflow-x-hidden selection:bg-[#C9FF23] selection:text-black font-body"
         )}
       >

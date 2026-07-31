@@ -26,7 +26,7 @@ export default function AboutUs() {
             id="about"
             ref={containerRef}
             aria-label="About 1327 Thirteen Twenty Seven"
-            className="relative z-10 py-32 bg-transparent text-white overflow-hidden"
+            className="relative z-10 py-20 md:py-32 bg-transparent text-white overflow-hidden"
         >
             <motion.div
                 style={{ y: yExit, opacity: opacityExit }}
@@ -94,9 +94,9 @@ export default function AboutUs() {
                     </motion.div>
 
                     {/* Image Grid Column (Right) */}
-                    <div className="w-full md:w-1/2 grid grid-cols-2 gap-6 md:gap-8 relative mt-16 md:mt-0">
-                        {/* Column 1 */}
-                        <motion.div style={{ y: y1, rotate: rotate1 }} className="flex flex-col gap-6 md:gap-8">
+                    <div className="w-full md:w-1/2 grid grid-cols-2 gap-3 sm:gap-6 md:gap-8 relative">
+                        {/* Column 1 — parallax only on md+ */}
+                        <motion.div style={{ y: y1, rotate: rotate1 }} className="flex flex-col gap-3 sm:gap-6 md:gap-8">
                             <InteractiveImageCard
                                 src="/aboutus/about-3.png"
                                 alt="1327 team crafting uniforms in Malad West"
@@ -111,8 +111,8 @@ export default function AboutUs() {
                             />
                         </motion.div>
 
-                        {/* Column 2 */}
-                        <motion.div style={{ y: y2, rotate: rotate2 }} className="flex flex-col gap-6 md:gap-8 mt-16 md:mt-24">
+                        {/* Column 2 — offset only on md+, flat on mobile */}
+                        <motion.div style={{ y: y2, rotate: rotate2 }} className="flex flex-col gap-3 sm:gap-6 md:gap-8 md:mt-24">
                             <InteractiveImageCard
                                 src="/aboutus/about-2.png"
                                 alt="Custom embroidery work by 1327 Mumbai"

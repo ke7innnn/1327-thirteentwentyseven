@@ -56,7 +56,7 @@ export default function Header() {
                 {/* Right: Reach Out Symbol & Permanent Alert - Wrapped in Width Container */}
                 <div className="w-24 flex justify-end">
                     <div className="flex items-center gap-3 relative z-50">
-                        <span className="block text-[10px] font-bold tracking-[0.2em] text-[#fdfbcf] font-heading uppercase animate-pulse">
+                        <span className="hidden sm:block text-[10px] font-bold tracking-[0.2em] text-[#fdfbcf] font-heading uppercase animate-pulse">
                             REACH OUT
                         </span>
                         <button

@@ -5,9 +5,9 @@ import { EASING, DURATION, viewportConfig, staggerContainer, staggerItem } from 
 
 export default function Notes() {
     return (
-        <section id="notes" className="relative z-10 py-32 bg-transparent text-white overflow-hidden border-b border-white/10">
-            <div className="container mx-auto px-6">
-                <div className="flex flex-col md:flex-row items-center gap-12 md:gap-24">
+        <section id="notes" className="relative z-10 py-20 md:py-32 bg-transparent text-white overflow-hidden border-b border-white/10">
+            <div className="container mx-auto px-5 sm:px-6">
+                <div className="flex flex-col md:flex-row items-center gap-10 md:gap-24">
 
                     {/* Text Column (Left) — one-shot entrance, no continuous scroll tracking */}
                     <motion.div
@@ -18,13 +18,11 @@ export default function Notes() {
                         className="w-full md:w-1/2 relative z-20"
                     >
                         <div className="relative max-w-xl mx-auto transform -rotate-1 group">
-                            {/* Tape Effect — removed backdrop-blur (kills mobile GPU) */}
-                            <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-32 h-10 bg-white/40 shadow-sm rotate-2 z-20 pointer-events-none transform origin-center border-l-2 border-r-2 border-white/20 skew-y-1"></div>
+                            {/* Tape Effect */}
+                            <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-24 sm:w-32 h-8 sm:h-10 bg-white/40 shadow-sm rotate-2 z-20 pointer-events-none transform origin-center border-l-2 border-r-2 border-white/20 skew-y-1"></div>
 
                             {/* Note Paper */}
-                            <div
-                                className="bg-[#fdfbcf] text-[#103010] p-8 md:p-12 rounded-sm shadow-[0_10px_40px_-10px_rgba(0,0,0,0.3)] border border-[#E6D5B8] relative overflow-hidden"
-                            >
+                            <div className="bg-[#fdfbcf] text-[#103010] p-6 sm:p-8 md:p-12 rounded-sm shadow-[0_10px_40px_-10px_rgba(0,0,0,0.3)] border border-[#E6D5B8] relative overflow-hidden">
 
                                 <motion.h2
                                     initial={{ opacity: 0, y: 20 }}
@@ -73,10 +71,10 @@ export default function Notes() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-10% 0px" }}
                         transition={{ duration: 0.8, ease: EASING, delay: 0.1 }}
-                        className="w-full md:w-1/2 relative mt-12 md:mt-0"
+                        className="w-full md:w-1/2 relative mt-6 md:mt-0"
                     >
-                        {/* WATCH Label */}
-                        <div className="absolute -top-12 left-0 flex items-center gap-3 z-30">
+                        {/* TAKE A LOOK Label — moved inside flow so it doesn't clip on mobile */}
+                        <div className="flex items-center gap-3 mb-4">
                             <span className="relative flex h-3 w-3">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#fdfbcf] opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-3 w-3 bg-[#fdfbcf]"></span>

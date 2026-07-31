@@ -256,66 +256,66 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
             <div className="absolute inset-0 z-10 w-full h-full flex items-center justify-center">
                 <motion.div
                     style={{ opacity: opacityHero, y: yHero, pointerEvents: pointerEventsHero }}
-                    className="absolute inset-0 w-full h-full flex flex-col justify-between px-6 md:px-16 lg:px-24 py-24 md:py-28 animate-[fadeIn_0.5s_ease-out]"
+                    className="absolute inset-0 w-full h-full flex flex-col justify-between px-5 sm:px-8 md:px-16 lg:px-24 pt-20 pb-4 sm:pt-24 sm:pb-6 md:py-28 animate-[fadeIn_0.5s_ease-out]"
                 >
                     {/* Top Bar */}
                     <div className="flex justify-between items-center text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-white/50 w-full">
                         <span className="text-[#1EA86E] font-semibold text-left">Custom Apparel &amp; Uniforms</span>
-                        <span className="text-right">Malad West — Mumbai, IN</span>
+                        <span className="text-right hidden sm:inline">Malad West — Mumbai, IN</span>
                     </div>
 
-                    {/* Center Typography & Text */}
-                    <div className="w-full flex justify-start items-center my-auto pt-6">
-                        <h1 className="text-[20vw] md:text-[22vw] font-bold leading-none tracking-tight flex items-center font-heading select-none text-[#F2F9F4]">
+                    {/* Center Number */}
+                    <div className="w-full flex justify-start items-center">
+                        <h1 className="text-[22vw] md:text-[22vw] font-bold leading-none tracking-tight flex items-center font-heading select-none text-[#F2F9F4]">
                             <span>13</span>
-                            <span style={{ WebkitTextStroke: "2px rgba(242, 249, 244, 0.8)", color: "transparent" }}>27</span>
+                            <span>27</span>
                         </h1>
                     </div>
 
-                    {/* Bottom Content: Left text, Right buttons */}
-                    <div className="w-full flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 mb-12">
-                        {/* Left: Heading & Description */}
-                        <div className="flex flex-col items-start text-left gap-4 max-w-4xl">
-                            <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-[5rem] xl:text-[5.5rem] font-black uppercase text-white tracking-tight leading-[0.9] font-sans">
+                    {/* Bottom Content */}
+                    <div className="w-full flex flex-col gap-3 sm:gap-5">
+                        {/* Heading & Description */}
+                        <div className="flex flex-col items-start text-left gap-2 sm:gap-3">
+                            <h2 className="text-2xl xs:text-3xl sm:text-5xl md:text-7xl lg:text-[5rem] xl:text-[5.5rem] font-black uppercase text-white tracking-tight leading-[0.9] font-sans">
                                 <span className="block">Designed for the</span>
                                 <span className="block text-[#1EA86E]">Bold.</span>
                             </h2>
-                            <p className="text-sm sm:text-base md:text-lg text-white/70 max-w-2xl font-sans leading-relaxed">
+                            <p className="text-xs sm:text-sm md:text-lg text-white/70 max-w-2xl font-sans leading-relaxed hidden sm:block">
                                 Premium custom apparel and uniforms for crews that move like family — cut, printed and embroidered in Mumbai.
                             </p>
                         </div>
 
-                        {/* Right: Buttons */}
-                        <div className="flex items-center gap-4 w-full lg:w-auto justify-start lg:justify-end shrink-0">
+                        {/* Buttons */}
+                        <div className="flex items-center gap-3">
                             <button
                                 onClick={() => setIsContactOpen(true)}
-                                className="bg-[#1EA86E] hover:bg-[#168a57] text-black font-mono text-xs md:text-sm font-bold tracking-widest px-6 py-3.5 rounded-sm flex items-center gap-2 transition-all duration-300 transform hover:scale-[1.03] active:scale-[0.98] whitespace-nowrap"
+                                className="bg-[#1EA86E] hover:bg-[#168a57] text-black font-mono text-[10px] sm:text-xs md:text-sm font-bold tracking-widest px-4 sm:px-6 py-2.5 sm:py-3.5 rounded-sm flex items-center gap-2 transition-all duration-300 transform hover:scale-[1.03] active:scale-[0.98] whitespace-nowrap"
                             >
                                 REACH OUT ↗
                             </button>
                             <button
                                 onClick={handleScrollToNext}
-                                className="border border-white/30 hover:border-white/80 hover:bg-white/5 text-white font-mono text-xs md:text-sm tracking-widest px-6 py-3.5 rounded-sm flex items-center gap-2 transition-all duration-300 whitespace-nowrap"
+                                className="border border-white/30 hover:border-white/80 hover:bg-white/5 text-white font-mono text-[10px] sm:text-xs md:text-sm tracking-widest px-4 sm:px-6 py-2.5 sm:py-3.5 rounded-sm flex items-center gap-2 transition-all duration-300 whitespace-nowrap"
                             >
                                 SEE THE WORK ⬇
                             </button>
                         </div>
-                    </div>
 
-                    {/* Bottom Bar */}
-                    <div className="flex justify-between items-center text-[9px] md:text-xs font-mono tracking-[0.15em] text-white/40 w-full">
-                        <span className="text-left">19.1871° N / 72.8488° E</span>
-                        <div className="flex flex-col items-center gap-1">
-                            <span className="text-[9px] tracking-[0.3em] font-bold">SCROLL</span>
-                            <div className="w-[1px] h-8 bg-white/20 relative overflow-hidden">
-                                <motion.div
-                                    animate={{ y: [-32, 32] }}
-                                    transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
-                                    className="absolute left-0 right-0 h-4 bg-[#1EA86E]"
-                                />
+                        {/* Bottom Bar */}
+                        <div className="flex justify-between items-center text-[8px] sm:text-[9px] md:text-xs font-mono tracking-[0.12em] text-white/40 w-full pt-1 sm:pt-2 border-t border-white/10">
+                            <span className="text-left">19.1871° N / 72.8488° E</span>
+                            <div className="flex flex-col items-center gap-1">
+                                <span className="text-[8px] tracking-[0.3em] font-bold">SCROLL</span>
+                                <div className="w-[1px] h-6 bg-white/20 relative overflow-hidden">
+                                    <motion.div
+                                        animate={{ y: [-24, 24] }}
+                                        transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+                                        className="absolute left-0 right-0 h-3 bg-[#1EA86E]"
+                                    />
+                                </div>
                             </div>
+                            <span className="text-right hidden xs:inline">@1327_THIRTEENTWENTYSEVEN</span>
                         </div>
-                        <span className="text-right">@1327_THIRTEENTWENTYSEVEN</span>
                     </div>
                 </motion.div>
             </div>
@@ -350,14 +350,14 @@ function ManifestoSection() {
     return (
         <section
             id="manifesto"
-            className="relative z-20 bg-[#eae6df] text-[#0a0a0a] py-24 md:py-32 border-b border-black/10 w-full min-h-screen flex flex-col justify-between"
+            className="relative z-20 bg-[#eae6df] text-[#0a0a0a] py-16 md:py-32 border-b border-black/10 w-full"
         >
             <motion.div 
                 initial="initial"
                 whileInView="animate"
                 viewport={{ once: true, margin: "-10% 0px" }}
                 variants={containerVariants}
-                className="container mx-auto px-6 md:px-16 lg:px-24 flex flex-col justify-between min-h-[70vh]"
+                className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24 flex flex-col justify-between min-h-0 md:min-h-[70vh] gap-8 md:gap-0"
             >
                 {/* Top Bar */}
                 <motion.div 
@@ -381,7 +381,7 @@ function ManifestoSection() {
                             Merch.
                         </motion.span>
                         <motion.span variants={itemVariants} className="block mt-2">
-                            We build <span className="text-[#105233]">Identity</span>
+                            We build <span className="text-[#105233]" style={{ filter: "drop-shadow(0 0 18px rgba(16, 82, 51, 0.8)) drop-shadow(0 0 40px rgba(30, 168, 110, 0.35))" }}>Identity</span>
                         </motion.span>
                         
                         {/* Horizontal black bar divider */}

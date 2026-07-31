@@ -28,11 +28,13 @@
 
   --font-heading: var(--font-heading);
   --font-body: var(--font-body);
-  --font-mono: var(--font-space-mono), monospace;
+  --font-mono: var(--font-space-mono), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
   --font-sans: var(--font-body);
   /* Default sans to body font */
 
+  /* Custom xs breakpoint */
+  --breakpoint-xs: 480px;
 
   /* Minimal reset */
   --animate-fade-in: fade-in 0.5s ease-out;
