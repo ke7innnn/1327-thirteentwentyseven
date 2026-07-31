@@ -3,6 +3,7 @@
 import { useScroll, useTransform, useMotionValueEvent, motion, useSpring, MotionValue } from "framer-motion";
 import { useRef, useMemo, useEffect, useState, useCallback } from "react";
 import ContactModal from "./ContactModal";
+import BrandTagTransition from "./BrandTagTransition";
 
 const TOTAL_FRAMES = 240;
 // Batch size for progressive loading — first batch loads instantly, rest load in background
@@ -34,6 +35,9 @@ export default function Mission() {
             
             {/* Spacer to allow scrolling of the sticky section */}
             <div className="h-[50vh] bg-transparent pointer-events-none" />
+
+            {/* Transition: Scroll-driven 1327 Brand Tag */}
+            <BrandTagTransition />
 
             {/* Manifesto Section */}
             <ManifestoSection />
