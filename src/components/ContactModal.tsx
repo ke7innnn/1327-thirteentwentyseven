@@ -65,7 +65,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
 
                             <div className="p-8 md:p-10 relative z-10">
                                 <h2 className="text-3xl font-heading text-white mb-2 tracking-tight">REACH OUT</h2>
-                                <p className="text-white/60 text-sm mb-8 font-mono">Tell us what you're looking for.</p>
+                                <p className="text-white/60 text-sm mb-8 font-mono">Tell us what you&apos;re looking for.</p>
 
                                 <form onSubmit={handleSubmit} className="space-y-4">
                                     <div className="grid grid-cols-2 gap-4">

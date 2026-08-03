@@ -7,7 +7,7 @@ export default function CustomCursor() {
     const cursorSize = 20;
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
-    const [isTouch, setIsTouch] = useState(false);
+    const [isTouch] = useState(() => typeof window !== "undefined" && window.matchMedia("(hover: none)").matches);
 
     const springConfig = { damping: 25, stiffness: 700 };
     const cursorX = useSpring(mouseX, springConfig);
@@ -18,9 +18,7 @@ export default function CustomCursor() {
 
     useEffect(() => {
         // Detect touch device and bail out
-        const isTouchDevice = window.matchMedia("(hover: none)").matches;
-        if (isTouchDevice) {
-            setIsTouch(true);
+        if (isTouch) {
             return;
         }
 
@@ -45,7 +43,7 @@ export default function CustomCursor() {
             window.removeEventListener("mousemove", moveCursor);
             window.removeEventListener("mouseover", handleMouseOver);
         };
-    }, [mouseX, mouseY]);
+    }, [mouseX, mouseY, isTouch]);
 
     // Don't render on touch devices
     if (isTouch) return null;

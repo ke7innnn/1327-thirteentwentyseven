@@ -1,13 +1,13 @@
 "use client";
 
 import { useScroll, useTransform, useMotionValueEvent, motion, useSpring, MotionValue } from "framer-motion";
-import { useRef, useMemo, useEffect, useState, useCallback } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import ContactModal from "./ContactModal";
 import BrandTagTransition from "./BrandTagTransition";
 
 const TOTAL_FRAMES = 240;
 // Batch size for progressive loading — first batch loads instantly, rest load in background
-const FIRST_BATCH = 20;
+const FIRST_BATCH = 40;
 
 function getFramePath(index: number): string {
     const num = String(index + 1).padStart(3, "0");
@@ -154,7 +154,7 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }
         // Load remaining frames in small batches using requestIdleCallback / setTimeout
         const loadRemainingFrames = () => {
             let i = FIRST_BATCH;
-            const BATCH = 10;
+            const BATCH = 20;
 
             const loadBatch = () => {
                 if (!mounted || i >= TOTAL_FRAMES) return;
@@ -194,9 +194,11 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }
             }, 100);
         }
         // Set initial size immediately
-        setCanvasSize({
-            width: window.innerWidth,
-            height: window.innerHeight
+        requestAnimationFrame(() => {
+            setCanvasSize({
+                width: window.innerWidth,
+                height: window.innerHeight
+            });
         });
         window.addEventListener("resize", handleResize, { passive: true });
         return () => {
@@ -379,7 +381,7 @@ function ManifestoSection() {
                 <div className="w-full flex justify-start items-center my-auto py-12">
                     <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold uppercase tracking-tight leading-[0.95] text-left text-black max-w-5xl font-sans flex flex-col items-start">
                         <motion.span variants={itemVariants} className="block">
-                            We don't make
+                            We don&apos;t make
                         </motion.span>
                         <motion.span variants={itemVariants} className="block mt-2">
                             Merch.

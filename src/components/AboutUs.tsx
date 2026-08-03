@@ -54,7 +54,7 @@ export default function AboutUs() {
 
                         <div className="flex flex-col gap-6 text-white/80 font-light font-sans text-base md:text-lg leading-relaxed max-w-xl">
                             <p>
-                                1327 was born in Mumbai on a code borrowed from the Fast &amp; Furious films and lived out on the street — nothing matters more than family. We don't chase orders; we build relationships that outlast trends.
+                                1327 was born in Mumbai on a code borrowed from the Fast &amp; Furious films and lived out on the street — nothing matters more than family. We don&apos;t chase orders; we build relationships that outlast trends.
                             </p>
                             <p>
                                 Founded by Keith Shah, we work shoulder-to-shoulder with cafés, kitchens, studios and crews across the city — designing, stitching and embroidering uniforms their teams are proud to pull on every shift.
@@ -205,8 +205,7 @@ function InteractiveImageCard({ src, alt, label, placeholder }: { src: string, a
                     alt={alt}
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    loading="lazy"
-                    unoptimized
+                    loading="eager"
                 />
                 <div className="absolute inset-0 bg-black/10 group-hover:bg-black/40 transition-colors duration-500 flex flex-col items-center justify-center p-4">
                     {/* Upload icon/text overlays on hover */}

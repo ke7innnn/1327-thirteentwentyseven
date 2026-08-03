@@ -7,7 +7,7 @@ interface ScrollRevealProps {
     children: React.ReactNode;
     className?: string;
     yOffset?: number;
-    offset?: any;
+    offset?: NonNullable<Parameters<typeof useScroll>[0]>["offset"];
     duration?: number;
 }
 

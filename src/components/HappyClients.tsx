@@ -97,7 +97,8 @@ export default function HappyClients() {
                                     fill
                                     sizes="(max-width: 768px) 220px, 300px"
                                     className="object-cover"
-                                    loading="lazy"
+                                    loading="eager"
+                                    priority={index < 4}
                                 />
                                 <div className="absolute inset-0 bg-[#061E13]/20 group-hover/card:bg-black/10 transition-colors" />
 

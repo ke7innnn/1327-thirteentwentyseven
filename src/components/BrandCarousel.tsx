@@ -44,8 +44,8 @@ export default function BrandCarousel() {
                             fill
                             sizes="(max-width: 768px) 120px, 200px"
                             className="object-contain"
-                            loading="lazy"
-                            unoptimized
+                            loading="eager"
+                            priority={index < 8}
                         />
                     </div>
                 ))}

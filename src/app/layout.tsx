@@ -6,8 +6,8 @@ import clsx from "clsx";
 import SmoothScroll from "@/components/SmoothScroll";
 import Header from "@/components/Header";
 import CinematicGrain from "@/components/ui/CinematicGrain";
-import CustomCursor from "@/components/ui/CustomCursor";
 import DynamicTitle from "@/components/DynamicTitle";
+import ImagePreloader from "@/components/ImagePreloader";
 
 const sugo = localFont({
   src: "../../public/fonts/Sugo-Pro-Display-Regular-trial.ttf",
@@ -317,6 +317,7 @@ export default function RootLayout({
           "antialiased text-white overflow-x-hidden selection:bg-[#C9FF23] selection:text-black font-body"
         )}
       >
+        <ImagePreloader />
         <SmoothScroll>
           <CinematicGrain />
           <Header />

@@ -17,6 +17,13 @@ export interface SubSection {
     specStrip: { label: string; value: string }[];
 }
 
+export interface GalleryItem {
+    image: string;
+    caption: string;
+    spec?: string;
+    specStrip?: { label: string; value: string }[];
+}
+
 interface ServiceItem {
     id: string;
     title: string;
@@ -27,6 +34,7 @@ interface ServiceItem {
     caption: string;
     specStrip?: { label: string; value: string }[];
     subSections?: SubSection[];
+    gallery?: GalleryItem[];
     priority?: boolean;
 }
 
@@ -506,11 +514,12 @@ function MediaPanel({
     reduced: boolean;
 }) {
     const [galleryIdx, setGalleryIdx] = useState(0);
+    const [prevItemId, setPrevItemId] = useState(item.id);
 
-    // Reset gallery index when item changes
-    useEffect(() => {
+    if (prevItemId !== item.id) {
+        setPrevItemId(item.id);
         setGalleryIdx(0);
-    }, [item.id]);
+    }
 
     const activeGalleryItem = item.gallery?.[galleryIdx];
 
@@ -550,13 +559,18 @@ function MediaPanel({
 
     useEffect(() => {
         if (currentView.id === displayed.id) return;
-        setIncoming(currentView);
-        setImgKey(k => k + 1);
+        const raf = requestAnimationFrame(() => {
+            setIncoming(currentView);
+            setImgKey(k => k + 1);
+        });
         const t = setTimeout(() => {
             setDisplayed(currentView);
             setIncoming(null);
         }, 380);
-        return () => clearTimeout(t);
+        return () => {
+            cancelAnimationFrame(raf);
+            clearTimeout(t);
+        };
     }, [currentView.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const indexLabel =
@@ -596,7 +610,8 @@ function MediaPanel({
                         fill
                         sizes="(min-width: 1024px) 38vw, 0px"
                         className="object-contain p-2"
-                        unoptimized
+                        loading="eager"
+                        priority
                     />
                 </motion.div>
 
@@ -617,7 +632,8 @@ function MediaPanel({
                                 fill
                                 sizes="(min-width: 1024px) 38vw, 0px"
                                 className="object-contain p-2"
-                                unoptimized
+                                loading="eager"
+                                priority
                             />
                         </motion.div>
                     )}
@@ -1023,6 +1039,7 @@ export default function Services() {
                     <div className="lg:col-span-5 sticky top-[80px] self-start">
                         <MediaPanel
                             item={activeItem}
+                            activeSubSection={activeSubSection}
                             globalIndex={activeGlobalIndex}
                             reduced={reduced}
                         />

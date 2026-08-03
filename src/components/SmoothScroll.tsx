@@ -1,16 +1,10 @@
 "use client";
 
 import { ReactLenis } from "lenis/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
-    const [isTouchDevice, setIsTouchDevice] = useState(false);
-
-    useEffect(() => {
-        // Detect touch-primary devices (phones/tablets)
-        const isTouch = window.matchMedia("(pointer: coarse)").matches;
-        setIsTouchDevice(isTouch);
-    }, []);
+    const [isTouchDevice] = useState(() => typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches);
 
     // On touch devices, skip Lenis entirely — native mobile scroll is smooth
     // and Lenis's momentum interpolation causes reverse-scroll glitches
@@ -22,9 +16,11 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
         <ReactLenis
             root
             options={{
-                lerp: 0.08,
-                duration: 1.2,
+                lerp: 0.14,
+                duration: 0.8,
                 smoothWheel: true,
+                wheelMultiplier: 1.1,
+                touchMultiplier: 2.0,
             }}
         >
             {children}
