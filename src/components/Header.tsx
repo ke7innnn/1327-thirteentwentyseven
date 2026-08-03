@@ -3,27 +3,52 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { EASING, DURATION, STAGGER } from "@/lib/motion";
 import ContactModal from "./ContactModal";
 
 export default function Header() {
     const [isOpen, setIsOpen] = useState(false);
     const [isContactOpen, setIsContactOpen] = useState(false);
+    const [hidden, setHidden] = useState(false);
+
+    const { scrollY } = useScroll();
+
+    useMotionValueEvent(scrollY, "change", (latest) => {
+        const previous = scrollY.getPrevious() ?? 0;
+        if (latest < 50) {
+            setHidden(false);
+        } else if (latest > previous && latest > 150) {
+            // Scrolling DOWN -> hide navbar
+            setHidden(true);
+        } else if (latest < previous) {
+            // Scrolling UP (opposite scroll direction) -> show navbar
+            setHidden(false);
+        }
+    });
 
     const toggleMenu = () => setIsOpen(!isOpen);
 
     const menuItems = [
         { label: "Mission", href: "#mission" },
         { label: "About Us", href: "#about" },
+        { label: "Services", href: "#services" },
         { label: "Clients", href: "#clients" },
-        { label: "Notes", href: "#notes" },
+        { label: "Location", href: "#location" },
         { label: "Contact", href: "#contact" },
     ];
 
     return (
         <>
-            <header className="fixed top-0 left-0 right-0 z-50 bg-[linear-gradient(90deg,#0C4029_0%,#105233_35%,#105233_65%,#0C4029_100%)] px-6 py-2 flex items-center justify-between h-16">
+            <motion.header
+                variants={{
+                    visible: { y: 0 },
+                    hidden: { y: "-100%" }
+                }}
+                animate={hidden && !isOpen ? "hidden" : "visible"}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/90 backdrop-blur-md border-b border-white/10 px-6 py-2 flex items-center justify-between h-16 transform-gpu"
+            >
 
                 {/* Left: MENU Text Button - Wrapped in Width Container for Balance */}
                 <div className="w-24 flex justify-start">
@@ -70,7 +95,7 @@ export default function Header() {
                         </button>
                     </div>
                 </div>
-            </header>
+            </motion.header>
 
             {/* Contact Modal */}
             <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
