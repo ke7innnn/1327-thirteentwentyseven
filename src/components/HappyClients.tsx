@@ -42,7 +42,7 @@ export default function HappyClients() {
     }, [selectedIndex, handleNext, handlePrev]);
 
     return (
-        <section id="clients" aria-label="Happy Clients of 1327" className="relative z-30 py-32 bg-[#105233] text-white overflow-hidden border-b border-white/10">
+        <section id="clients" aria-label="Happy Clients of 1327" className="relative z-30 py-32 bg-black text-white overflow-hidden border-b border-white/10">
             <div className="container mx-auto px-6 mb-16 text-center relative z-10">
                 {/* Entrance title */}
                 <motion.div
@@ -78,7 +78,7 @@ export default function HappyClients() {
             {/* Marquee — pure CSS infinite scroll track, cards are clickable */}
             <div className="relative w-full overflow-hidden flex py-8 group">
                 <div
-                    className="flex gap-4 md:gap-8 items-center animate-infinite-scroll will-change-transform group-hover:[animation-play-state:paused]"
+                    className="flex gap-4 md:gap-8 items-center animate-infinite-scroll will-change-transform transform-gpu group-hover:[animation-play-state:paused]"
                     style={{ width: "max-content" }}
                 >
                     {[...clients, ...clients].map((client, index) => {

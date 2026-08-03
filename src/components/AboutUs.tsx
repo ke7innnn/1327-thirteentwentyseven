@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 export default function AboutUs() {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -101,13 +101,11 @@ export default function AboutUs() {
                                 src="/aboutus/about-3.png"
                                 alt="1327 team crafting uniforms in Malad West"
                                 label="THE WORKSHOP - MALAD WEST"
-                                placeholder="Drop: team crafting uniforms"
                             />
                             <InteractiveImageCard
                                 src="/aboutus/about-1.png"
                                 alt="1327 custom branded t-shirts showcase"
                                 label="THE RANGE - SS/26"
-                                placeholder="Drop: apparel showcase"
                             />
                         </motion.div>
 
@@ -117,13 +115,11 @@ export default function AboutUs() {
                                 src="/aboutus/about-2.png"
                                 alt="Custom embroidery work by 1327 Mumbai"
                                 label="THE STITCH - MACRO"
-                                placeholder="Drop: embroidery close-up"
                             />
                             <InteractiveImageCard
                                 src="/aboutus/about-4.png"
                                 alt="Premium custom apparel by 1327 Thirteen Twenty Seven"
                                 label="THE FIT - ON CREW"
-                                placeholder="Drop: crew fitting / detail"
                             />
                         </motion.div>
                     </div>
@@ -137,86 +133,21 @@ export default function AboutUs() {
     );
 }
 
-function InteractiveImageCard({ src, alt, label, placeholder }: { src: string, alt: string, label: string, placeholder: string }) {
-    const [uploadedImage, setUploadedImage] = useState<string | null>(null);
-    const [isDragging, setIsDragging] = useState(false);
-    const fileInputRef = useRef<HTMLInputElement>(null);
-
-    const handleFile = (file: File) => {
-        if (file && file.type.startsWith("image/")) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                if (e.target?.result) {
-                    setUploadedImage(e.target.result as string);
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    const handleDragOver = (e: React.DragEvent) => {
-        e.preventDefault();
-        setIsDragging(true);
-    };
-
-    const handleDragLeave = () => {
-        setIsDragging(false);
-    };
-
-    const handleDrop = (e: React.DragEvent) => {
-        e.preventDefault();
-        setIsDragging(false);
-        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-            handleFile(e.dataTransfer.files[0]);
-        }
-    };
-
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            handleFile(e.target.files[0]);
-        }
-    };
-
-    const handleBoxClick = () => {
-        fileInputRef.current?.click();
-    };
-
+function InteractiveImageCard({ src, alt, label }: { src: string, alt: string, label: string }) {
     return (
         <div
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            onClick={handleBoxClick}
-            className={`group relative aspect-[3/4] w-full overflow-hidden rounded-sm border border-white/10 transition-all duration-300 flex flex-col justify-between cursor-pointer select-none bg-white/[0.02]
-                ${isDragging ? "border-[#1EA86E] bg-[#1EA86E]/5 scale-[1.01]" : "hover:border-white/30 hover:bg-white/[0.04]"}`}
+            className="group relative aspect-[3/4] w-full overflow-hidden rounded-sm border border-white/10 transition-all duration-300 flex flex-col justify-between select-none bg-white/[0.02] hover:border-white/30"
         >
-            <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleFileChange}
-                accept="image/*"
-                className="hidden"
-            />
-
-            {/* Image Preview Container */}
+            {/* Image Container */}
             <div className="relative w-full flex-1 overflow-hidden">
                 <Image
-                    src={uploadedImage || src}
+                    src={src}
                     alt={alt}
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="eager"
                 />
-                <div className="absolute inset-0 bg-black/10 group-hover:bg-black/40 transition-colors duration-500 flex flex-col items-center justify-center p-4">
-                    {/* Upload icon/text overlays on hover */}
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center gap-2 text-white text-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-[#1EA86E]">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v12m0 0 3.75-3.75M12 21l-3.75-3.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                        </svg>
-                        <span className="text-[10px] font-mono tracking-widest uppercase font-bold">{placeholder}</span>
-                        <span className="text-[8px] font-mono tracking-widest uppercase opacity-60">or click to change</span>
-                    </div>
-                </div>
+                <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-500" />
             </div>
 
             {/* Label Footer */}

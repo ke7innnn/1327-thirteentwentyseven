@@ -51,7 +51,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 20 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="bg-[#105233] border border-white/10 w-full max-w-lg rounded-sm shadow-2xl relative overflow-hidden"
+                            className="bg-[#0d0d0d] border border-white/10 w-full max-w-lg rounded-sm shadow-2xl relative overflow-hidden"
                         >
 
 

@@ -43,9 +43,9 @@ export default function BrandTagTransition() {
     // ─── DIRECT GPU TRANSFORM MAPPINGS ───────────────────────────────────────
     const maxYRot = isMobile ? 8 : 14;
 
-    const scale      = useTransform(sp, [0.00, 0.15, 0.70, 1.00], [0.65, 1.00, 1.00, 0.90]);
-    const translateY = useTransform(sp, [0.00, 0.15, 0.70, 1.00], [50, 0, 0, -25]);
-    const opacity    = useTransform(sp, [0.00, 0.10, 0.90, 1.00], [0, 1, 1, 0]);
+    const scale      = useTransform(sp, [0.00, 0.15, 1.00], [0.65, 1.00, 1.00]);
+    const translateY = useTransform(sp, [0.00, 0.15, 1.00], [50, 0, 0]);
+    const opacity    = useTransform(sp, [0.00, 0.10, 1.00], [0, 1, 1]);
     const rotateX    = useTransform(sp, [0.00, 0.15, 0.45, 0.70, 1.00], [-20, 0, 4, -4, 0]);
     const rotateY    = useTransform(sp, [0.00, 0.15, 0.45, 0.70, 1.00], [0, -maxYRot, maxYRot, 180, 180]);
     const cordRotate = useTransform(sp, [0.15, 0.45, 0.70], [-2, 2, 0]);
@@ -59,11 +59,11 @@ export default function BrandTagTransition() {
     const lightOpacity = useTransform(sp, [0.00, 0.30, 0.70, 1.00], [0.08, 0.20, 0.12, 0.04]);
 
     // Shadow
-    const shadowOpacity = useTransform(sp, [0.75, 0.85, 0.95, 1.00], [0, 0.35, 0.35, 0]);
+    const shadowOpacity = useTransform(sp, [0.75, 0.85, 1.00], [0, 0.35, 0.35]);
 
     // Motion-based caption swap (No React state re-renders!)
     const caption1Opacity = useTransform(sp, [0.44, 0.48], [1, 0]);
-    const caption2Opacity = useTransform(sp, [0.46, 0.50], [0, 1]);
+    const caption2Opacity = useTransform(sp, [0.46, 0.50, 1.00], [0, 1, 1]);
 
     if (prefersReducedMotion) {
         return (

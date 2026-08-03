@@ -94,7 +94,7 @@ export default function Header() {
                             animate={{ x: 0 }}
                             exit={{ x: "-100%" }}
                             transition={{ duration: DURATION.slow, ease: EASING }}
-                            className="fixed top-0 left-0 bottom-0 w-full md:w-[400px] z-50 bg-[#105233] border-r border-white/10 flex flex-col justify-center px-12"
+                            className="fixed top-0 left-0 bottom-0 w-full md:w-[400px] z-50 bg-[#0a0a0a] border-r border-white/10 flex flex-col justify-center px-12"
                         >
                             <nav className="flex flex-col gap-8">
                                 {menuItems.map((item, index) => (

@@ -358,22 +358,13 @@ function ServiceRow({
                 className="absolute top-0 left-0 right-0 h-px bg-white/[0.12] pointer-events-none"
             />
 
-            {/* green active highlight — soft corner & edge fade */}
+            {/* green active highlight — sleek GPU accelerated fill */}
             <motion.div
-                animate={{ opacity: isActive ? 1 : 0, scaleX: isActive ? 1 : 0.96 }}
-                transition={{ duration: reduced ? 0 : 0.28, ease: EASE }}
-                style={{ zIndex: 0, transformOrigin: "center" }}
-                className="absolute inset-x-0 inset-y-0.5 pointer-events-none rounded-lg overflow-hidden"
-            >
-                <div
-                    className="w-full h-full rounded-lg"
-                    style={{
-                        background: "linear-gradient(90deg, rgba(30, 168, 110, 0.1) 0%, rgba(30, 168, 110, 0.75) 15%, rgba(30, 168, 110, 0.75) 85%, rgba(30, 168, 110, 0.1) 100%)",
-                        maskImage: "radial-gradient(ellipse 96% 90% at 50% 50%, black 60%, transparent 100%)",
-                        WebkitMaskImage: "radial-gradient(ellipse 96% 90% at 50% 50%, black 60%, transparent 100%)",
-                    }}
-                />
-            </motion.div>
+                animate={{ opacity: isActive ? 1 : 0 }}
+                transition={{ duration: reduced ? 0 : 0.2, ease: EASE }}
+                style={{ zIndex: 0 }}
+                className="absolute inset-x-0 inset-y-0.5 pointer-events-none rounded-sm bg-[#1EA86E]/20 border-l-2 border-[#1EA86E] transform-gpu"
+            />
 
             {/* row content — sits above the fill */}
             <div className="relative z-10">
@@ -592,7 +583,7 @@ function MediaPanel({
         <div className="w-full flex flex-col">
             {/* IMAGE — bleeds edge to edge, no border, no padding */}
             <div
-                className="relative w-full overflow-hidden bg-[#050c07] group select-none"
+                className="relative w-full overflow-hidden bg-black group select-none"
                 style={{ height: "min(78vh, 720px)" }}
             >
                 {/* outgoing image */}
@@ -803,7 +794,7 @@ function MobileTrack({ family }: { family: Family }) {
                             style={{ scrollSnapAlign: "start", flex: "0 0 78vw", maxWidth: 320 }}
                             className="border border-white/10 bg-white/[0.02] flex flex-col overflow-hidden rounded-sm"
                         >
-                            <div className="relative w-full bg-[#050c07]" style={{ aspectRatio: "4/3" }}>
+                            <div className="relative w-full bg-black" style={{ aspectRatio: "4/3" }}>
                                 <Image
                                     src={activeImage}
                                     alt={item.title}

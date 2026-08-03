@@ -1,13 +1,14 @@
 "use client";
 
-import { useScroll, useTransform, useMotionValueEvent, motion, useSpring, MotionValue } from "framer-motion";
+import { useScroll, useTransform, useMotionValueEvent, motion, MotionValue } from "framer-motion";
 import { useRef, useEffect, useState, useCallback } from "react";
+import NextImage from "next/image";
 import ContactModal from "./ContactModal";
 import BrandTagTransition from "./BrandTagTransition";
 
 const TOTAL_FRAMES = 240;
 // Batch size for progressive loading — first batch loads instantly, rest load in background
-const FIRST_BATCH = 40;
+const FIRST_BATCH = 50;
 
 function getFramePath(index: number): string {
     const num = String(index + 1).padStart(3, "0");
@@ -23,9 +24,19 @@ export default function Mission() {
 
     return (
         <div id="mission" className="relative w-full z-10">
-            {/* Dedicated scroll-pinned container for Hero sequence (300vh height ensures smooth frame scrubbing while locked) */}
-            <div ref={heroRef} className="relative w-full h-[300vh]">
+            {/* Dedicated scroll-pinned container for Hero sequence (350vh height ensures lock breaks at 85% of frames while remaining 15% plays during scroll-down) */}
+            <div ref={heroRef} className="relative w-full h-[350vh]">
                 <section className="sticky top-0 w-full h-screen overflow-hidden">
+                    {/* Instant fallback frame 1 for 0ms initial render before JS canvas hydratation */}
+                    <NextImage
+                        src="/sequence/ezgif-frame-001.jpg"
+                        alt="1327 Hero Frame 1"
+                        fill
+                        priority
+                        unoptimized
+                        className="object-cover object-center z-0 pointer-events-none"
+                    />
+
                     {/* Scroll-driven frame animation background */}
                     <FrameCanvas scrollProgress={scrollYProgress} />
                     {/* Dark overlay for text readability */}
@@ -48,9 +59,12 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const imagesRef = useRef<(HTMLImageElement | null)[]>(new Array(TOTAL_FRAMES).fill(null));
     const lastDrawnFrame = useRef(-1);
+    const lastScheduledFrame = useRef(-1);
     const rafId = useRef(0);
     const pendingFrame = useRef(-1);
-    const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
+    const [canvasSize, setCanvasSize] = useState(() =>
+        typeof window !== "undefined" ? { width: window.innerWidth, height: window.innerHeight } : { width: 1920, height: 1080 }
+    );
 
     // Draw a frame with cover-style scaling (memoised, no deps)
     const drawFrame = useCallback((frameIndex: number) => {
@@ -214,20 +228,17 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }
         }
     }, [canvasSize, drawFrame]);
 
-    // Add a smooth spring interpolation to the scroll progress
-    const smoothProgress = useSpring(scrollProgress, {
-        damping: 45,
-        stiffness: 200,
-        mass: 0.4,
-        restDelta: 0.001
-    });
-
-    // Map smooth scroll progress (0..1) → frame index (0..239)
-    const frameIndex = useTransform(smoothProgress, [0, 1], [0, TOTAL_FRAMES - 1]);
+    // Map scroll progress (0..1.176) → frame index (0..239) with clamping.
+    // Pinned lock plays 85% of frames (0..204) up to scrollProgress = 1.0.
+    // At scrollProgress = 1.0, lock breaks and section unpins while remaining 15% of frames (204..239) continue playing as user scrolls down!
+    const frameIndex = useTransform(scrollProgress, [0, 1.176], [0, TOTAL_FRAMES - 1], { clamp: true });
 
     useMotionValueEvent(frameIndex, "change", (latest) => {
         const index = Math.min(TOTAL_FRAMES - 1, Math.max(0, Math.round(latest)));
-        scheduleDrawFrame(index);
+        if (index !== lastScheduledFrame.current) {
+            lastScheduledFrame.current = index;
+            scheduleDrawFrame(index);
+        }
     });
 
     return (
@@ -244,10 +255,11 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }
 function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
     const [isContactOpen, setIsContactOpen] = useState(false);
 
-    // Hero Section Animations: Fades out from 0 to 0.4
-    const opacityHero = useTransform(scrollProgress, [0, 0.4], [1, 0]);
-    const yHero = useTransform(scrollProgress, [0, 0.4], [0, -50]);
-    const pointerEventsHero = useTransform(scrollProgress, (latest: number) => latest > 0.4 ? "none" : "auto");
+    // Hero Section Overlay (1327 DESIGNED FOR THE BOLD): Stays 100% visible on screen
+    // while locked, and unpins smoothly as user scrolls down into Manifesto
+    const opacityHero = useTransform(scrollProgress, [0, 1.0, 1.15], [1, 1, 0]);
+    const yHero = useTransform(scrollProgress, [0, 1.0, 1.15], [0, 0, -40]);
+    const pointerEventsHero = useTransform(scrollProgress, (latest: number) => latest > 1.05 ? "none" : "auto");
 
     const handleScrollToNext = () => {
         const nextSec = document.getElementById("manifesto");

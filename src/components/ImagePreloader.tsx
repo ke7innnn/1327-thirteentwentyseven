@@ -2,7 +2,13 @@
 
 import { useEffect } from "react";
 
+const HERO_PRELOAD_FRAMES = Array.from({ length: 30 }, (_, i) => {
+    const num = String(i + 1).padStart(3, "0");
+    return `/sequence/ezgif-frame-${num}.jpg`;
+});
+
 const CRITICAL_IMAGES = [
+    ...HERO_PRELOAD_FRAMES,
     // Service pictures
     "/servicepics/newovwersized.jpg",
     "/servicepics/straightfit.png",
