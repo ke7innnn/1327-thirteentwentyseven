@@ -19,7 +19,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
         phone: "",
         requirements: ""
     });
-    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
     useEffect(() => {
         setMounted(true);
@@ -115,36 +115,70 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                 </span>
                             </div>
 
-                            {isSubmitted ? (
+                            {status === "success" ? (
                                 <motion.div
                                     initial={{ opacity: 0, scale: 0.9 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     className="py-10 flex flex-col items-center justify-center text-center gap-3"
                                 >
                                     <CheckCircle2 size={52} className="text-[#1EA86E]" />
-                                    <h3 className="font-heading text-2xl font-bold uppercase tracking-wide text-white">INQUIRY READY!</h3>
+                                    <h3 className="font-heading text-2xl font-bold uppercase tracking-wide text-white">SENT!</h3>
                                     <p className="font-mono text-xs text-white/70 max-w-xs leading-relaxed">
-                                        Opening your mail app with pre-filled inquiry details...
+                                        Your inquiry has been sent directly to the 1327 team. We&apos;ll get back to you shortly.
                                     </p>
+                                </motion.div>
+                            ) : status === "error" ? (
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    className="py-10 flex flex-col items-center justify-center text-center gap-3"
+                                >
+                                    <span className="text-4xl">✕</span>
+                                    <h3 className="font-heading text-xl font-bold uppercase tracking-wide text-white">SOMETHING WENT WRONG</h3>
+                                    <p className="font-mono text-xs text-white/70 max-w-xs leading-relaxed">
+                                        Please try again or reach us directly at 1327thecommunity@gmail.com
+                                    </p>
+                                    <button
+                                        onClick={() => setStatus("idle")}
+                                        className="mt-2 font-mono text-xs uppercase tracking-widest text-[#1EA86E] hover:text-white transition-colors cursor-pointer"
+                                    >
+                                        TRY AGAIN
+                                    </button>
                                 </motion.div>
                             ) : (
                                 <form
-                                    onSubmit={(e) => {
+                                    onSubmit={async (e) => {
                                         e.preventDefault();
                                         const { firstName, lastName, email, phone, requirements } = formData;
-                                        const subject = encodeURIComponent(`Inquiry from ${firstName} ${lastName} - 1327 Website`);
-                                        const body = encodeURIComponent(`Name: ${firstName} ${lastName}\nEmail: ${email}\nPhone: ${phone}\n\nRequirements:\n${requirements}`);
-
-                                        setIsSubmitted(true);
-                                        setTimeout(() => {
-                                            window.location.href = `mailto:1327thecommunity@gmail.com?subject=${subject}&body=${body}`;
-                                        }, 300);
-
-                                        setTimeout(() => {
-                                            setIsSubmitted(false);
-                                            setFormData({ firstName: "", lastName: "", email: "", phone: "", requirements: "" });
-                                            onClose();
-                                        }, 2200);
+                                        setStatus("sending");
+                                        try {
+                                            const res = await fetch("https://api.web3forms.com/submit", {
+                                                method: "POST",
+                                                headers: { "Content-Type": "application/json" },
+                                                body: JSON.stringify({
+                                                    access_key: process.env.NEXT_PUBLIC_WEB3FORMS_KEY,
+                                                    subject: `Inquiry from ${firstName} ${lastName} — 1327 Website`,
+                                                    name: `${firstName} ${lastName}`,
+                                                    email,
+                                                    phone,
+                                                    requirements,
+                                                    from_name: "1327 Website Contact Form",
+                                                }),
+                                            });
+                                            const data = await res.json();
+                                            if (data.success) {
+                                                setStatus("success");
+                                                setFormData({ firstName: "", lastName: "", email: "", phone: "", requirements: "" });
+                                                setTimeout(() => {
+                                                    setStatus("idle");
+                                                    onClose();
+                                                }, 3000);
+                                            } else {
+                                                setStatus("error");
+                                            }
+                                        } catch {
+                                            setStatus("error");
+                                        }
                                     }}
                                     className="space-y-4"
                                 >
@@ -216,10 +250,23 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
 
                                     <button
                                         type="submit"
-                                        className="w-full bg-[#1EA86E] hover:bg-[#168a57] text-black font-mono text-xs font-bold uppercase tracking-widest py-4 mt-2 flex items-center justify-center gap-2 transition-all rounded-sm group cursor-pointer"
+                                        disabled={status === "sending"}
+                                        className="w-full bg-[#1EA86E] hover:bg-[#168a57] disabled:opacity-60 disabled:cursor-not-allowed text-black font-mono text-xs font-bold uppercase tracking-widest py-4 mt-2 flex items-center justify-center gap-2 transition-all rounded-sm group cursor-pointer"
                                     >
-                                        <span>SEND INQUIRY</span>
-                                        <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                                        {status === "sending" ? (
+                                            <>
+                                                <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                                                </svg>
+                                                <span>SENDING...</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span>SEND INQUIRY</span>
+                                                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                                            </>
+                                        )}
                                     </button>
                                 </form>
                             )}
