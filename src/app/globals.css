@@ -41,10 +41,28 @@
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
   body {
     @apply bg-background text-foreground font-body;
     background: radial-gradient(circle at 50% 0%, #176B45 0%, #105233 75%, #0B3D26 100%);
-    /* Removed background-attachment: fixed — causes full repaint on mobile scroll */
+    /* Prevent layout shifts and full repaints */
+    overflow-x: hidden;
+    contain: layout style;
+  }
+
+  /* GPU Compositing for Butter-Smooth 60FPS Animations */
+  .transform-gpu,
+  .will-change-transform {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 
   h1,
