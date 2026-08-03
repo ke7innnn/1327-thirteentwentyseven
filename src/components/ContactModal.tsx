@@ -49,7 +49,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="fixed inset-0 bg-black/85 backdrop-blur-xl z-0"
+                        className="fixed inset-0 bg-black/90 z-0"
                     />
 
                     {/* Modal Card */}

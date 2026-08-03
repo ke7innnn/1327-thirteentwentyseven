@@ -43,7 +43,6 @@
   body {
     @apply bg-black text-foreground font-body;
     background: #000000;
-    contain: layout style;
   }
 
   /* GPU Compositing for Butter-Smooth 60FPS Animations */
