@@ -122,9 +122,9 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                     className="py-10 flex flex-col items-center justify-center text-center gap-3"
                                 >
                                     <CheckCircle2 size={52} className="text-[#1EA86E]" />
-                                    <h3 className="font-heading text-2xl font-bold uppercase tracking-wide text-white">SENT!</h3>
+                                    <h3 className="font-heading text-2xl font-bold uppercase tracking-wide text-white">OPENING WHATSAPP!</h3>
                                     <p className="font-mono text-xs text-white/70 max-w-xs leading-relaxed">
-                                        Your inquiry has been sent directly to the 1327 team. We&apos;ll get back to you shortly.
+                                        WhatsApp is opening with your inquiry pre-filled — just tap Send.
                                     </p>
                                 </motion.div>
                             ) : status === "error" ? (
@@ -147,38 +147,27 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                 </motion.div>
                             ) : (
                                 <form
-                                    onSubmit={async (e) => {
+                                    onSubmit={(e) => {
                                         e.preventDefault();
                                         const { firstName, lastName, email, phone, requirements } = formData;
-                                        setStatus("sending");
-                                        try {
-                                            const res = await fetch("https://api.web3forms.com/submit", {
-                                                method: "POST",
-                                                headers: { "Content-Type": "application/json" },
-                                                body: JSON.stringify({
-                                                    access_key: process.env.NEXT_PUBLIC_WEB3FORMS_KEY,
-                                                    subject: `Inquiry from ${firstName} ${lastName} — 1327 Website`,
-                                                    name: `${firstName} ${lastName}`,
-                                                    email,
-                                                    phone,
-                                                    requirements,
-                                                    from_name: "1327 Website Contact Form",
-                                                }),
-                                            });
-                                            const data = await res.json();
-                                            if (data.success) {
-                                                setStatus("success");
-                                                setFormData({ firstName: "", lastName: "", email: "", phone: "", requirements: "" });
-                                                setTimeout(() => {
-                                                    setStatus("idle");
-                                                    onClose();
-                                                }, 3000);
-                                            } else {
-                                                setStatus("error");
-                                            }
-                                        } catch {
-                                            setStatus("error");
-                                        }
+
+                                        const message = encodeURIComponent(
+                                            `Hi 1327! 👋\n\n*New Inquiry from Website*\n\n` +
+                                            `*Name:* ${firstName} ${lastName}\n` +
+                                            `*Email:* ${email}\n` +
+                                            `*Phone:* ${phone}\n\n` +
+                                            `*Requirements:*\n${requirements}`
+                                        );
+
+                                        setStatus("success");
+                                        setTimeout(() => {
+                                            window.open(`https://wa.me/918082845721?text=${message}`, "_blank");
+                                        }, 400);
+                                        setTimeout(() => {
+                                            setStatus("idle");
+                                            setFormData({ firstName: "", lastName: "", email: "", phone: "", requirements: "" });
+                                            onClose();
+                                        }, 2500);
                                     }}
                                     className="space-y-4"
                                 >
@@ -250,23 +239,11 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
 
                                     <button
                                         type="submit"
-                                        disabled={status === "sending"}
-                                        className="w-full bg-[#1EA86E] hover:bg-[#168a57] disabled:opacity-60 disabled:cursor-not-allowed text-black font-mono text-xs font-bold uppercase tracking-widest py-4 mt-2 flex items-center justify-center gap-2 transition-all rounded-sm group cursor-pointer"
+                                        className="w-full bg-[#1EA86E] hover:bg-[#168a57] text-black font-mono text-xs font-bold uppercase tracking-widest py-4 mt-2 flex items-center justify-center gap-2 transition-all rounded-sm group cursor-pointer"
                                     >
-                                        {status === "sending" ? (
-                                            <>
-                                                <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
-                                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                                                </svg>
-                                                <span>SENDING...</span>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <span>SEND INQUIRY</span>
-                                                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                                            </>
-                                        )}
+                                        <MessageSquare size={16} />
+                                        <span>SEND ON WHATSAPP</span>
+                                        <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                                     </button>
                                 </form>
                             )}
