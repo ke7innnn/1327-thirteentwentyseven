@@ -15,26 +15,25 @@ function getFramePath(index: number): string {
 }
 
 export default function Mission() {
-    const containerRef = useRef<HTMLDivElement>(null);
+    const heroRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
-        target: containerRef,
+        target: heroRef,
         offset: ["start start", "end end"]
     });
 
     return (
-        <div ref={containerRef} id="mission" className="relative w-full z-10">
-            {/* Sticky Hero section with sequence animation */}
-            <section className="sticky top-0 w-full h-screen overflow-hidden">
-                {/* Scroll-driven frame animation background */}
-                <FrameCanvas scrollProgress={scrollYProgress} />
-                {/* Dark overlay for text readability */}
-                <div className="absolute inset-0 bg-black/40 z-[1]" />
+        <div id="mission" className="relative w-full z-10">
+            {/* Dedicated scroll-pinned container for Hero sequence (300vh height ensures smooth frame scrubbing while locked) */}
+            <div ref={heroRef} className="relative w-full h-[300vh]">
+                <section className="sticky top-0 w-full h-screen overflow-hidden">
+                    {/* Scroll-driven frame animation background */}
+                    <FrameCanvas scrollProgress={scrollYProgress} />
+                    {/* Dark overlay for text readability */}
+                    <div className="absolute inset-0 bg-black/40 z-[1]" />
 
-                <HeroContent scrollProgress={scrollYProgress} />
-            </section>
-            
-            {/* Spacer to allow scrolling of the sticky section */}
-            <div className="h-[50vh] bg-transparent pointer-events-none" />
+                    <HeroContent scrollProgress={scrollYProgress} />
+                </section>
+            </div>
 
             {/* Transition: Scroll-driven 1327 Brand Tag */}
             <BrandTagTransition />
