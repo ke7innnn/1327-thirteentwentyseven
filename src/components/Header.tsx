@@ -78,22 +78,20 @@ export default function Header() {
                     </Link>
                 </div>
 
-                {/* Right: Reach Out Symbol & Permanent Alert - Wrapped in Width Container */}
-                <div className="w-24 flex justify-end">
-                    <div className="flex items-center gap-3 relative z-50">
-                        <span className="hidden sm:block text-[10px] font-bold tracking-[0.2em] text-[#fdfbcf] font-heading uppercase animate-pulse">
+                {/* Right: Reach Out Symbol & Permanent Button */}
+                <div className="w-auto flex justify-end">
+                    <button
+                        onClick={() => setIsContactOpen(true)}
+                        className="flex items-center gap-2.5 relative z-50 text-white hover:text-[#1EA86E] transition-colors focus:outline-none group cursor-pointer"
+                        aria-label="Reach Out"
+                    >
+                        <span className="hidden sm:block text-[11px] font-mono font-bold tracking-[0.2em] uppercase text-[#1EA86E] group-hover:text-white transition-colors">
                             REACH OUT
                         </span>
-                        <button
-                            onClick={() => setIsContactOpen(true)}
-                            className="text-white hover:text-[#fdfbcf] transition-colors focus:outline-none"
-                            aria-label="Reach Out"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-                            </svg>
-                        </button>
-                    </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 group-hover:scale-110 transition-transform">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+                        </svg>
+                    </button>
                 </div>
             </motion.header>
 
@@ -135,8 +133,16 @@ export default function Header() {
                                     >
                                         <Link
                                             href={item.href}
-                                            onClick={toggleMenu}
-                                            className="text-3xl md:text-5xl font-thin uppercase tracking-tighter hover:text-[#fdfbcf] transition-colors block"
+                                            onClick={(e) => {
+                                                if (item.href === "#contact") {
+                                                    e.preventDefault();
+                                                    setIsOpen(false);
+                                                    setIsContactOpen(true);
+                                                } else {
+                                                    toggleMenu();
+                                                }
+                                            }}
+                                            className="text-3xl md:text-5xl font-thin uppercase tracking-tighter hover:text-[#1EA86E] transition-colors block font-heading"
                                         >
                                             {item.label}
                                         </Link>
