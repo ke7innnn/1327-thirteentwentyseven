@@ -48,22 +48,20 @@ export default function AboutUs() {
         <section
             id="about"
             aria-label="About 1327 Thirteen Twenty Seven — Origin & Code"
-            className="relative z-10 py-24 md:py-32 bg-[#061810] text-white overflow-hidden border-b border-white/10"
+            className="relative z-10 py-24 md:py-32 bg-black text-white overflow-hidden border-b border-white/10"
         >
             {/* Gemini Generated Leather & Apparel Craftsmanship Background */}
-            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-[#061810]">
-                <div
-                    className="absolute inset-0 opacity-[0.45] bg-cover bg-center mix-blend-overlay"
-                    style={{
-                        backgroundImage: "url('/bg/leather_fabric_texture_bg.png')",
-                    }}
+            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+                <Image
+                    src="/bg/leather_apparel_craftsmanship_bg.png"
+                    alt="Craftsmanship and Leather Atelier Background"
+                    fill
+                    sizes="100vw"
+                    className="object-cover object-center brightness-[0.45] contrast-[1.08]"
+                    priority
                 />
-                <div
-                    className="absolute inset-0 pointer-events-none"
-                    style={{
-                        background: "radial-gradient(ellipse 90% 90% at 50% 45%, rgba(16,82,51,0.28) 0%, rgba(3,12,8,0.92) 100%)",
-                    }}
-                />
+                {/* Subtle dark vignette overlay for optimal text readability */}
+                <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/70 via-black/45 to-black/75" />
             </div>
 
             <div className="relative z-10 w-full">
