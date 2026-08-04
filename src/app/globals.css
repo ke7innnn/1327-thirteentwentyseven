@@ -41,8 +41,9 @@
   }
 
   body {
-    @apply bg-black text-foreground font-body;
-    background: #000000;
+    background-color: #000000;
+    color: var(--foreground);
+    font-family: var(--font-body);
   }
 
   /* GPU Compositing for Butter-Smooth 60FPS Animations */
@@ -60,7 +61,7 @@
   h4,
   h5,
   h6 {
-    @apply font-heading;
+    font-family: var(--font-heading);
   }
 }
 
