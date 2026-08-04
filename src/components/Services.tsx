@@ -1021,7 +1021,22 @@ function BrandAccentCard() {
             transition={{ duration: 0.42, ease: EASE }}
             className="overflow-hidden mt-4"
         >
-            <div className="relative w-full rounded-xl border border-white/20 bg-white/10 p-6 sm:p-8 flex flex-col justify-between overflow-hidden shadow-sm">
+            <div className="relative w-full rounded-xl border border-white/20 bg-[#0d4028] p-6 sm:p-8 flex flex-col justify-between overflow-hidden shadow-sm">
+                {/* Woven Cloth / Fabric Texture Background */}
+                <div
+                    className="absolute inset-0 opacity-40 mix-blend-multiply bg-repeat pointer-events-none"
+                    style={{
+                        backgroundImage: "url('/bg/notes_fabric_bg.png')",
+                        backgroundSize: "400px 400px",
+                    }}
+                />
+                <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                        background: "radial-gradient(ellipse 95% 95% at 50% 50%, rgba(30,168,110,0.15) 0%, rgba(5,30,18,0.5) 100%)",
+                    }}
+                />
+
                 {/* Background Watermark 1327 Logo / Monogram */}
                 <div className="absolute -right-6 -bottom-8 pointer-events-none opacity-15 select-none">
                     <span className="font-heading font-black text-8xl sm:text-9xl md:text-[11rem] tracking-tighter text-white">
