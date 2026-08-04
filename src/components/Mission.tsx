@@ -71,8 +71,9 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }
         if (frameIndex === lastDrawnFrame.current) return; // skip if already drawn
         const canvas = canvasRef.current;
         if (!canvas) return;
-        const ctx = canvas.getContext("2d", { alpha: false });
+        const ctx = canvas.getContext("2d", { alpha: false, desynchronized: true });
         if (!ctx) return;
+        ctx.imageSmoothingQuality = "medium";
 
         // Try to draw the requested frame
         let img = imagesRef.current[frameIndex];
