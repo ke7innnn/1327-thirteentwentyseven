@@ -48,9 +48,26 @@ export default function AboutUs() {
         <section
             id="about"
             aria-label="About 1327 Thirteen Twenty Seven — Origin & Code"
-            className="relative z-10 py-24 md:py-32 bg-transparent text-white overflow-hidden border-b border-white/10"
+            className="relative z-10 py-24 md:py-32 bg-[#0B3C26] text-white overflow-hidden border-b border-white/15"
         >
-            <div className="w-full">
+            {/* Rolex-Style Deep Emerald Craftsmanship Background */}
+            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-[#0B3C26]">
+                <div
+                    className="absolute inset-0 opacity-[0.35] mix-blend-overlay bg-repeat"
+                    style={{
+                        backgroundImage: "url('/bg/rolex_emerald_bg.png')",
+                        backgroundSize: "600px 600px",
+                    }}
+                />
+                <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                        background: "radial-gradient(ellipse 90% 90% at 50% 40%, rgba(20,95,58,0.35) 0%, rgba(5,25,15,0.88) 100%)",
+                    }}
+                />
+            </div>
+
+            <div className="relative z-10 w-full">
                 
                 {/* ─── MOVEMENT 1 — THE ORIGIN ──────────────────────────────────────────────── */}
                 <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24 mb-20 md:mb-28">
@@ -74,12 +91,12 @@ export default function AboutUs() {
                                     loading="lazy"
                                 />
 
-                                {/* Solid #105233 Caption Box Overlay (No blur, no transparency per spec) */}
-                                <div className="absolute bottom-0 left-0 p-3 sm:p-4 bg-[#105233] text-white z-10 rounded-none border-t border-r border-white/20">
+                                {/* Solid Rolex Emerald Caption Box Overlay */}
+                                <div className="absolute bottom-0 left-0 p-3 sm:p-4 bg-[#0B3C26] text-white z-10 rounded-none border-t border-r border-white/30 shadow-md">
                                     <div className="font-mono text-[9px] sm:text-[10px] font-bold tracking-[0.22em] uppercase leading-tight">
                                         <p className="text-white">KEITH SHAH</p>
-                                        <p className="text-white/70">FOUNDER</p>
-                                        <p className="text-white/50">MALAD WEST</p>
+                                        <p className="text-white/80">FOUNDER</p>
+                                        <p className="text-white/60">MALAD WEST</p>
                                     </div>
                                 </div>
                             </div>
@@ -93,9 +110,9 @@ export default function AboutUs() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, margin: "-10% 0px" }}
                                 transition={{ duration: 0.5, ease: EASING }}
-                                className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-[#1EA86E] flex items-center gap-2"
+                                className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-white flex items-center gap-2"
                             >
-                                <span className="text-[#1EA86E] font-bold">&#123; 01 &#125;</span>
+                                <span className="text-white font-bold">&#123; 01 &#125;</span>
                                 <span>/ THE ORIGIN</span>
                             </motion.div>
 
@@ -107,8 +124,8 @@ export default function AboutUs() {
                                 transition={{ duration: 0.7, ease: EASING, delay: 0.08 }}
                                 className="font-heading font-black text-5xl sm:text-6xl md:text-7xl lg:text-8xl uppercase tracking-tighter leading-[0.9] text-white"
                             >
-                                <span className="block">It Runs On</span>
-                                <span className="block text-[#1EA86E]">Family.</span>
+                                <span className="block text-white">It Runs On</span>
+                                <span className="block text-white">Family.</span>
                             </motion.h2>
 
                             <motion.div
@@ -117,7 +134,7 @@ export default function AboutUs() {
                                 viewport={{ once: true, margin: "-10% 0px" }}
                                 transition={{ duration: 0.6, ease: EASING }}
                                 style={{ transformOrigin: "left" }}
-                                className="w-full h-px bg-white/15 my-1"
+                                className="w-full h-px bg-white/20 my-1"
                             />
 
                             {/* Lead Paragraph — Prose at Scale */}
@@ -137,7 +154,7 @@ export default function AboutUs() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, margin: "-10% 0px" }}
                                 transition={{ duration: 0.6, ease: EASING, delay: 0.16 }}
-                                className="font-sans text-sm sm:text-base text-white/70 leading-relaxed max-w-2xl font-light"
+                                className="font-sans text-sm sm:text-base text-white/80 leading-relaxed max-w-2xl font-light"
                             >
                                 I started this in Malad West, working shoulder-to-shoulder with cafés, kitchens, studios and crews across Bombay — designing, stitching and embroidering uniforms their teams are proud to pull on every shift. We don&apos;t chase orders. We keep the ones we&apos;ve got, and they keep us.
                             </motion.p>
@@ -148,12 +165,12 @@ export default function AboutUs() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, margin: "-10% 0px" }}
                                 transition={{ duration: 0.6, ease: EASING, delay: 0.2 }}
-                                className="pt-4 flex flex-col items-start gap-1.5 border-t border-white/10"
+                                className="pt-4 flex flex-col items-start gap-1.5 border-t border-white/15"
                             >
                                 <span className="font-heading italic text-xl sm:text-2xl text-white tracking-widest uppercase">
                                     Keith Shah
                                 </span>
-                                <span className="font-mono text-xs uppercase tracking-[0.25em] text-white/50 font-bold">
+                                <span className="font-mono text-xs uppercase tracking-[0.25em] text-white/60 font-bold">
                                     KEITH SHAH — FOUNDER
                                 </span>
                             </motion.div>
@@ -163,12 +180,12 @@ export default function AboutUs() {
                 </div>
 
                 {/* ─── PROOF BAR ──────────────────────────────────────────────────────────── */}
-                <div className="border-t border-b border-white/15 py-4 bg-white/[0.02]">
+                <div className="border-t border-b border-white/20 py-4 bg-black/20">
                     <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24">
-                        <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/15">
+                        <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/20">
                             {PROOF_CELLS.map((cell, idx) => (
                                 <div key={idx} className="px-3 sm:px-6 py-2 flex flex-col gap-1 text-center md:text-left">
-                                    <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/40">
+                                    <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/50">
                                         {cell.label}
                                     </span>
                                     <span className="font-mono text-xs sm:text-sm font-bold uppercase tracking-[0.18em] text-white">
@@ -184,32 +201,32 @@ export default function AboutUs() {
                 <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24 pt-20 md:pt-28">
                     
                     {/* Header */}
-                    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 pb-4 border-b border-white/15">
+                    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 pb-4 border-b border-white/20">
                         <div className="flex items-center gap-3">
-                            <span className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-[#1EA86E]">
+                            <span className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-white">
                                 / THE CODE
                             </span>
                         </div>
-                        <span className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-white/50">
+                        <span className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-white/60">
                             FOUR PRINCIPLES
                         </span>
                     </div>
 
                     {/* 4 Tabular Ruled Rows */}
-                    <div className="border-b border-white/15">
+                    <div className="border-b border-white/20">
                         {VALUES_INDEX.map((item) => (
                             <Link
                                 key={item.num}
                                 href={`/values/${item.slug}`}
-                                className="group relative block border-t border-white/15 py-6 sm:py-8 px-4 sm:px-6 transition-all duration-300 cursor-pointer overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#105233] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                                className="group relative block border-t border-white/20 py-6 sm:py-8 px-4 sm:px-6 transition-all duration-300 cursor-pointer overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B3C26]"
                                 aria-label={`${item.title} — ${item.definition}`}
                             >
-                                {/* Green #105233 Fill Wipe on Hover / Focus */}
-                                <div className="absolute inset-0 bg-[#105233] opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-240 ease-out pointer-events-none" />
+                                {/* Green Fill Wipe on Hover / Focus */}
+                                <div className="absolute inset-0 bg-[#072618] opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-240 ease-out pointer-events-none" />
 
                                 <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 items-start md:items-center gap-3 md:gap-6 min-h-[64px]">
                                     {/* Mono Index (1fr = col-span-2) */}
-                                    <div className="md:col-span-2 font-mono text-xl sm:text-2xl font-bold tracking-tighter text-[#1EA86E] group-hover:text-white transition-colors">
+                                    <div className="md:col-span-2 font-mono text-xl sm:text-2xl font-bold tracking-tighter text-white/90 group-hover:text-white transition-colors">
                                         {item.num}
                                     </div>
 
@@ -219,12 +236,12 @@ export default function AboutUs() {
                                     </div>
 
                                     {/* Definition (6fr = col-span-6) */}
-                                    <div className="md:col-span-6 font-sans text-sm sm:text-base text-white/70 group-hover:text-white/90 font-light leading-relaxed transition-colors">
+                                    <div className="md:col-span-6 font-sans text-sm sm:text-base text-white/80 group-hover:text-white font-light leading-relaxed transition-colors">
                                         {item.definition}
                                     </div>
 
                                     {/* Arrow (1fr = col-span-1) */}
-                                    <div className="md:col-span-1 text-left md:text-right font-mono text-lg text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all duration-240">
+                                    <div className="md:col-span-1 text-left md:text-right font-mono text-lg text-white/60 group-hover:text-white group-hover:translate-x-1 transition-all duration-240">
                                         ↗
                                     </div>
                                 </div>
