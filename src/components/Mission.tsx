@@ -282,8 +282,7 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
                     className="absolute inset-0 w-full h-full flex flex-col justify-between px-5 sm:px-8 md:px-16 lg:px-24 pt-20 pb-4 sm:pt-24 sm:pb-6 md:py-28 animate-[fadeIn_0.5s_ease-out]"
                 >
                     {/* Top Bar */}
-                    <div className="flex justify-between items-center text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-white/50 w-full">
-                        <span className="text-[#1EA86E] font-semibold text-left">Custom Apparel &amp; Uniforms</span>
+                    <div className="flex justify-end items-center text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-white/50 w-full">
                         <span className="text-right hidden sm:inline">Malad West — Mumbai, IN</span>
                     </div>
 
