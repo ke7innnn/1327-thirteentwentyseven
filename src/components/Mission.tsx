@@ -324,11 +324,6 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
                             </button>
                         </div>
 
-                        {/* Early MOQ Micro-Label */}
-                        <div className="font-mono text-[9px] sm:text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-[#1EA86E] pt-1">
-                            {HERO_MOQ_LINE}
-                        </div>
-
                         {/* Bottom Bar */}
                         <div className="flex justify-between items-center text-[8px] sm:text-[9px] md:text-xs font-mono tracking-[0.12em] text-white/40 w-full pt-1 sm:pt-2 border-t border-white/10">
                             <span className="text-left">19.1871° N / 72.8488° E</span>
