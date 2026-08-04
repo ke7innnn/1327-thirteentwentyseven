@@ -24,8 +24,8 @@ export default function Mission() {
 
     return (
         <div id="mission" className="relative w-full z-10">
-            {/* Dedicated scroll-pinned container for Hero sequence (350vh height ensures lock breaks at 85% of frames while remaining 15% plays during scroll-down) */}
-            <div ref={heroRef} className="relative w-full h-[350vh]">
+            {/* Smooth Hero sequence container */}
+            <div ref={heroRef} className="relative w-full h-[110vh]">
                 <section className="sticky top-0 w-full h-screen overflow-hidden">
                     {/* Instant fallback frame 1 for 0ms initial render before JS canvas hydratation */}
                     <NextImage
@@ -41,6 +41,9 @@ export default function Mission() {
                     <FrameCanvas scrollProgress={scrollYProgress} />
                     {/* Dark overlay for text readability */}
                     <div className="absolute inset-0 bg-black/40 z-[1]" />
+
+                    {/* Bottom gradient mask — blends green video frame background to 100% pitch black */}
+                    <div className="absolute bottom-0 left-0 right-0 h-48 sm:h-64 bg-gradient-to-t from-[#105233] via-[#105233]/95 to-transparent z-[5] pointer-events-none" />
 
                     <HeroContent scrollProgress={scrollYProgress} />
                 </section>
@@ -258,9 +261,9 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
 
     // Hero Section Overlay (1327 DESIGNED FOR THE BOLD): Stays 100% visible on screen
     // while locked, and unpins smoothly as user scrolls down into Manifesto
-    const opacityHero = useTransform(scrollProgress, [0, 1.0, 1.15], [1, 1, 0]);
-    const yHero = useTransform(scrollProgress, [0, 1.0, 1.15], [0, 0, -40]);
-    const pointerEventsHero = useTransform(scrollProgress, (latest: number) => latest > 1.05 ? "none" : "auto");
+    const opacityHero = useTransform(scrollProgress, [0, 0.7, 1.0], [1, 1, 0]);
+    const yHero = useTransform(scrollProgress, [0, 0.7, 1.0], [0, 0, -40]);
+    const pointerEventsHero = useTransform(scrollProgress, (latest: number) => latest > 0.8 ? "none" : "auto");
 
     const handleScrollToNext = () => {
         const nextSec = document.getElementById("manifesto");
@@ -354,7 +357,7 @@ function ManifestoSection() {
     };
 
     const itemVariants = {
-        initial: { opacity: 0, y: 50 },
+        initial: { opacity: 0, y: 40 },
         animate: {
             opacity: 1,
             y: 0,
@@ -368,29 +371,65 @@ function ManifestoSection() {
     return (
         <section
             id="manifesto"
-            className="relative z-20 bg-[#eae6df] text-[#0a0a0a] py-16 md:py-32 border-b border-black/10 w-full"
+            className="relative z-20 bg-[#eae6df] text-[#0a0a0a] py-16 md:py-28 border-b border-black/10 w-full overflow-hidden"
         >
+            {/* Woven Linen Apparel Fabric Texture Overlay */}
+            <div
+                className="absolute inset-0 pointer-events-none opacity-[0.22] mix-blend-multiply bg-repeat z-0"
+                style={{
+                    backgroundImage: "url('/bg/clothing_fabric_bg.png')",
+                    backgroundSize: "450px 450px",
+                }}
+            />
+
+            {/* Studio Spotlight Vignette */}
+            <div
+                className="absolute inset-0 pointer-events-none z-0"
+                style={{
+                    background: "radial-gradient(ellipse 80% 70% at 50% 25%, rgba(255,255,255,0.6) 0%, transparent 85%)",
+                }}
+            />
+
+            {/* Giant 1327 Brand Watermark */}
+            <div className="absolute right-4 lg:right-16 top-1/2 -translate-y-1/2 pointer-events-none select-none z-0 opacity-[0.06]">
+                <span className="font-heading font-black text-9xl sm:text-[14rem] md:text-[20rem] tracking-tighter text-[#105233]">
+                    1327
+                </span>
+            </div>
+
             <motion.div 
                 initial="initial"
                 whileInView="animate"
                 viewport={{ once: true, margin: "-10% 0px" }}
                 variants={containerVariants}
-                className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24 flex flex-col justify-between min-h-0 md:min-h-[70vh] gap-8 md:gap-0"
+                className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24 flex flex-col justify-between min-h-0 md:min-h-[65vh] gap-8 md:gap-0 relative z-10"
             >
                 {/* Top Bar */}
-                <motion.div 
-                    variants={itemVariants}
-                    className="flex justify-between items-center text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-black border-b border-black/10 pb-4 mb-8 w-full opacity-50"
-                >
-                    <div className="text-left">
-                        <span className="text-[#105233] font-bold mr-2">&#123; 01 &#125;</span>
-                        <span>Our Mission</span>
-                    </div>
-                    <span className="text-right">The Manifesto</span>
-                </motion.div>
+                <div className="flex flex-col gap-3">
+                    <motion.div
+                        variants={itemVariants}
+                        className="inline-flex items-center gap-2 px-3.5 py-1 rounded-sm bg-[#105233] text-white shadow-sm self-start"
+                    >
+                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-white">
+                            1327 — BRAND MANIFESTO
+                        </span>
+                    </motion.div>
+
+                    <motion.div 
+                        variants={itemVariants}
+                        className="flex justify-between items-center text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-black border-b border-black/10 pb-3 w-full opacity-50"
+                    >
+                        <div className="text-left">
+                            <span className="text-[#105233] font-bold mr-2">&#123; 01 &#125;</span>
+                            <span>Our Mission</span>
+                        </div>
+                        <span className="text-right">The Manifesto</span>
+                    </motion.div>
+                </div>
 
                 {/* Central Title */}
-                <div className="w-full flex justify-start items-center my-auto py-12">
+                <div className="w-full flex justify-start items-center my-auto py-8">
                     <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold uppercase tracking-tight leading-[0.95] text-left text-black max-w-5xl font-sans flex flex-col items-start">
                         <motion.span variants={itemVariants} className="block">
                             We don&apos;t make
@@ -399,7 +438,11 @@ function ManifestoSection() {
                             Merch.
                         </motion.span>
                         <motion.span variants={itemVariants} className="block mt-2">
-                            We build <span className="text-[#105233]" style={{ filter: "drop-shadow(0 0 18px rgba(16, 82, 51, 0.8)) drop-shadow(0 0 40px rgba(30, 168, 110, 0.35))" }}>Identity</span>
+                            We build{" "}
+                            <span className="text-[#105233] relative inline-block font-black" style={{ filter: "drop-shadow(0 0 18px rgba(16, 82, 51, 0.4))" }}>
+                                Identity
+                                <span className="absolute bottom-1 left-0 right-0 h-1.5 bg-[#1EA86E] rounded-full opacity-70" />
+                            </span>
                         </motion.span>
                         
                         {/* Horizontal black bar divider */}
@@ -408,7 +451,7 @@ function ManifestoSection() {
                                 initial: { width: 0, opacity: 0 },
                                 animate: { width: "64px", opacity: 1, transition: { duration: 0.6, ease: "easeOut" } }
                             }}
-                            className="h-1 bg-[#0a0a0a] my-8"
+                            className="h-1 bg-[#105233] my-6 rounded-full"
                         />
                         
                         <motion.span 
@@ -424,10 +467,11 @@ function ManifestoSection() {
                 {/* Bottom Row */}
                 <motion.div 
                     variants={itemVariants}
-                    className="w-full grid grid-cols-1 md:grid-cols-12 gap-8 items-end mt-8"
+                    className="w-full grid grid-cols-1 md:grid-cols-12 gap-6 items-end mt-4 pt-4 border-t border-black/10"
                 >
-                    <div className="md:col-span-4 text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-[#105233] font-bold self-start md:self-end text-left">
-                        / Why We Exist
+                    <div className="md:col-span-4 text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-[#105233] font-bold self-start md:self-end text-left flex items-center gap-2">
+                        <span>/ Why We Exist</span>
+                        <span className="text-black/30 font-normal">| 1327</span>
                     </div>
                     <div
                         style={{ fontFamily: '"Times New Roman", serif' }}

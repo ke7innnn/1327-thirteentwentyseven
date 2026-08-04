@@ -316,7 +316,7 @@ export default function RootLayout({
           sugo.variable,
           bodoni.variable,
           premiumMono.variable,
-          "antialiased text-white selection:bg-[#C9FF23] selection:text-black font-body bg-black"
+          "antialiased text-white selection:bg-white selection:text-black font-body bg-black"
         )}
       >
         <ImagePreloader />

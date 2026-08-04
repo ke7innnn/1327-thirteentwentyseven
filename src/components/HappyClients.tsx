@@ -42,21 +42,36 @@ export default function HappyClients() {
     }, [selectedIndex, handleNext, handlePrev]);
 
     return (
-        <section id="clients" aria-label="Happy Clients of 1327" className="relative z-30 py-32 bg-black text-white overflow-hidden border-b border-white/10">
+        <section id="clients" aria-label="Happy Clients of 1327" className="relative z-30 py-32 bg-[#105233] text-white overflow-hidden border-b border-white/10">
+            {/* 1327 Official Brand Green Woven Apparel Texture */}
+            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-[#105233]">
+                <div
+                    className="absolute inset-0 opacity-[0.25] mix-blend-multiply bg-repeat"
+                    style={{
+                        backgroundImage: "url('/bg/clothing_fabric_bg.png')",
+                        backgroundSize: "400px 400px",
+                    }}
+                />
+                {/* Studio Radial Lighting Vignette */}
+                <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                        background: "radial-gradient(ellipse 85% 85% at 50% 50%, rgba(30,168,110,0.18) 0%, rgba(12,60,37,0.55) 100%)",
+                    }}
+                />
+            </div>
+
             <div className="container mx-auto px-6 mb-16 text-center relative z-10">
                 {/* Entrance title */}
                 <motion.div
-                    initial={{ opacity: 0, y: 40 }}
+                    initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-10% 0px" }}
                     transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                    className="flex items-center justify-center gap-2 text-xs font-mono font-bold uppercase tracking-[0.25em] text-white mb-2"
                 >
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/20 backdrop-blur-md border border-[#1EA86E]/40 mb-4 shadow-[0_0_20px_rgba(30,168,110,0.2)]">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#C9FF23] animate-pulse" />
-                        <span className="text-xs font-mono font-bold uppercase tracking-[0.2em] text-[#C9FF23]">
-                            TRUSTED BY CREWS
-                        </span>
-                    </div>
+                    <span className="text-white font-bold">&#123; 03 &#125;</span>
+                    <span>/ TRUSTED BY CREWS</span>
                 </motion.div>
                 <motion.div
                     initial={{ opacity: 0, y: 60 }}
@@ -88,7 +103,7 @@ export default function HappyClients() {
                                 key={index}
                                 type="button"
                                 onClick={() => setSelectedIndex(originalIdx)}
-                                className="relative w-[220px] h-[300px] md:w-[300px] md:h-[400px] flex-shrink-0 rounded-sm overflow-hidden border-[3px] md:border-[5px] border-white/90 shadow-lg md:shadow-[0_20px_50px_rgba(0,0,0,0.5)] cursor-pointer hover:scale-[1.03] transition-transform duration-300 group/card text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C9FF23]"
+                                className="relative w-[220px] h-[300px] md:w-[300px] md:h-[400px] flex-shrink-0 rounded-sm overflow-hidden border-[3px] md:border-[5px] border-white/90 shadow-lg md:shadow-[0_20px_50px_rgba(0,0,0,0.5)] cursor-pointer hover:scale-[1.03] transition-transform duration-300 group/card text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
                                 aria-label={`View photo of ${client.title}`}
                             >
                                 <Image
@@ -104,7 +119,7 @@ export default function HappyClients() {
 
                                 {/* Hover overlay label */}
                                 <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex justify-between items-end">
-                                    <span className="font-mono text-[10px] uppercase tracking-widest text-[#C9FF23] font-bold">
+                                    <span className="font-mono text-[10px] uppercase tracking-widest text-white font-bold">
                                         CLICK TO PREVIEW ↗
                                     </span>
                                 </div>

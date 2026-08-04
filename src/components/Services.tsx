@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } from "framer-motion";
 
 // ─── EASING ──────────────────────────────────────────────────────────────────
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
@@ -355,7 +355,7 @@ function ServiceRow({
                 viewport={{ once: true, margin: "-3% 0px" }}
                 transition={{ duration: 0.4, ease: EASE, delay: entryDelay }}
                 style={{ transformOrigin: "left" }}
-                className="absolute top-0 left-0 right-0 h-px bg-white/[0.12] pointer-events-none"
+                className="absolute top-0 left-0 right-0 h-px bg-black/15 pointer-events-none"
             />
 
             {/* green active highlight — sleek GPU accelerated fill */}
@@ -363,7 +363,7 @@ function ServiceRow({
                 animate={{ opacity: isActive ? 1 : 0 }}
                 transition={{ duration: reduced ? 0 : 0.2, ease: EASE }}
                 style={{ zIndex: 0 }}
-                className="absolute inset-x-0 inset-y-0.5 pointer-events-none rounded-sm bg-[#1EA86E]/20 border-l-2 border-[#1EA86E] transform-gpu"
+                className="absolute inset-x-0 inset-y-0.5 pointer-events-none rounded-sm bg-[#105233]/10 border-l-2 border-[#105233] transform-gpu"
             />
 
             {/* row content — sits above the fill */}
@@ -383,7 +383,7 @@ function ServiceRow({
                         className="font-heading font-black uppercase tracking-tight leading-none pr-4 truncate"
                         style={{
                             fontSize: "clamp(1.125rem, 1.4vw, 1.5rem)",
-                            color: isActive ? "#F2F9F4" : "#EAE6DA",
+                            color: isActive ? "#105233" : "#0a0a0a",
                             transition: "color 0.15s",
                         }}
                     >
@@ -396,7 +396,7 @@ function ServiceRow({
                         style={{
                             fontSize: "0.6875rem",
                             fontVariantNumeric: "tabular-nums",
-                            color: isActive ? "rgba(242,249,244,0.75)" : "rgba(255,255,255,0.35)",
+                            color: isActive ? "rgba(10,10,10,0.85)" : "rgba(10,10,10,0.45)",
                             transition: "color 0.15s",
                         }}
                     >
@@ -408,7 +408,7 @@ function ServiceRow({
                         className="font-mono uppercase tracking-[0.14em] text-right"
                         style={{
                             fontSize: "0.6875rem",
-                            color: isActive ? "rgba(242,249,244,0.5)" : "rgba(255,255,255,0.22)",
+                            color: isActive ? "rgba(10,10,10,0.5)" : "rgba(10,10,10,0.3)",
                             transition: "color 0.15s",
                         }}
                     >
@@ -421,7 +421,7 @@ function ServiceRow({
                         style={{
                             fontSize: "0.6875rem",
                             fontVariantNumeric: "tabular-nums",
-                            color: isActive ? "rgba(242,249,244,0.75)" : "rgba(255,255,255,0.35)",
+                            color: isActive ? "rgba(10,10,10,0.85)" : "rgba(10,10,10,0.45)",
                             transition: "color 0.15s",
                         }}
                     >
@@ -441,7 +441,7 @@ function ServiceRow({
                         style={{
                             fontSize: "0.9375rem",
                             maxWidth: "52ch",
-                            color: isActive ? "rgba(242,249,244,0.85)" : "rgba(255,255,255,0.6)",
+                            color: isActive ? "rgba(10,10,10,0.85)" : "rgba(10,10,10,0.6)",
                         }}
                     >
                         <p>{item.copy}</p>
@@ -452,7 +452,7 @@ function ServiceRow({
                                 className="flex items-center gap-2 pt-2"
                                 onClick={(e) => e.stopPropagation()}
                             >
-                                <span className="font-mono text-[10px] tracking-widest text-white/50 uppercase mr-1">
+                                <span className="font-mono text-[10px] tracking-widest text-black/50 uppercase mr-1">
                                     Cuts:
                                 </span>
                                 <div className="flex items-center gap-1.5 flex-wrap">
@@ -469,8 +469,8 @@ function ServiceRow({
                                                 onMouseEnter={() => onSelectSubSection?.(sub.id)}
                                                 className={`font-mono text-[10px] tracking-wider uppercase px-2.5 py-1 rounded transition-all cursor-pointer ${
                                                     isSubActive
-                                                        ? "bg-[#F2F9F4] text-[#105233] font-bold shadow-sm"
-                                                        : "bg-black/40 text-white/80 hover:bg-black/70 hover:text-white border border-white/10"
+                                                        ? "bg-[#105233] text-white font-bold shadow-sm"
+                                                        : "bg-black/10 text-black/80 hover:bg-black/20 hover:text-black border border-black/10"
                                                 }`}
                                             >
                                                 {sub.label}
@@ -486,7 +486,7 @@ function ServiceRow({
 
             {/* bottom hairline (only when collapsed, the row's own border) */}
             {!isActive && (
-                <div className="absolute bottom-0 left-0 right-0 h-px bg-white/[0.12] pointer-events-none" />
+                <div className="absolute bottom-0 left-0 right-0 h-px bg-black/15 pointer-events-none" />
             )}
         </motion.div>
     );
@@ -580,11 +580,16 @@ function MediaPanel({
     };
 
     return (
-        <div className="w-full flex flex-col">
-            {/* IMAGE — bleeds edge to edge, no border, no padding */}
+        <motion.div
+            initial={reduced ? false : { opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-5% 0px" }}
+            transition={{ duration: 0.5, ease: EASE }}
+            className="w-full flex flex-col"
+        >
+            {/* IMAGE — tight aspect ratio alignment without empty gap */}
             <div
-                className="relative w-full overflow-hidden bg-black group select-none"
-                style={{ height: "min(78vh, 720px)" }}
+                className="relative w-full overflow-hidden rounded-lg group select-none shadow-md aspect-[4/5] max-h-[540px]"
             >
                 {/* outgoing image */}
                 <motion.div
@@ -600,7 +605,7 @@ function MediaPanel({
                         alt={displayed.title}
                         fill
                         sizes="(min-width: 1024px) 38vw, 0px"
-                        className="object-contain p-2"
+                        className="object-cover"
                         loading="eager"
                         priority
                     />
@@ -622,7 +627,7 @@ function MediaPanel({
                                 alt={incoming.title}
                                 fill
                                 sizes="(min-width: 1024px) 38vw, 0px"
-                                className="object-contain p-2"
+                                className="object-cover"
                                 loading="eager"
                                 priority
                             />
@@ -691,7 +696,7 @@ function MediaPanel({
                     </span>
                     <span
                         className="font-mono uppercase tracking-[0.16em]"
-                        style={{ fontSize: "0.625rem", color: "rgba(242,249,244,0.55)" }}
+                        style={{ fontSize: "0.625rem", color: "rgba(242,249,244,0.75)" }}
                     >
                         {displayed.caption}
                     </span>
@@ -701,7 +706,7 @@ function MediaPanel({
                 <div className="absolute top-0 right-0 p-4 z-10 pointer-events-none">
                     <span
                         className="font-mono tracking-[0.16em]"
-                        style={{ fontSize: "0.6875rem", color: "rgba(255,255,255,0.28)" }}
+                        style={{ fontSize: "0.6875rem", color: "rgba(255,255,255,0.4)" }}
                     >
                         {indexLabel}
                     </span>
@@ -710,7 +715,7 @@ function MediaPanel({
 
             {/* SPEC STRIP — below the image, outside it */}
             {displayed.specStrip && displayed.specStrip.length > 0 && (
-                <div className="border-t border-white/10 pt-4 mt-0">
+                <div className="border-t border-black/15 pt-3 mt-0">
                     <div
                         style={{
                             display: "grid",
@@ -721,18 +726,18 @@ function MediaPanel({
                         {displayed.specStrip.map((row, i) => (
                             <div
                                 key={i}
-                                className="flex flex-col gap-0.5 py-2.5 border-b border-white/[0.08]"
-                                style={{ paddingRight: i % 2 === 0 ? 20 : 0, paddingLeft: i % 2 === 1 ? 20 : 0, borderLeft: i % 2 === 1 ? "1px solid rgba(255,255,255,0.08)" : "none" }}
+                                className="flex flex-col gap-0.5 py-2 border-b border-black/10"
+                                style={{ paddingRight: i % 2 === 0 ? 16 : 0, paddingLeft: i % 2 === 1 ? 16 : 0, borderLeft: i % 2 === 1 ? "1px solid rgba(10,10,10,0.1)" : "none" }}
                             >
                                 <span
                                     className="font-mono uppercase tracking-[0.14em]"
-                                    style={{ fontSize: "0.5625rem", color: "rgba(255,255,255,0.28)" }}
+                                    style={{ fontSize: "0.5625rem", color: "rgba(10,10,10,0.45)" }}
                                 >
                                     {row.label}
                                 </span>
                                 <span
                                     className="font-mono uppercase tracking-[0.1em]"
-                                    style={{ fontSize: "0.6875rem", color: "rgba(242,249,244,0.7)", fontVariantNumeric: "tabular-nums" }}
+                                    style={{ fontSize: "0.6875rem", color: "#0a0a0a", fontVariantNumeric: "tabular-nums", fontWeight: 600 }}
                                 >
                                     {row.value}
                                 </span>
@@ -741,7 +746,7 @@ function MediaPanel({
                     </div>
                 </div>
             )}
-        </div>
+        </motion.div>
     );
 }
 
@@ -770,7 +775,7 @@ function MobileTrack({ family }: { family: Family }) {
         <div className="w-full">
             <div
                 ref={trackRef}
-                className="flex overflow-x-auto gap-3 pl-5 pr-5 pb-1"
+                className="flex overflow-x-auto gap-3 pl-1 pr-1 pb-1"
                 style={{
                     scrollSnapType: "x mandatory",
                     WebkitOverflowScrolling: "touch",
@@ -791,16 +796,16 @@ function MobileTrack({ family }: { family: Family }) {
                     return (
                         <div
                             key={item.id}
-                            style={{ scrollSnapAlign: "start", flex: "0 0 78vw", maxWidth: 320 }}
-                            className="border border-white/10 bg-white/[0.02] flex flex-col overflow-hidden rounded-sm"
+                            style={{ scrollSnapAlign: "start", flex: "0 0 82vw", maxWidth: 330 }}
+                            className="border border-black/15 bg-black/5 flex flex-col overflow-hidden rounded-md shadow-sm"
                         >
-                            <div className="relative w-full bg-black" style={{ aspectRatio: "4/3" }}>
+                            <div className="relative w-full overflow-hidden" style={{ aspectRatio: "4/3" }}>
                                 <Image
                                     src={activeImage}
                                     alt={item.title}
                                     fill
-                                    sizes="78vw"
-                                    className="object-contain p-2 transition-opacity duration-300"
+                                    sizes="82vw"
+                                    className="object-cover transition-opacity duration-300"
                                     unoptimized
                                 />
 
@@ -824,16 +829,16 @@ function MobileTrack({ family }: { family: Family }) {
                                     </div>
                                 )}
                             </div>
-                            <div className="flex flex-col gap-1.5 p-4">
-                                <span className="font-heading font-black uppercase tracking-tight text-sm text-[#EAE6DA] leading-tight">
+                            <div className="flex flex-col gap-1.5 p-3.5">
+                                <span className="font-heading font-[#0a0a0a] font-black uppercase tracking-tight text-sm leading-tight">
                                     {item.title}
                                 </span>
                                 <div className="flex items-center gap-3">
-                                    <span className="font-mono uppercase tracking-[0.14em] text-white/40" style={{ fontSize: "0.625rem", fontVariantNumeric: "tabular-nums" }}>
+                                    <span className="font-mono uppercase tracking-[0.14em] text-black/50" style={{ fontSize: "0.625rem", fontVariantNumeric: "tabular-nums" }}>
                                         {activeSpec}
                                     </span>
                                     {item.moqNum && (
-                                        <span className="font-mono uppercase tracking-[0.14em] text-white/30" style={{ fontSize: "0.625rem" }}>
+                                        <span className="font-mono uppercase tracking-[0.14em] text-black/40" style={{ fontSize: "0.625rem" }}>
                                             MOQ {item.moqNum}
                                         </span>
                                     )}
@@ -841,7 +846,7 @@ function MobileTrack({ family }: { family: Family }) {
 
                                 {/* Subsections selector on mobile */}
                                 {item.subSections && item.subSections.length > 0 && (
-                                    <div className="flex items-center gap-1.5 pt-1.5 pb-1 flex-wrap">
+                                    <div className="flex items-center gap-1.5 pt-1 flex-wrap">
                                         {item.subSections.map(sub => (
                                             <button
                                                 key={sub.id}
@@ -849,8 +854,8 @@ function MobileTrack({ family }: { family: Family }) {
                                                 onClick={() => setMobileSubState(prev => ({ ...prev, [item.id]: sub.id }))}
                                                 className={`font-mono text-[9px] tracking-wider uppercase px-2 py-0.5 rounded ${
                                                     activeSubId === sub.id
-                                                        ? "bg-[#1EA86E] text-black font-bold"
-                                                        : "bg-white/10 text-white/70"
+                                                        ? "bg-[#105233] text-white font-bold"
+                                                        : "bg-black/10 text-black/70"
                                                 }`}
                                             >
                                                 {sub.label}
@@ -868,14 +873,14 @@ function MobileTrack({ family }: { family: Family }) {
                                                 type="button"
                                                 onClick={() => setMobileGalState(p => ({ ...p, [item.id]: gi }))}
                                                 className={`h-1 rounded-full transition-all ${
-                                                    gi === galIdx ? "w-4 bg-[#1EA86E]" : "w-1.5 bg-white/20"
+                                                    gi === galIdx ? "w-4 bg-[#105233]" : "w-1.5 bg-black/20"
                                                 }`}
                                             />
                                         ))}
                                     </div>
                                 )}
 
-                                <p className="font-sans leading-relaxed text-white/50 mt-1" style={{ fontSize: "0.75rem" }}>
+                                <p className="font-sans leading-relaxed text-black/60 mt-0.5" style={{ fontSize: "0.75rem" }}>
                                     {item.copy}
                                 </p>
                             </div>
@@ -885,14 +890,14 @@ function MobileTrack({ family }: { family: Family }) {
             </div>
 
             {family.items.length > 1 && (
-                <div className="flex gap-2 px-5 mt-3">
+                <div className="flex gap-2 px-1 mt-2.5">
                     {family.items.map((_, i) => (
                         <div
                             key={i}
                             className="h-px transition-all duration-300"
                             style={{
                                 width: i === dot ? 24 : 8,
-                                background: i === dot ? "#1EA86E" : "rgba(255,255,255,0.18)",
+                                background: i === dot ? "#105233" : "rgba(10,10,10,0.18)",
                             }}
                         />
                     ))}
@@ -905,22 +910,17 @@ function MobileTrack({ family }: { family: Family }) {
 // ─── SECTION HEADER ───────────────────────────────────────────────────────────
 function SectionHeader({ reduced }: { reduced: boolean }) {
     return (
-        <div className="mb-12 md:mb-16 flex flex-col items-start gap-4">
-            {/* Glowing Glass Bubble Badge */}
+        <div className="mb-8 md:mb-10 flex flex-col items-start gap-3">
+            {/* Subtle Brand Green Section Tag */}
             <motion.div
-                initial={reduced ? false : { opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                initial={reduced ? false : { opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-5% 0px" }}
                 transition={{ duration: 0.5, ease: EASE }}
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.05] backdrop-blur-md border border-[#1EA86E]/40 shadow-[0_0_20px_rgba(30,168,110,0.3)] hover:shadow-[0_0_30px_rgba(30,168,110,0.5)] transition-all duration-300"
+                className="flex items-center gap-2 font-mono text-[10px] md:text-xs font-bold tracking-[0.25em] uppercase text-[#105233]"
             >
-                <span className="w-1.5 h-1.5 rounded-full bg-[#1EA86E] animate-pulse" />
-                <span
-                    className="font-mono font-bold uppercase tracking-[0.2em] text-[#1EA86E]"
-                    style={{ fontSize: "0.6875rem" }}
-                >
-                    OUR SERVICES
-                </span>
+                <span className="text-[#105233] font-bold">&#123; 02 &#125;</span>
+                <span>/ OUR SERVICES</span>
             </motion.div>
 
             {/* Main Title & Subtitle */}
@@ -931,7 +931,7 @@ function SectionHeader({ reduced }: { reduced: boolean }) {
                         whileInView={{ clipPath: "inset(0 0% 0 0)" }}
                         viewport={{ once: true, margin: "-5% 0px" }}
                         transition={{ duration: 0.7, ease: EASE, delay: 0.08 }}
-                        className="font-heading font-black uppercase leading-none tracking-tighter text-4xl sm:text-5xl md:text-7xl lg:text-8xl"
+                        className="font-heading font-black uppercase leading-none tracking-tighter text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-black"
                     >
                         <span>What We </span>
                         <span style={{ WebkitTextStroke: "2px #1EA86E", color: "transparent" }}>Offer.</span>
@@ -943,7 +943,7 @@ function SectionHeader({ reduced }: { reduced: boolean }) {
                         whileInView={{ clipPath: "inset(0 0% 0 0)" }}
                         viewport={{ once: true, margin: "-5% 0px" }}
                         transition={{ duration: 0.7, ease: EASE, delay: 0.16 }}
-                        className="font-mono uppercase text-white/40"
+                        className="font-mono uppercase text-black/50"
                         style={{ fontSize: "0.75rem", letterSpacing: "0.2em" }}
                     >
                         {TOTAL} ways to suit up
@@ -954,31 +954,128 @@ function SectionHeader({ reduced }: { reduced: boolean }) {
     );
 }
 
-// ─── FAMILY HEADER ────────────────────────────────────────────────────────────
-function FamilyHeader({ family }: { family: Family }) {
+// ─── FAMILY ACCORDION HEADER ───────────────────────────────────────────────────
+function FamilyAccordionHeader({
+    family,
+    index,
+    isExpanded,
+    onToggle,
+}: {
+    family: Family;
+    index: number;
+    isExpanded: boolean;
+    onToggle: () => void;
+}) {
     return (
-        <div className="sticky top-[64px] z-10 bg-black flex items-center gap-3 pt-3 pb-[24px]">
-            <span
-                className="font-mono uppercase tracking-[0.22em] shrink-0 text-white/35"
-                style={{ fontSize: "0.6875rem" }}
+        <div className="sticky top-[64px] z-20 bg-[#eae6df]/95 backdrop-blur-md py-1">
+            <button
+                type="button"
+                onClick={onToggle}
+                className="w-full text-left focus:outline-none group cursor-pointer py-3.5 px-4 rounded-lg bg-black/[0.03] hover:bg-black/[0.06] border border-black/10 transition-all duration-300 flex items-center justify-between shadow-sm hover:shadow"
             >
-                {family.label}
-            </span>
-            <div className="flex-1 h-px bg-white/[0.12]" />
-            <span
-                className="font-mono tracking-[0.16em] shrink-0 text-white/25"
-                style={{ fontSize: "0.6875rem" }}
-            >
-                ({String(family.items.length).padStart(2, "0")})
-            </span>
+                <div className="flex items-center gap-3.5 sm:gap-5">
+                    <span className="font-mono text-xs sm:text-sm text-[#1EA86E] font-bold tracking-wider">
+                        0{index + 1}
+                    </span>
+                    <h3 className="font-heading font-black uppercase text-xl sm:text-2xl md:text-3xl tracking-tight text-[#0a0a0a] group-hover:text-[#1EA86E] transition-colors">
+                        {family.label}
+                    </h3>
+                    <span className="font-mono text-[10px] sm:text-xs uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-black/5 text-black/60 font-medium border border-black/10 group-hover:border-[#1EA86E]/40 group-hover:text-[#1EA86E] transition-all">
+                        {String(family.items.length).padStart(2, "0")} Items
+                    </span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                    <span className="hidden sm:inline-block font-mono text-[10px] uppercase tracking-widest text-black/40 group-hover:text-[#1EA86E] transition-colors">
+                        {isExpanded ? "Hide" : "Explore"}
+                    </span>
+                    <div
+                        className={`w-7 h-7 rounded-full flex items-center justify-center border transition-all duration-300 ${
+                            isExpanded
+                                ? "bg-[#1EA86E] text-black border-[#1EA86E] shadow-md font-bold"
+                                : "bg-black/5 text-black/70 border-black/15 group-hover:bg-[#1EA86E]/10 group-hover:text-[#1EA86E]"
+                        }`}
+                    >
+                        <motion.svg
+                            width="12"
+                            height="12"
+                            viewBox="0 0 12 12"
+                            fill="none"
+                            animate={{ rotate: isExpanded ? 45 : 0 }}
+                            transition={{ duration: 0.3, ease: EASE }}
+                        >
+                            <path d="M6 1V11M1 6H11" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        </motion.svg>
+                    </div>
+                </div>
+            </button>
         </div>
+    );
+}
+
+// ─── BRAND ACCENT CARD (Fills empty space when all categories are closed) ─────
+function BrandAccentCard() {
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 16, height: 0 }}
+            animate={{ opacity: 1, y: 0, height: "auto" }}
+            exit={{ opacity: 0, y: -10, height: 0 }}
+            transition={{ duration: 0.42, ease: EASE }}
+            className="overflow-hidden mt-4"
+        >
+            <div className="relative w-full rounded-xl border border-black/10 bg-black/[0.03] p-6 sm:p-8 flex flex-col justify-between overflow-hidden shadow-sm">
+                {/* Background Watermark 1327 Logo / Monogram */}
+                <div className="absolute -right-6 -bottom-8 pointer-events-none opacity-10 select-none">
+                    <span className="font-heading font-black text-8xl sm:text-9xl md:text-[11rem] tracking-tighter text-[#1EA86E]">
+                        1327
+                    </span>
+                </div>
+
+                <div className="flex flex-col gap-2.5 relative z-10 max-w-md">
+                    <div className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#105233]">
+                        / 1327 — BRAND ATELIER
+                    </div>
+
+                    <h4 className="font-heading font-black uppercase text-xl sm:text-2xl text-[#0a0a0a] tracking-tight leading-tight">
+                        CRAFTED FOR CREWS & BRANDS
+                    </h4>
+
+                    <p className="font-sans text-xs sm:text-sm text-black/60 leading-relaxed">
+                        Explore our complete catalogue of heavyweight blanks, custom aprons, headwear & plant-based leather goods.
+                    </p>
+                </div>
+
+                {/* Bottom Call to Action hint */}
+                <div className="mt-6 pt-3 border-t border-black/10 w-full flex items-center justify-between relative z-10">
+                    <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-widest text-[#1EA86E] font-bold flex items-center gap-1.5">
+                        <span className="animate-bounce">↑</span> Select a category above to view items
+                    </span>
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-black/40">
+                        {TOTAL} WAYS TO SUIT UP
+                    </span>
+                </div>
+            </div>
+        </motion.div>
     );
 }
 
 // ─── MAIN ─────────────────────────────────────────────────────────────────────
 export default function Services() {
+    const sectionRef = useRef<HTMLDivElement>(null);
     const reduced = useReducedMotion() ?? false;
+
+    const { scrollYProgress } = useScroll({
+        target: sectionRef,
+        offset: ["start end", "end start"],
+    });
+    const scrollLineScaleY = useTransform(scrollYProgress, [0.05, 0.95], [0, 1]);
+
     const [activeId, setActiveId] = useState(FAMILIES[0].items[0].id);
+    const [expandedFamilies, setExpandedFamilies] = useState<Record<string, boolean>>({
+        apparel: true,
+        workwear: false,
+        accessories: false,
+    });
     const [subSectionState, setSubSectionState] = useState<Record<string, string>>({
         aprons: "full",
     });
@@ -989,45 +1086,122 @@ export default function Services() {
     const activeSubId = subSectionState[activeItem.id] || activeItem.subSections?.[0]?.id;
     const activeSubSection = activeItem.subSections?.find(s => s.id === activeSubId) ?? activeItem.subSections?.[0];
 
+    const anyCategoryOpen = Object.values(expandedFamilies).some(Boolean);
+
+    const toggleFamily = (familyId: string) => {
+        setExpandedFamilies(prev => {
+            const nextState = !prev[familyId];
+            const updated = { ...prev, [familyId]: nextState };
+            if (nextState) {
+                const fam = FAMILIES.find(f => f.id === familyId);
+                if (fam && fam.items.length > 0) {
+                    setActiveId(fam.items[0].id);
+                }
+            }
+            return updated;
+        });
+    };
+
     return (
         <section
+            ref={sectionRef}
             id="services"
-            className="relative z-20 bg-black text-white py-20 md:py-28 border-b border-white/10"
+            className="relative z-20 bg-[#eae6df] text-[#0a0a0a] py-14 md:py-20 border-b border-black/10 overflow-hidden"
         >
-            <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-20">
+            {/* Scroll progress side accent bar */}
+            <motion.div
+                style={{ scaleY: scrollLineScaleY, transformOrigin: "top" }}
+                className="absolute left-0 top-0 bottom-0 w-1 bg-[#1EA86E] z-30"
+            />
+
+            {/* Elegant Luxury Woven Linen/Cotton Apparel Fabric Texture */}
+            <div
+                className="absolute inset-0 pointer-events-none opacity-[0.25] mix-blend-multiply bg-repeat"
+                style={{
+                    backgroundImage: "url('/bg/clothing_fabric_bg.png')",
+                    backgroundSize: "450px 450px",
+                }}
+            />
+
+            {/* Soft subtle luxury studio radial vignette */}
+            <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                    background: "radial-gradient(ellipse 85% 85% at 50% 15%, rgba(255,255,255,0.5) 0%, transparent 85%)",
+                }}
+            />
+
+            <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-20 relative z-10">
 
                 <SectionHeader reduced={reduced} />
 
                 {/* ── DESKTOP ── */}
-                <div className="hidden lg:grid lg:grid-cols-12 lg:gap-12 items-start">
+                <div className="hidden lg:grid lg:grid-cols-12 lg:gap-10 items-start">
 
                     {/* Left index (7 cols) */}
                     <div className="lg:col-span-7">
-                        {FAMILIES.map(family => (
-                            <div key={family.id}>
-                                <FamilyHeader family={family} />
-
-                                {family.items.map((item, idx) => (
-                                    <ServiceRow
-                                        key={item.id}
-                                        item={item}
-                                        isActive={activeId === item.id}
-                                        onActivate={() => setActiveId(item.id)}
-                                        activeSubId={subSectionState[item.id] || item.subSections?.[0]?.id}
-                                        onSelectSubSection={(subId) => setSubSectionState(prev => ({ ...prev, [item.id]: subId }))}
-                                        reduced={reduced}
-                                        entryDelay={idx * 0.04}
+                        {FAMILIES.map((family, fIdx) => {
+                            const isExpanded = !!expandedFamilies[family.id];
+                            return (
+                                <motion.div
+                                    key={family.id}
+                                    initial={reduced ? false : { opacity: 0, y: 16 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true, margin: "-5% 0px" }}
+                                    transition={{ duration: 0.4, delay: fIdx * 0.08, ease: EASE }}
+                                    className="mb-4"
+                                >
+                                    <FamilyAccordionHeader
+                                        family={family}
+                                        index={fIdx}
+                                        isExpanded={isExpanded}
+                                        onToggle={() => toggleFamily(family.id)}
                                     />
-                                ))}
 
-                                {/* 72px gap between families */}
-                                <div style={{ height: 72 }} />
-                            </div>
-                        ))}
+                                    <AnimatePresence initial={false}>
+                                        {isExpanded && (
+                                            <motion.div
+                                                initial={{ height: 0, opacity: 0 }}
+                                                animate={{ height: "auto", opacity: 1 }}
+                                                exit={{ height: 0, opacity: 0 }}
+                                                transition={{ duration: 0.42, ease: EASE }}
+                                                className="overflow-hidden"
+                                            >
+                                                <div className="pt-1.5 pb-2">
+                                                    {family.items.map((item, idx) => (
+                                                        <motion.div
+                                                            key={item.id}
+                                                            initial={{ opacity: 0, y: 10 }}
+                                                            animate={{ opacity: 1, y: 0 }}
+                                                            transition={{ duration: 0.28, delay: idx * 0.04, ease: EASE }}
+                                                        >
+                                                            <ServiceRow
+                                                                item={item}
+                                                                isActive={activeId === item.id}
+                                                                onActivate={() => setActiveId(item.id)}
+                                                                activeSubId={subSectionState[item.id] || item.subSections?.[0]?.id}
+                                                                onSelectSubSection={(subId) => setSubSectionState(prev => ({ ...prev, [item.id]: subId }))}
+                                                                reduced={reduced}
+                                                                entryDelay={0}
+                                                            />
+                                                        </motion.div>
+                                                    ))}
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </motion.div>
+                            );
+                        })}
+
+                        {/* 1327 Brand Accent Card — appears in empty space when all categories are closed */}
+                        <AnimatePresence>
+                            {!anyCategoryOpen && <BrandAccentCard />}
+                        </AnimatePresence>
                     </div>
 
                     {/* Right pinned panel (5 cols) */}
-                    <div className="lg:col-span-5 sticky top-[80px] self-start">
+                    <div className="lg:col-span-5 sticky top-[84px] self-start">
                         <MediaPanel
                             item={activeItem}
                             activeSubSection={activeSubSection}
@@ -1038,27 +1212,45 @@ export default function Services() {
                 </div>
 
                 {/* ── MOBILE ── */}
-                <div className="lg:hidden flex flex-col gap-10">
-                    {FAMILIES.map(family => (
-                        <div key={family.id}>
-                            <div className="sticky top-[64px] z-10 bg-black flex items-center gap-3 py-2 mb-4">
-                                <span
-                                    className="font-mono uppercase tracking-[0.22em] shrink-0 text-white/35"
-                                    style={{ fontSize: "0.6875rem" }}
-                                >
-                                    {family.label}
-                                </span>
-                                <div className="flex-1 h-px bg-white/[0.12]" />
-                                <span
-                                    className="font-mono tracking-[0.16em] shrink-0 text-white/25"
-                                    style={{ fontSize: "0.6875rem" }}
-                                >
-                                    ({String(family.items.length).padStart(2, "0")})
-                                </span>
-                            </div>
-                            <MobileTrack family={family} />
-                        </div>
-                    ))}
+                <div className="lg:hidden flex flex-col gap-4">
+                    {FAMILIES.map((family, fIdx) => {
+                        const isExpanded = !!expandedFamilies[family.id];
+                        return (
+                            <motion.div
+                                key={family.id}
+                                initial={reduced ? false : { opacity: 0, y: 16 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, margin: "-5% 0px" }}
+                                transition={{ duration: 0.4, delay: fIdx * 0.08, ease: EASE }}
+                            >
+                                <FamilyAccordionHeader
+                                    family={family}
+                                    index={fIdx}
+                                    isExpanded={isExpanded}
+                                    onToggle={() => toggleFamily(family.id)}
+                                />
+
+                                <AnimatePresence initial={false}>
+                                    {isExpanded && (
+                                        <motion.div
+                                            initial={{ height: 0, opacity: 0 }}
+                                            animate={{ height: "auto", opacity: 1 }}
+                                            exit={{ height: 0, opacity: 0 }}
+                                            transition={{ duration: 0.42, ease: EASE }}
+                                            className="overflow-hidden pt-2 pb-3"
+                                        >
+                                            <MobileTrack family={family} />
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </motion.div>
+                        );
+                    })}
+
+                    {/* 1327 Brand Accent Card for mobile */}
+                    <AnimatePresence>
+                        {!anyCategoryOpen && <BrandAccentCard />}
+                    </AnimatePresence>
                 </div>
 
             </div>

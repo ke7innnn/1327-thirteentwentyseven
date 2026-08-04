@@ -47,14 +47,14 @@ export default function Header() {
                 }}
                 animate={hidden && !isOpen ? "hidden" : "visible"}
                 transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/90 backdrop-blur-md border-b border-white/10 px-6 py-2 flex items-center justify-between h-16 transform-gpu"
+                className="fixed top-0 left-0 right-0 z-50 bg-[#105233]/95 backdrop-blur-md border-b border-[#1EA86E]/40 shadow-md px-6 py-2 flex items-center justify-between h-16 transform-gpu"
             >
 
                 {/* Left: MENU Text Button - Wrapped in Width Container for Balance */}
                 <div className="w-24 flex justify-start">
                     <motion.button
                         onClick={toggleMenu}
-                        className="relative z-50 text-white hover:text-[#fdfbcf] transition-colors focus:outline-none text-sm font-mono tracking-[0.2em] font-bold"
+                        className="relative z-50 text-white hover:text-white/80 transition-colors focus:outline-none text-sm font-mono tracking-[0.2em] font-bold"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         transition={{ duration: 0.2, ease: EASING }}
@@ -82,13 +82,13 @@ export default function Header() {
                 <div className="w-auto flex justify-end">
                     <button
                         onClick={() => setIsContactOpen(true)}
-                        className="flex items-center gap-2.5 relative z-50 text-white hover:text-[#1EA86E] transition-colors focus:outline-none group cursor-pointer"
+                        className="flex items-center gap-2.5 relative z-50 text-white hover:text-white/80 transition-colors focus:outline-none group cursor-pointer"
                         aria-label="Reach Out"
                     >
-                        <span className="hidden sm:block text-[11px] font-mono font-bold tracking-[0.2em] uppercase text-[#1EA86E] group-hover:text-white transition-colors">
+                        <span className="hidden sm:block text-[11px] font-mono font-bold tracking-[0.2em] uppercase text-white transition-colors">
                             REACH OUT
                         </span>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 group-hover:scale-110 transition-transform">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-white group-hover:scale-110 transition-transform">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
                         </svg>
                     </button>

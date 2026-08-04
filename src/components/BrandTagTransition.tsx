@@ -6,12 +6,13 @@ import {
     useScroll,
     useTransform,
     useReducedMotion,
+    MotionValue,
 } from "framer-motion";
 import Image from "next/image";
 
 // ─── NAMED CONSTANT FOR PIN SCROLL LENGTH ────────────────────────────────────
-export const PIN_SCROLL_LENGTH_DESKTOP = "200vh";
-export const PIN_SCROLL_LENGTH_MOBILE = "150vh";
+export const PIN_SCROLL_LENGTH_DESKTOP = "120vh";
+export const PIN_SCROLL_LENGTH_MOBILE = "100vh";
 
 const values = [
     { num: "01", word: "COMMUNITY" },
@@ -19,6 +20,94 @@ const values = [
     { num: "03", word: "RESPECT" },
     { num: "04", word: "LOYALTY" },
 ];
+
+function ClothingAccentsBackground({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
+    // Parallax scroll transforms for background clothing accents
+    const yTape = useTransform(scrollProgress, [0, 1], [-100, 100]);
+    const yBadgeLeft = useTransform(scrollProgress, [0, 1], [-60, 80]);
+    const yBadgeRight = useTransform(scrollProgress, [0, 1], [80, -60]);
+    const rotateStitch = useTransform(scrollProgress, [0, 1], [-8, 12]);
+    const opacityStitch = useTransform(scrollProgress, [0, 0.5, 1], [0.25, 0.5, 0.25]);
+
+    return (
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
+            {/* 1. Left Side: Animated Tailor's Measuring Tape Strip */}
+            <motion.div
+                style={{ y: yTape }}
+                className="absolute left-4 sm:left-12 top-6 bottom-6 w-8 sm:w-10 border-r border-[#1EA86E]/40 flex flex-col justify-between py-8 opacity-40"
+            >
+                {[...Array(14)].map((_, i) => (
+                    <div key={i} className="flex items-center gap-1.5 font-mono text-[9px] text-[#1EA86E]">
+                        <span className="w-3 h-px bg-[#1EA86E]/70" />
+                        <span className="tabular-nums font-bold">0{i + 1}</span>
+                    </div>
+                ))}
+            </motion.div>
+
+            {/* 2. Right Side: Floating Garment Spec Tag 1 */}
+            <motion.div
+                style={{ y: yBadgeRight, rotate: rotateStitch }}
+                className="absolute right-6 sm:right-16 top-1/4 bg-black/60 backdrop-blur-md border border-[#1EA86E]/40 px-3.5 py-2 rounded-sm text-left shadow-lg opacity-85 hidden xs:block"
+            >
+                <div className="flex items-center gap-2 mb-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#1EA86E] animate-pulse" />
+                    <span className="font-mono text-[9px] font-bold tracking-[0.2em] text-[#1EA86E] uppercase">
+                        FABRIC SPEC
+                    </span>
+                </div>
+                <div className="font-mono text-[10px] text-white/90 font-medium tracking-wider">
+                    320 GSM HEAVY COTTON
+                </div>
+                <div className="font-mono text-[8px] text-white/50 tracking-widest mt-0.5">
+                    THREAD: EMERALD 40/2
+                </div>
+            </motion.div>
+
+            {/* 3. Left Side: Floating Garment Spec Tag 2 */}
+            <motion.div
+                style={{ y: yBadgeLeft }}
+                className="absolute left-8 sm:left-24 bottom-1/4 bg-black/60 backdrop-blur-md border border-[#1EA86E]/40 px-3 py-2 rounded-sm text-left shadow-lg opacity-80 hidden sm:block"
+            >
+                <div className="font-mono text-[9px] font-bold text-[#1EA86E] tracking-widest uppercase">
+                    STITCH COUNT: 14/INCH
+                </div>
+                <div className="font-mono text-[8px] text-white/60 tracking-wider mt-0.5">
+                    ATELIER NO: #1327-A
+                </div>
+            </motion.div>
+
+            {/* 4. Animated Embroidery Stitch Line Guide (SVG) */}
+            <motion.svg
+                style={{ opacity: opacityStitch }}
+                className="absolute inset-0 w-full h-full stroke-white/30 fill-none"
+            >
+                <line
+                    x1="10%"
+                    y1="0"
+                    x2="90%"
+                    y2="100%"
+                    strokeWidth="1.5"
+                    strokeDasharray="8 8"
+                />
+                <line
+                    x1="90%"
+                    y1="0"
+                    x2="10%"
+                    y2="100%"
+                    strokeWidth="1.5"
+                    strokeDasharray="8 8"
+                />
+            </motion.svg>
+
+            {/* 5. Giant Monogram 1327 Apparel Stamp Watermark */}
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.06] pointer-events-none">
+                <span className="font-heading font-black text-[18vw] text-white leading-none tracking-tight">
+                    1327
+                </span>
+            </div>
+        </div>
+    );
+}
 
 export default function BrandTagTransition() {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -32,7 +121,7 @@ export default function BrandTagTransition() {
         return () => window.removeEventListener("resize", check);
     }, []);
 
-    // Directly bind scroll progress to viewport scroll (GPU accelerated compositor execution)
+    // Directly bind scroll progress to viewport scroll
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start start", "end end"],
@@ -61,13 +150,13 @@ export default function BrandTagTransition() {
     // Shadow
     const shadowOpacity = useTransform(sp, [0.00, 1.00], [0.35, 0.35]);
 
-    // Motion-based caption swap (No React state re-renders!)
+    // Motion-based caption swap
     const caption1Opacity = useTransform(sp, [0.28, 0.32], [1, 0]);
     const caption2Opacity = useTransform(sp, [0.30, 1.00], [0, 1]);
 
     if (prefersReducedMotion) {
         return (
-            <section className="py-20 text-[#eae6df] bg-black flex flex-col items-center justify-center px-6">
+            <section className="py-20 text-[#eae6df] bg-[#105233] flex flex-col items-center justify-center px-6">
                 <div className="w-[260px] sm:w-[340px] bg-[#eae6df] text-[#105233] rounded-lg p-6 flex flex-col items-center border border-[#ccc8be] shadow-xl">
                     <Image
                         src="/logo/1327_logo_v2.png"
@@ -90,7 +179,7 @@ export default function BrandTagTransition() {
         <section
             ref={containerRef}
             aria-label="1327 Brand Tag"
-            className="relative w-full text-white bg-black"
+            className="relative w-full text-white bg-[#105233]"
             style={{
                 height: isMobile ? PIN_SCROLL_LENGTH_MOBILE : PIN_SCROLL_LENGTH_DESKTOP,
             }}
@@ -103,19 +192,26 @@ export default function BrandTagTransition() {
             </div>
 
             {/* Sticky Viewport */}
-            <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center select-none bg-black">
-                {/* Gemini Craftsmanship Background */}
-                <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-                    <Image
-                        src="/bg/craftsmanship_bg.png"
-                        alt="Craftsmanship Atelier Workshop"
-                        fill
-                        className="object-cover object-center brightness-70"
-                        unoptimized
-                        priority
+            <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center select-none bg-[#105233]">
+                {/* Brand Green Background with Luxury Apparel Woven Fabric Texture */}
+                <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-[#105233]">
+                    <div
+                        className="absolute inset-0 opacity-[0.25] mix-blend-multiply bg-repeat"
+                        style={{
+                            backgroundImage: "url('/bg/clothing_fabric_bg.png')",
+                            backgroundSize: "450px 450px",
+                        }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black/90 pointer-events-none" />
+                    <div
+                        className="absolute inset-0 pointer-events-none"
+                        style={{
+                            background: "radial-gradient(ellipse 85% 85% at 50% 50%, rgba(30,168,110,0.15) 0%, rgba(12,60,37,0.6) 100%)",
+                        }}
+                    />
                 </div>
+
+                {/* Clothing-Themed Animated Scrollable Accents */}
+                <ClothingAccentsBackground scrollProgress={sp} />
 
                 {/* Perspective Stage */}
                 <div

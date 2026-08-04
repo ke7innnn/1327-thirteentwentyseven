@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { useRef } from "react";
 
 export default function AboutUs() {
@@ -61,7 +62,7 @@ export default function AboutUs() {
                             </p>
                         </div>
 
-                        {/* Values List with Dividers */}
+                        {/* Values List with Dividers & Clickable Links */}
                         <motion.div 
                             initial="initial"
                             whileInView="animate"
@@ -73,10 +74,10 @@ export default function AboutUs() {
                             className="flex flex-col border-t border-white/10 w-full max-w-md mt-4"
                         >
                             {[
-                                { num: "01", text: "Community" },
-                                { num: "02", text: "Trust" },
-                                { num: "03", text: "Respect" },
-                                { num: "04", text: "Loyalty" }
+                                { num: "01", text: "Community", slug: "community" },
+                                { num: "02", text: "Trust", slug: "trust" },
+                                { num: "03", text: "Respect", slug: "respect" },
+                                { num: "04", text: "Loyalty", slug: "loyalty" }
                             ].map((item) => (
                                 <motion.div 
                                     key={item.num} 
@@ -84,10 +85,21 @@ export default function AboutUs() {
                                         initial: { opacity: 0, x: -20 },
                                         animate: { opacity: 1, x: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } }
                                     }}
-                                    className="flex items-center gap-4 py-4 border-b border-white/10"
                                 >
-                                    <span className="text-[#1EA86E] font-mono text-xs font-bold">{item.num}</span>
-                                    <span className="uppercase text-sm sm:text-base font-bold font-heading tracking-widest text-white">{item.text}</span>
+                                    <Link
+                                        href={`/values/${item.slug}`}
+                                        className="group flex items-center justify-between py-4 border-b border-white/10 hover:border-[#1EA86E]/60 hover:bg-white/[0.04] px-3 rounded-sm transition-all duration-300 cursor-pointer"
+                                    >
+                                        <div className="flex items-center gap-4">
+                                            <span className="text-[#1EA86E] font-mono text-xs font-bold">{item.num}</span>
+                                            <span className="uppercase text-sm sm:text-base font-bold font-heading tracking-widest text-white group-hover:text-[#1EA86E] transition-colors">
+                                                {item.text}
+                                            </span>
+                                        </div>
+                                        <span className="text-white/40 group-hover:text-[#1EA86E] group-hover:translate-x-1 font-mono text-sm transition-all">
+                                            ↗
+                                        </span>
+                                    </Link>
                                 </motion.div>
                             ))}
                         </motion.div>
@@ -100,12 +112,14 @@ export default function AboutUs() {
                             <InteractiveImageCard
                                 src="/aboutus/about-3.png"
                                 alt="1327 team crafting uniforms in Malad West"
-                                label="THE WORKSHOP - MALAD WEST"
+                                label="THE WORKSHOP"
+                                tag="MALAD WEST"
                             />
                             <InteractiveImageCard
                                 src="/aboutus/about-1.png"
                                 alt="1327 custom branded t-shirts showcase"
-                                label="THE RANGE - SS/26"
+                                label="THE RANGE"
+                                tag="SS/26 ATELIER"
                             />
                         </motion.div>
 
@@ -114,12 +128,14 @@ export default function AboutUs() {
                             <InteractiveImageCard
                                 src="/aboutus/about-2.png"
                                 alt="Custom embroidery work by 1327 Mumbai"
-                                label="THE STITCH - MACRO"
+                                label="THE STITCH"
+                                tag="EMBROIDERY"
                             />
                             <InteractiveImageCard
                                 src="/aboutus/about-4.png"
                                 alt="Premium custom apparel by 1327 Thirteen Twenty Seven"
-                                label="THE FIT - ON CREW"
+                                label="THE FIT"
+                                tag="ON CREW"
                             />
                         </motion.div>
                     </div>
@@ -133,28 +149,36 @@ export default function AboutUs() {
     );
 }
 
-function InteractiveImageCard({ src, alt, label }: { src: string, alt: string, label: string }) {
+function InteractiveImageCard({ src, alt, label, tag = "1327 // BOMBAY" }: { src: string, alt: string, label: string, tag?: string }) {
     return (
         <div
-            className="group relative aspect-[3/4] w-full overflow-hidden rounded-sm border border-white/10 transition-all duration-300 flex flex-col justify-between select-none bg-white/[0.02] hover:border-white/30"
+            className="group relative aspect-[3/4] w-full overflow-hidden rounded-md border border-white/10 hover:border-white/40 transition-all duration-500 select-none shadow-[0_10px_30px_rgba(0,0,0,0.4)] hover:shadow-[0_15px_40px_rgba(255,255,255,0.1)] transform-gpu hover:-translate-y-1 cursor-pointer bg-black/40"
         >
-            {/* Image Container */}
-            <div className="relative w-full flex-1 overflow-hidden">
-                <Image
-                    src={src}
-                    alt={alt}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    loading="eager"
-                />
-                <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-500" />
+            {/* Full Height Edge-to-Edge Image */}
+            <Image
+                src={src}
+                alt={alt}
+                fill
+                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                loading="eager"
+            />
+
+            {/* Subtle Studio Dark Vignette */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30 group-hover:from-black/60 transition-colors duration-500" />
+
+            {/* Top Right: Minimal White Glass Tag */}
+            <div className="absolute top-3 right-3 px-2.5 py-1 rounded-sm bg-white/10 backdrop-blur-md border border-white/20 text-[9px] font-mono font-bold tracking-widest text-white uppercase shadow-sm">
+                {tag}
             </div>
 
-            {/* Label Footer */}
-            <div className="w-full py-3 px-4 border-t border-white/10 bg-black/90 flex items-center justify-center">
-                <span className="text-[10px] sm:text-xs font-mono tracking-widest uppercase font-bold text-white/60 group-hover:text-[#1EA86E] transition-colors duration-300">
-                    {label}
-                </span>
+            {/* Bottom Left: Minimal Pure White Label Tag */}
+            <div className="absolute bottom-3 left-3 pointer-events-none z-10">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-sm bg-white/95 text-black backdrop-blur-md border border-white shadow-[0_4px_20px_rgba(0,0,0,0.3)] group-hover:bg-white transition-all duration-300">
+                    <span className="w-1.5 h-1.5 rounded-full bg-black shrink-0" />
+                    <span className="text-[9px] sm:text-[10px] font-mono tracking-[0.2em] uppercase font-bold text-black">
+                        {label}
+                    </span>
+                </div>
             </div>
         </div>
     );
