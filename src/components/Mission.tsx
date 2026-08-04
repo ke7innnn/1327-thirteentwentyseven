@@ -423,9 +423,8 @@ function ManifestoSection() {
                         </motion.span>
                         <motion.span variants={itemVariants} className="block mt-2">
                             We build{" "}
-                            <span className="text-[#105233] relative inline-block font-black" style={{ filter: "drop-shadow(0 0 18px rgba(16, 82, 51, 0.4))" }}>
-                                Identity
-                                <span className="absolute bottom-1 left-0 right-0 h-1.5 bg-[#1EA86E] rounded-full opacity-70" />
+                            <span className="text-[#105233] font-black uppercase">
+                                Identity.
                             </span>
                         </motion.span>
                         
