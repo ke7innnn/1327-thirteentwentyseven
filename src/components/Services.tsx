@@ -437,7 +437,7 @@ function ServiceRow({
                 >
                     <div
                         ref={copyRef}
-                        className="pb-5 pt-1 font-sans leading-relaxed flex flex-col gap-3.5"
+                        className="pb-5 pt-1 font-sans leading-relaxed flex flex-col gap-3.5 pl-6 sm:pl-8"
                         style={{
                             fontSize: "0.9375rem",
                             maxWidth: "52ch",
