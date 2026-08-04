@@ -41,38 +41,6 @@ const VALUES_INDEX = [
     },
 ];
 
-// ─── MOVEMENT 3: THE CONTACT SHEET FRAMES ──────────────────────────────────────
-const CONTACT_FRAMES = [
-    {
-        num: "01 / 04",
-        src: "/aboutus/about-3.png",
-        alt: "Keith Shah and 1327 tailoring team at work in Malad West workshop",
-        overLabel: "MALAD WEST",
-        caption: "THE WORKSHOP",
-    },
-    {
-        num: "02 / 04",
-        src: "/aboutus/about-1.png",
-        alt: "1327 custom apparel showcase range",
-        overLabel: "SS/26 ATELIER",
-        caption: "THE RANGE",
-    },
-    {
-        num: "03 / 04",
-        src: "/aboutus/about-2.png",
-        alt: "Close-up of 1327 precision embroidery stitching",
-        overLabel: "EMBROIDERY",
-        caption: "THE STITCH",
-    },
-    {
-        num: "04 / 04",
-        src: "/aboutus/about-4.png",
-        alt: "Custom crew uniform fit by 1327 Mumbai",
-        overLabel: "ON CREW",
-        caption: "THE FIT",
-    },
-];
-
 export default function AboutUs() {
     const reduced = useReducedMotion() ?? false;
 
@@ -213,7 +181,7 @@ export default function AboutUs() {
                 </div>
 
                 {/* ─── MOVEMENT 2 — THE CODE (VALUES INDEX) ────────────────────────────────── */}
-                <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24 py-20 md:py-28">
+                <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24 pt-20 md:pt-28">
                     
                     {/* Header */}
                     <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 pb-4 border-b border-white/15">
@@ -261,56 +229,6 @@ export default function AboutUs() {
                                     </div>
                                 </div>
                             </Link>
-                        ))}
-                    </div>
-
-                </div>
-
-                {/* ─── MOVEMENT 3 — THE CONTACT SHEET ───────────────────────────────────────── */}
-                <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24">
-                    
-                    <div className="mb-8 pb-4 border-b border-white/15 flex justify-between items-center">
-                        <span className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-[#1EA86E]">
-                            / CONTACT SHEET
-                        </span>
-                        <span className="font-mono text-xs uppercase tracking-[0.2em] text-white/50">
-                            MALAD WEST ATELIER
-                        </span>
-                    </div>
-
-                    {/* 4 Contact Frames */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-                        {CONTACT_FRAMES.map((frame, idx) => (
-                            <div key={idx} className="flex flex-col gap-3 group cursor-pointer">
-                                
-                                {/* Photo Container — fixed 4:5 aspect, scale on hover */}
-                                <div className="relative aspect-[4/5] w-full overflow-hidden border border-white/15 bg-black/50 rounded-none">
-                                    <Image
-                                        src={frame.src}
-                                        alt={frame.alt}
-                                        fill
-                                        sizes="(max-width: 768px) 50vw, 25vw"
-                                        className="object-cover transition-transform duration-400 ease-out group-hover:scale-[1.03]"
-                                        loading="lazy"
-                                    />
-                                    
-                                    {/* Top-Left Mono Frame Counter */}
-                                    <div className="absolute top-2.5 left-2.5 z-10 px-2 py-0.5 bg-black/75 backdrop-blur-sm border border-white/20 font-mono text-[9px] font-bold tracking-widest text-white uppercase">
-                                        {frame.num}
-                                    </div>
-                                </div>
-
-                                {/* Caption below hairline rule */}
-                                <div className="border-t border-white/15 pt-2 flex flex-col gap-0.5">
-                                    <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/50">
-                                        {frame.overLabel}
-                                    </span>
-                                    <span className="font-heading font-black text-sm uppercase tracking-wider text-white">
-                                        {frame.caption}
-                                    </span>
-                                </div>
-
-                            </div>
                         ))}
                     </div>
 
