@@ -30,15 +30,17 @@ export default function Footer() {
                             href={WHATSAPP_URL}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="bg-[#1EA86E] hover:bg-[#168a57] text-black font-mono text-xs md:text-sm font-bold tracking-widest px-8 py-4 rounded-sm flex items-center gap-2 transition-all duration-300 transform hover:scale-[1.03] active:scale-[0.98] whitespace-nowrap"
+                            className="bg-white text-black hover:bg-[#105233] hover:text-white hover:border-[#105233] border-2 border-white font-heading font-black text-sm sm:text-base md:text-lg uppercase tracking-wider px-8 py-3.5 rounded-none flex items-center gap-2.5 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap shadow-lg cursor-pointer"
                         >
-                            WHATSAPP ↗
+                            <span>WHATSAPP</span>
+                            <span>↗</span>
                         </a>
                         <a 
                             href={`tel:${PHONE_NUMBER}`}
-                            className="border border-white/30 hover:border-white/80 hover:bg-white/5 text-white font-mono text-xs md:text-sm tracking-widest px-6 py-4 rounded-sm flex items-center gap-2 transition-all duration-300 whitespace-nowrap"
+                            className="border-2 border-white/90 text-white hover:bg-white hover:text-black font-heading font-black text-sm sm:text-base md:text-lg uppercase tracking-wider px-8 py-3.5 rounded-none flex items-center gap-2.5 transition-all duration-300 whitespace-nowrap cursor-pointer"
                         >
-                            CALL US ↗
+                            <span>CALL US</span>
+                            <span>↗</span>
                         </a>
                     </div>
                 </motion.div>

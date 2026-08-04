@@ -308,19 +308,21 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
                             </p>
                         </div>
 
-                        {/* Buttons */}
-                        <div className="flex items-center gap-3">
+                        {/* Buttons — Styled in 1327 Logo Font (Sugo / font-heading) */}
+                        <div className="flex flex-wrap items-center gap-3.5">
                             <button
                                 onClick={() => setIsContactOpen(true)}
-                                className="bg-[#1EA86E] hover:bg-[#168a57] text-black font-mono text-[10px] sm:text-xs md:text-sm font-bold tracking-widest px-4 sm:px-6 py-2.5 sm:py-3.5 rounded-sm flex items-center gap-2 transition-all duration-300 transform hover:scale-[1.03] active:scale-[0.98] whitespace-nowrap"
+                                className="bg-white text-black hover:bg-[#105233] hover:text-white hover:border-[#105233] border-2 border-white font-heading font-black text-sm sm:text-base md:text-lg uppercase tracking-wider px-6 sm:px-8 py-3 sm:py-3.5 rounded-none flex items-center gap-2.5 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap cursor-pointer shadow-lg"
                             >
-                                REACH OUT ↗
+                                <span>REACH OUT</span>
+                                <span className="text-xs sm:text-sm">↗</span>
                             </button>
                             <button
                                 onClick={handleScrollToNext}
-                                className="border border-white/30 hover:border-white/80 hover:bg-white/5 text-white font-mono text-[10px] sm:text-xs md:text-sm tracking-widest px-4 sm:px-6 py-2.5 sm:py-3.5 rounded-sm flex items-center gap-2 transition-all duration-300 whitespace-nowrap"
+                                className="border-2 border-white/90 text-white hover:bg-white hover:text-black font-heading font-black text-sm sm:text-base md:text-lg uppercase tracking-wider px-6 sm:px-8 py-3 sm:py-3.5 rounded-none flex items-center gap-2.5 transition-all duration-300 whitespace-nowrap cursor-pointer"
                             >
-                                SEE THE WORK ⬇
+                                <span>SEE THE WORK</span>
+                                <span className="text-xs sm:text-sm">⬇</span>
                             </button>
                         </div>
 
