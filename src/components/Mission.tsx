@@ -358,13 +358,13 @@ function ManifestoSection() {
     return (
         <section
             id="manifesto"
-            className="relative z-20 bg-[#eae6df] text-[#0a0a0a] py-16 md:py-28 border-b border-black/10 w-full overflow-hidden"
+            className="relative z-20 bg-[#105233] text-white py-16 md:py-28 border-b border-white/15 w-full overflow-hidden"
         >
             {/* Woven Linen Apparel Fabric Texture Overlay */}
             <div
-                className="absolute inset-0 pointer-events-none opacity-[0.22] mix-blend-multiply bg-repeat z-0"
+                className="absolute inset-0 pointer-events-none opacity-[0.25] mix-blend-multiply bg-repeat z-0"
                 style={{
-                    backgroundImage: "url('/bg/clothing_fabric_bg.png')",
+                    backgroundImage: "url('/bg/notes_fabric_bg.png')",
                     backgroundSize: "450px 450px",
                 }}
             />
@@ -373,13 +373,13 @@ function ManifestoSection() {
             <div
                 className="absolute inset-0 pointer-events-none z-0"
                 style={{
-                    background: "radial-gradient(ellipse 80% 70% at 50% 25%, rgba(255,255,255,0.6) 0%, transparent 85%)",
+                    background: "radial-gradient(ellipse 85% 85% at 50% 40%, rgba(30,168,110,0.2) 0%, rgba(10,45,28,0.85) 100%)",
                 }}
             />
 
             {/* Giant 1327 Brand Watermark */}
-            <div className="absolute right-4 lg:right-16 top-1/2 -translate-y-1/2 pointer-events-none select-none z-0 opacity-[0.06]">
-                <span className="font-heading font-black text-9xl sm:text-[14rem] md:text-[20rem] tracking-tighter text-[#105233]">
+            <div className="absolute right-4 lg:right-16 top-1/2 -translate-y-1/2 pointer-events-none select-none z-0 opacity-[0.08]">
+                <span className="font-heading font-black text-9xl sm:text-[14rem] md:text-[20rem] tracking-tighter text-white">
                     1327
                 </span>
             </div>
@@ -389,58 +389,58 @@ function ManifestoSection() {
                 whileInView="animate"
                 viewport={{ once: true, margin: "-10% 0px" }}
                 variants={containerVariants}
-                className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24 flex flex-col justify-between min-h-0 md:min-h-[65vh] gap-8 md:gap-0 relative z-10"
+                className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24 flex flex-col justify-between min-h-0 md:min-h-[65vh] gap-8 md:gap-0 relative z-10 text-white"
             >
                 {/* Top Bar */}
                 <div className="flex flex-col gap-3">
                     <motion.div
                         variants={itemVariants}
-                        className="inline-flex items-center gap-2 px-3.5 py-1 rounded-sm bg-[#105233] text-white shadow-sm self-start"
+                        className="inline-flex items-center gap-2 px-3.5 py-1 rounded-none bg-white text-[#105233] shadow-sm self-start"
                     >
-                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-white">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#105233] animate-pulse" />
+                        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#105233]">
                             1327 — BRAND MANIFESTO
                         </span>
                     </motion.div>
 
                     <motion.div 
                         variants={itemVariants}
-                        className="flex justify-between items-center border-b border-black/10 pb-3 w-full"
+                        className="flex justify-between items-center border-b border-white/15 pb-3 w-full"
                     >
                         <SectionMarker sectionKey="mission" />
-                        <span className="text-right font-mono text-xs uppercase tracking-[0.2em] text-black/50">The Manifesto</span>
+                        <span className="text-right font-mono text-xs uppercase tracking-[0.2em] text-white/60">The Manifesto</span>
                     </motion.div>
                 </div>
 
                 {/* Central Title */}
                 <div className="w-full flex justify-start items-center my-auto py-8">
-                    <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold uppercase tracking-tight leading-[0.95] text-left text-black max-w-5xl font-sans flex flex-col items-start">
-                        <motion.span variants={itemVariants} className="block">
+                    <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold uppercase tracking-tight leading-[0.95] text-left text-white max-w-5xl font-sans flex flex-col items-start">
+                        <motion.span variants={itemVariants} className="block text-white">
                             We don&apos;t make
                         </motion.span>
-                        <motion.span variants={itemVariants} className="block mt-2">
+                        <motion.span variants={itemVariants} className="block mt-2 text-white">
                             Merch.
                         </motion.span>
-                        <motion.span variants={itemVariants} className="block mt-2">
+                        <motion.span variants={itemVariants} className="block mt-2 text-white">
                             We build{" "}
-                            <span className="text-[#105233] font-black uppercase">
+                            <span className="text-white font-heading font-black uppercase tracking-tight">
                                 Identity.
                             </span>
                         </motion.span>
                         
-                        {/* Horizontal black bar divider */}
+                        {/* Horizontal white bar divider */}
                         <motion.div 
                             variants={{
                                 initial: { width: 0, opacity: 0 },
                                 animate: { width: "64px", opacity: 1, transition: { duration: 0.6, ease: "easeOut" } }
                             }}
-                            className="h-1 bg-[#105233] my-6 rounded-full"
+                            className="h-1 bg-white my-6 rounded-none"
                         />
                         
                         <motion.span 
                             variants={itemVariants} 
                             className="block"
-                            style={{ WebkitTextStroke: "1.5px #0a0a0a", color: "transparent" }}
+                            style={{ WebkitTextStroke: "1.5px #FFFFFF", color: "transparent" }}
                         >
                             Stitch by Stitch.
                         </motion.span>
@@ -450,15 +450,15 @@ function ManifestoSection() {
                 {/* Bottom Row */}
                 <motion.div 
                     variants={itemVariants}
-                    className="w-full grid grid-cols-1 md:grid-cols-12 gap-6 items-end mt-4 pt-4 border-t border-black/10"
+                    className="w-full grid grid-cols-1 md:grid-cols-12 gap-6 items-end mt-4 pt-4 border-t border-white/15"
                 >
-                    <div className="md:col-span-4 text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-[#105233] font-bold self-start md:self-end text-left flex items-center gap-2">
+                    <div className="md:col-span-4 text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-white font-bold self-start md:self-end text-left flex items-center gap-2">
                         <span>/ Why We Exist</span>
-                        <span className="text-black/30 font-normal">| 1327</span>
+                        <span className="text-white/40 font-normal">| 1327</span>
                     </div>
                     <div
                         style={{ fontFamily: '"Times New Roman", serif' }}
-                        className="md:col-span-8 text-sm sm:text-base md:text-lg lg:text-xl font-light text-black/90 leading-relaxed text-left"
+                        className="md:col-span-8 text-sm sm:text-base md:text-lg lg:text-xl font-light text-white/90 leading-relaxed text-left"
                     >
                         Every crew deserves a uniform worth belonging to. We cut premium fabric, obsess over embroidery and skip every shortcut — so your people feel like a team, and your brand becomes impossible to miss.
                     </div>
