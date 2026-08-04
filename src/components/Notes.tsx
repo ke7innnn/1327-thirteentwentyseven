@@ -7,8 +7,26 @@ import { WHATSAPP_URL, PHONE_NUMBER, CONTACT_EMAIL } from "@/config/constants";
 
 export default function Notes() {
     return (
-        <section id="notes" aria-label="Orders, MOQ and Brand Film" className="relative z-10 py-20 md:py-32 bg-transparent text-white overflow-hidden border-b border-white/10">
-            <div className="container mx-auto px-5 sm:px-6">
+        <section id="notes" aria-label="Orders, MOQ and Brand Film" className="relative z-10 py-20 md:py-32 bg-[#105233] text-white overflow-hidden border-b border-white/10">
+            {/* 1327 Brand Green Apparel Craftsmanship Fabric Texture */}
+            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-[#105233]">
+                <div
+                    className="absolute inset-0 opacity-[0.35] mix-blend-multiply bg-repeat"
+                    style={{
+                        backgroundImage: "url('/bg/notes_fabric_bg.png')",
+                        backgroundSize: "450px 450px",
+                    }}
+                />
+                {/* Atelier Lighting Vignette */}
+                <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                        background: "radial-gradient(ellipse 85% 85% at 50% 50%, rgba(30,168,110,0.22) 0%, rgba(12,60,37,0.65) 100%)",
+                    }}
+                />
+            </div>
+
+            <div className="container mx-auto px-5 sm:px-6 relative z-10">
                 <div className="flex flex-col md:flex-row items-center gap-10 md:gap-24">
 
                     {/* Text Column (Left) — Yellow Note Paper */}
