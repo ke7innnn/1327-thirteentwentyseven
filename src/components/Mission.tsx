@@ -5,6 +5,8 @@ import { useRef, useEffect, useState, useCallback } from "react";
 import NextImage from "next/image";
 import ContactModal from "./ContactModal";
 import BrandTagTransition from "./BrandTagTransition";
+import SectionMarker from "./ui/SectionMarker";
+import { HERO_MOQ_LINE } from "@/config/constants";
 
 const TOTAL_FRAMES = 240;
 // Batch size for progressive loading — first batch loads instantly, rest load in background
@@ -322,6 +324,11 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
                             </button>
                         </div>
 
+                        {/* Early MOQ Micro-Label */}
+                        <div className="font-mono text-[9px] sm:text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-[#1EA86E] pt-1">
+                            {HERO_MOQ_LINE}
+                        </div>
+
                         {/* Bottom Bar */}
                         <div className="flex justify-between items-center text-[8px] sm:text-[9px] md:text-xs font-mono tracking-[0.12em] text-white/40 w-full pt-1 sm:pt-2 border-t border-white/10">
                             <span className="text-left">19.1871° N / 72.8488° E</span>
@@ -418,13 +425,10 @@ function ManifestoSection() {
 
                     <motion.div 
                         variants={itemVariants}
-                        className="flex justify-between items-center text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-black border-b border-black/10 pb-3 w-full opacity-50"
+                        className="flex justify-between items-center border-b border-black/10 pb-3 w-full"
                     >
-                        <div className="text-left">
-                            <span className="text-[#105233] font-bold mr-2">&#123; 01 &#125;</span>
-                            <span>Our Mission</span>
-                        </div>
-                        <span className="text-right">The Manifesto</span>
+                        <SectionMarker sectionKey="mission" />
+                        <span className="text-right font-mono text-xs uppercase tracking-[0.2em] text-black/50">The Manifesto</span>
                     </motion.div>
                 </div>
 

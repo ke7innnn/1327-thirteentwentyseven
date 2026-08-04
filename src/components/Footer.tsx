@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import ContactModal from "./ContactModal";
+import { WHATSAPP_URL, PHONE_NUMBER, CONTACT_EMAIL, FOOTER_SIGNATURE } from "@/config/constants";
 
 export default function Footer() {
     const [isContactOpen, setIsContactOpen] = useState(false);
@@ -24,12 +25,22 @@ export default function Footer() {
                         <span className="block text-[#1EA86E]">To Dress?</span>
                     </h2>
                     
-                    <button 
-                        onClick={() => setIsContactOpen(true)}
-                        className="bg-[#1EA86E] hover:bg-[#168a57] text-black font-mono text-xs md:text-sm font-bold tracking-widest px-8 py-4 rounded-sm flex items-center gap-2 transition-all duration-300 transform hover:scale-[1.03] active:scale-[0.98] whitespace-nowrap self-start md:self-center"
-                    >
-                        START A CONVERSATION ↗
-                    </button>
+                    <div className="flex flex-wrap items-center gap-4 self-start md:self-center">
+                        <a 
+                            href={WHATSAPP_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-[#1EA86E] hover:bg-[#168a57] text-black font-mono text-xs md:text-sm font-bold tracking-widest px-8 py-4 rounded-sm flex items-center gap-2 transition-all duration-300 transform hover:scale-[1.03] active:scale-[0.98] whitespace-nowrap"
+                        >
+                            WHATSAPP ↗
+                        </a>
+                        <a 
+                            href={`tel:${PHONE_NUMBER}`}
+                            className="border border-white/30 hover:border-white/80 hover:bg-white/5 text-white font-mono text-xs md:text-sm tracking-widest px-6 py-4 rounded-sm flex items-center gap-2 transition-all duration-300 whitespace-nowrap"
+                        >
+                            CALL US ↗
+                        </a>
+                    </div>
                 </motion.div>
 
                 {/* Divider */}
@@ -56,8 +67,8 @@ export default function Footer() {
                     >
                         <h3 className="text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-white/40 font-bold">Contact</h3>
                         <div className="flex flex-col gap-2 font-mono text-xs md:text-sm text-white/60 tracking-wider">
-                            <a href="tel:+918082845721" className="hover:text-[#1EA86E] transition-colors">+91 80828 45721</a>
-                            <a href="mailto:1327thecommunity@gmail.com" className="hover:text-[#1EA86E] transition-colors break-all">1327thecommunity@gmail.com</a>
+                            <a href={`tel:${PHONE_NUMBER}`} className="hover:text-[#1EA86E] transition-colors">{PHONE_NUMBER}</a>
+                            <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-[#1EA86E] transition-colors break-all">{CONTACT_EMAIL}</a>
                         </div>
                     </motion.div>
 
@@ -86,11 +97,13 @@ export default function Footer() {
                     >
                         <h3 className="text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-white/40 font-bold">Menu</h3>
                         <div className="flex flex-col gap-2 font-mono text-xs md:text-sm text-white/60 tracking-wider">
-                            <a href="#mission" className="hover:text-[#1EA86E] transition-colors">Our Mission</a>
-                            <a href="#about" className="hover:text-[#1EA86E] transition-colors">About Us</a>
-                            <a href="#services" className="hover:text-[#1EA86E] transition-colors">What We Offer</a>
-                            <a href="#clients" className="hover:text-[#1EA86E] transition-colors">Clients</a>
-                            <a href="#notes" className="hover:text-[#1EA86E] transition-colors">Orders &amp; MOQ</a>
+                            <a href="#manifesto" className="hover:text-[#1EA86E] transition-colors">01 Manifesto</a>
+                            <a href="#services" className="hover:text-[#1EA86E] transition-colors">02 What We Offer</a>
+                            <a href="#process" className="hover:text-[#1EA86E] transition-colors">03 The Process</a>
+                            <a href="#clients" className="hover:text-[#1EA86E] transition-colors">04 Clients</a>
+                            <a href="#orders" className="hover:text-[#1EA86E] transition-colors">05 Orders &amp; MOQ</a>
+                            <a href="#film" className="hover:text-[#1EA86E] transition-colors">06 Brand Film</a>
+                            <a href="#location" className="hover:text-[#1EA86E] transition-colors">07 Location</a>
                         </div>
                     </motion.div>
 
@@ -113,7 +126,7 @@ export default function Footer() {
                 {/* Bottom Bar: Copyright and Tagline */}
                 <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-[9px] md:text-xs font-mono tracking-[0.15em] text-white/40 border-t border-white/5 pt-8 w-full relative z-10">
                     <span className="text-left font-sans">© 2026 1327 - THIRTEEN TWENTY SEVEN</span>
-                    <span className="text-right">DESIGNED FOR THE BOLD  ·  MADE IN MALAD WEST</span>
+                    <span className="text-right">{FOOTER_SIGNATURE}</span>
                 </div>
 
             </div>

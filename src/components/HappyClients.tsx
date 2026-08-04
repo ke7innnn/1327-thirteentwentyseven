@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import BrandCarousel from "./BrandCarousel";
+import SectionMarker from "./ui/SectionMarker";
 
 const clients = [
     { src: "/clients/client-1.png", title: "Bisou Bisou — Bakery & Café", alt: "Happy client wearing custom 1327 branded t-shirt", tag: "Custom Crew Apparel · Embroidery" },
@@ -68,10 +69,9 @@ export default function HappyClients() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-10% 0px" }}
                     transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                    className="flex items-center justify-center gap-2 text-xs font-mono font-bold uppercase tracking-[0.25em] text-white mb-2"
+                    className="mb-2"
                 >
-                    <span className="text-white font-bold">&#123; 03 &#125;</span>
-                    <span>/ TRUSTED BY CREWS</span>
+                    <SectionMarker sectionKey="clients" align="center" className="!text-white" />
                 </motion.div>
                 <motion.div
                     initial={{ opacity: 0, y: 60 }}
@@ -96,13 +96,13 @@ export default function HappyClients() {
                     className="flex gap-4 md:gap-8 items-center animate-infinite-scroll will-change-transform transform-gpu group-hover:[animation-play-state:paused]"
                     style={{ width: "max-content" }}
                 >
-                    {[...clients, ...clients].map((client, index) => {
-                        const originalIdx = index % clients.length;
-                        return (
+                    {/* Primary track for screen readers */}
+                    <div className="flex gap-4 md:gap-8 items-center">
+                        {clients.map((client, index) => (
                             <button
-                                key={index}
+                                key={`primary-${index}`}
                                 type="button"
-                                onClick={() => setSelectedIndex(originalIdx)}
+                                onClick={() => setSelectedIndex(index)}
                                 className="relative w-[220px] h-[300px] md:w-[300px] md:h-[400px] flex-shrink-0 rounded-sm overflow-hidden border-[3px] md:border-[5px] border-white/90 shadow-lg md:shadow-[0_20px_50px_rgba(0,0,0,0.5)] cursor-pointer hover:scale-[1.03] transition-transform duration-300 group/card text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
                                 aria-label={`View photo of ${client.title}`}
                             >
@@ -110,22 +110,49 @@ export default function HappyClients() {
                                     src={client.src}
                                     alt={client.alt}
                                     fill
-                                    sizes="(max-width: 768px) 220px, 300px"
+                                    sizes="(max-width: 768px) 80vw, 33vw"
                                     className="object-cover"
-                                    loading="eager"
-                                    priority={index < 4}
+                                    loading="lazy"
                                 />
                                 <div className="absolute inset-0 bg-[#061E13]/20 group-hover/card:bg-black/10 transition-colors" />
 
-                                {/* Hover overlay label */}
                                 <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex justify-between items-end">
                                     <span className="font-mono text-[10px] uppercase tracking-widest text-white font-bold">
                                         CLICK TO PREVIEW ↗
                                     </span>
                                 </div>
                             </button>
-                        );
-                    })}
+                        ))}
+                    </div>
+
+                    {/* Duplicate track — hidden from screen readers */}
+                    <div className="flex gap-4 md:gap-8 items-center" aria-hidden="true">
+                        {clients.map((client, index) => (
+                            <button
+                                key={`duplicate-${index}`}
+                                type="button"
+                                onClick={() => setSelectedIndex(index)}
+                                tabIndex={-1}
+                                className="relative w-[220px] h-[300px] md:w-[300px] md:h-[400px] flex-shrink-0 rounded-sm overflow-hidden border-[3px] md:border-[5px] border-white/90 shadow-lg md:shadow-[0_20px_50px_rgba(0,0,0,0.5)] cursor-pointer hover:scale-[1.03] transition-transform duration-300 group/card text-left focus:outline-none"
+                            >
+                                <Image
+                                    src={client.src}
+                                    alt=""
+                                    fill
+                                    sizes="(max-width: 768px) 80vw, 33vw"
+                                    className="object-cover"
+                                    loading="lazy"
+                                />
+                                <div className="absolute inset-0 bg-[#061E13]/20 group-hover/card:bg-black/10 transition-colors" />
+
+                                <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex justify-between items-end">
+                                    <span className="font-mono text-[10px] uppercase tracking-widest text-white font-bold">
+                                        CLICK TO PREVIEW ↗
+                                    </span>
+                                </div>
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </div>
 

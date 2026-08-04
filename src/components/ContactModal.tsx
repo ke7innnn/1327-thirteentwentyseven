@@ -136,7 +136,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                     <span className="text-4xl">✕</span>
                                     <h3 className="font-heading text-xl font-bold uppercase tracking-wide text-white">SOMETHING WENT WRONG</h3>
                                     <p className="font-mono text-xs text-white/70 max-w-xs leading-relaxed">
-                                        Please try again or reach us directly at 1327thecommunity@gmail.com
+                                        Please try again or reach us directly at hello@1327.in
                                     </p>
                                     <button
                                         onClick={() => setStatus("idle")}

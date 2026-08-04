@@ -28,27 +28,49 @@ export default function BrandCarousel() {
                 WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
             }}
         >
-            {/* CSS animation instead of framer-motion animate */}
             <div
                 className="flex items-center gap-8 md:gap-16 animate-infinite-scroll will-change-transform"
                 style={{ width: "max-content" }}
             >
-                {allLogos.map((logo, index) => (
-                    <div
-                        key={index}
-                        className="relative flex-shrink-0 w-[120px] h-[70px] md:w-[200px] md:h-[110px]"
-                    >
-                        <Image
-                            src={logo.src}
-                            alt={logo.alt}
-                            fill
-                            sizes="(max-width: 768px) 120px, 200px"
-                            className="object-contain"
-                            loading="eager"
-                            priority={index < 8}
-                        />
-                    </div>
-                ))}
+                {/* Primary track for screen readers */}
+                <div className="flex items-center gap-8 md:gap-16">
+                    {logos.map((logo, index) => (
+                        <div
+                            key={`primary-${index}`}
+                            className="relative flex-shrink-0 w-[120px] h-[70px] md:w-[200px] md:h-[110px]"
+                        >
+                            <Image
+                                src={logo.src}
+                                alt={logo.alt}
+                                fill
+                                sizes="(max-width: 768px) 120px, 200px"
+                                quality={80}
+                                className="object-contain"
+                                loading="lazy"
+                            />
+                        </div>
+                    ))}
+                </div>
+
+                {/* Duplicate track for continuous marquee — hidden from screen readers */}
+                <div className="flex items-center gap-8 md:gap-16" aria-hidden="true">
+                    {logos.map((logo, index) => (
+                        <div
+                            key={`duplicate-${index}`}
+                            className="relative flex-shrink-0 w-[120px] h-[70px] md:w-[200px] md:h-[110px]"
+                        >
+                            <Image
+                                src={logo.src}
+                                alt=""
+                                fill
+                                sizes="(max-width: 768px) 120px, 200px"
+                                quality={80}
+                                className="object-contain"
+                                loading="lazy"
+                            />
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );

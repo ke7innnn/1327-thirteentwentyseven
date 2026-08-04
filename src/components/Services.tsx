@@ -3,6 +3,7 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import SectionMarker from "./ui/SectionMarker";
 
 // ─── EASING ──────────────────────────────────────────────────────────────────
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
@@ -911,16 +912,14 @@ function MobileTrack({ family }: { family: Family }) {
 function SectionHeader({ reduced }: { reduced: boolean }) {
     return (
         <div className="mb-8 md:mb-10 flex flex-col items-start gap-3">
-            {/* Subtle Brand Green Section Tag */}
+            {/* Canonical Section Marker 02 */}
             <motion.div
                 initial={reduced ? false : { opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-5% 0px" }}
                 transition={{ duration: 0.5, ease: EASE }}
-                className="flex items-center gap-2 font-mono text-[10px] md:text-xs font-bold tracking-[0.25em] uppercase text-[#105233]"
             >
-                <span className="text-[#105233] font-bold">&#123; 02 &#125;</span>
-                <span>/ OUR SERVICES</span>
+                <SectionMarker sectionKey="services" />
             </motion.div>
 
             {/* Main Title & Subtitle */}
@@ -975,7 +974,7 @@ function FamilyAccordionHeader({
             >
                 <div className="flex items-center gap-3.5 sm:gap-5">
                     <span className="font-mono text-xs sm:text-sm text-[#1EA86E] font-bold tracking-wider">
-                        0{index + 1}
+                        {String(index + 1).padStart(2, "0")}
                     </span>
                     <h3 className="font-heading font-black uppercase text-xl sm:text-2xl md:text-3xl tracking-tight text-[#0a0a0a] group-hover:text-[#1EA86E] transition-colors">
                         {family.label}

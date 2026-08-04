@@ -47,35 +47,6 @@ export const metadata: Metadata = {
   description:
     "1327 crafts custom t-shirts, caps, aprons & uniforms for businesses in Mumbai. Embroidery & printing. MOQ 50 pcs. Born in Malad.",
 
-  keywords: [
-    "1327",
-    "thirteen twenty seven",
-    "1327 Malad",
-    "1327 Mumbai",
-    "1327 custom t-shirts",
-    "1327 community",
-    "custom t-shirts Mumbai",
-    "custom uniforms Mumbai",
-    "bulk t-shirt printing Mumbai",
-    "corporate uniforms Mumbai",
-    "custom embroidery t-shirts",
-    "custom polo t-shirts Mumbai",
-    "custom caps Mumbai",
-    "custom aprons Mumbai",
-    "branded uniforms for business",
-    "t-shirt embroidery Mumbai",
-    "custom apparel Malad West",
-    "t-shirt manufacturer Mumbai",
-    "uniform supplier Maharashtra",
-    "relaxed fit t-shirts bulk order",
-    "custom t-shirts for restaurants Mumbai",
-    "corporate branded uniforms Malad",
-    "bulk order custom polo t-shirts India",
-    "custom embroidery caps for brands",
-    "t-shirt printing near Malad West",
-    "custom merchandise Mumbai",
-  ],
-
   authors: [{ name: "1327 Community" }],
   creator: "1327 Community",
   publisher: "1327 Community",
@@ -99,8 +70,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/logo/1327_logo_v2.png",
-        width: 800,
-        height: 800,
+        width: 1200,
+        height: 630,
         alt: "1327 Thirteen Twenty Seven Logo",
       },
     ],
@@ -159,7 +130,7 @@ function JsonLd() {
       "@type": "ContactPoint",
       telephone: "+91-8082845721",
       contactType: "sales",
-      email: "1327thecommunity@gmail.com",
+      email: "hello@1327.in",
       areaServed: "IN",
       availableLanguage: ["English", "Hindi"],
     },
@@ -178,7 +149,7 @@ function JsonLd() {
     description:
       "Custom t-shirts, polo shirts, caps, aprons and uniforms manufacturer in Malad West, Mumbai. Embroidery and printing specialists.",
     telephone: "+91-8082845721",
-    email: "1327thecommunity@gmail.com",
+    email: "hello@1327.in",
     url: "https://www.1327.in",
     address: {
       "@type": "PostalAddress",
@@ -198,6 +169,10 @@ function JsonLd() {
       name: "Mumbai",
     },
     priceRange: "$$",
+    sameAs: [
+      "https://www.instagram.com/1327_thirteentwentyseven/",
+      "https://www.youtube.com/@1327-thirteentwentyseven",
+    ],
     openingHoursSpecification: {
       "@type": "OpeningHoursSpecification",
       dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import SectionMarker from "./ui/SectionMarker";
 
 export default function LocationMap() {
     return (
@@ -19,12 +20,9 @@ export default function LocationMap() {
                     className="lg:col-span-6 flex flex-col items-start w-full"
                 >
                     {/* Top Bar Header */}
-                    <div className="flex justify-between items-center text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-white/50 border-b border-white/10 pb-4 mb-8 w-full">
-                        <div>
-                            <span className="text-[#1EA86E] font-bold mr-2">&#123; 07 &#125;</span>
-                            <span>Location</span>
-                        </div>
-                        <span>Malad West, Mumbai</span>
+                    <div className="flex justify-between items-center border-b border-white/10 pb-4 mb-8 w-full">
+                        <SectionMarker sectionKey="location" className="!text-white" />
+                        <span className="font-mono text-xs uppercase tracking-[0.2em] text-white/50">Malad West, Mumbai</span>
                     </div>
 
                     {/* Title */}
