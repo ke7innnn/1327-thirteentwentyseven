@@ -1,21 +1,17 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import SectionMarker from "./ui/SectionMarker";
 import { EASING, DURATION, viewportConfig, staggerContainer, staggerItem } from "@/lib/motion";
 import { WHATSAPP_URL, PHONE_NUMBER, CONTACT_EMAIL } from "@/config/constants";
 
 export default function Notes() {
-    const [isVideoLoaded, setIsVideoLoaded] = useState(false);
-
     return (
-        <section id="orders" aria-label="Orders, MOQ and Brand Film" className="relative z-10 py-20 md:py-32 bg-transparent text-white overflow-hidden border-b border-white/10">
+        <section id="notes" aria-label="Orders, MOQ and Brand Film" className="relative z-10 py-20 md:py-32 bg-transparent text-white overflow-hidden border-b border-white/10">
             <div className="container mx-auto px-5 sm:px-6">
                 <div className="flex flex-col md:flex-row items-center gap-10 md:gap-24">
 
-                    {/* Text Column (Left) — Original Yellow Note Paper */}
+                    {/* Text Column (Left) — Yellow Note Paper */}
                     <motion.div
                         initial={{ opacity: 0, y: 50 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -75,7 +71,7 @@ export default function Notes() {
                         </div>
                     </motion.div>
 
-                    {/* Video Column (Right) */}
+                    {/* Video Column (Right) — Exact Original YouTube Embed */}
                     <motion.div
                         initial={{ opacity: 0, y: 80 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -83,49 +79,30 @@ export default function Notes() {
                         transition={{ duration: 0.8, ease: EASING, delay: 0.1 }}
                         className="w-full md:w-1/2 relative mt-6 md:mt-0"
                     >
-                        <div className="mb-4">
-                            <SectionMarker sectionKey="film" className="!text-white" />
+                        {/* TAKE A LOOK Label */}
+                        <div id="film" className="flex items-center gap-3 mb-4">
+                            <span className="relative flex h-3 w-3">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#fdfbcf] opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-3 w-3 bg-[#fdfbcf]"></span>
+                            </span>
+                            <span className="text-sm font-bold tracking-[0.2em] text-[#fdfbcf] font-heading">TAKE A LOOK</span>
                         </div>
 
-                        <div id="film" className="relative aspect-video w-full overflow-hidden rounded-sm border border-white/10 group shadow-2xl shadow-[#fdfbcf]/10 bg-black">
-                            {!isVideoLoaded ? (
-                                <button
-                                    type="button"
-                                    onClick={() => setIsVideoLoaded(true)}
-                                    className="relative w-full h-full block text-left focus:outline-none cursor-pointer group"
-                                    aria-label="Play 1327 Brand Showcase Film"
-                                >
-                                    <Image
-                                        src="/aboutus/about-1.png"
-                                        alt="1327 Brand Film Poster Still"
-                                        fill
-                                        className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
-                                        sizes="(max-width: 768px) 100vw, 50vw"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20" />
+                        <div className="relative aspect-video w-full overflow-hidden rounded-sm border border-white/10 group shadow-2xl shadow-[#fdfbcf]/10">
+                            <iframe
+                                width="100%"
+                                height="100%"
+                                src="https://www.youtube.com/embed/wW5xMjM0rNk?si=JixVJUilbeboumbv"
+                                title="1327 Thirteen Twenty Seven — Custom T-Shirts and Uniforms Showcase"
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowFullScreen
+                                loading="lazy"
+                                className="absolute inset-0 w-full h-full"
+                            ></iframe>
 
-                                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-6 text-center z-10">
-                                        <div className="px-5 py-2.5 bg-[#105233] text-white font-mono text-xs sm:text-sm font-bold uppercase tracking-[0.25em] shadow-lg group-hover:bg-[#166942] transition-colors flex items-center gap-2">
-                                            <span>TAKE A LOOK</span>
-                                            <span className="group-hover:translate-x-1 transition-transform">↗</span>
-                                        </div>
-                                        <span className="font-mono text-[10px] sm:text-xs text-white/70 uppercase tracking-widest">
-                                            1327 MUMBAI — ATELIER &amp; CREW SHOWCASE FILM
-                                        </span>
-                                    </div>
-                                </button>
-                            ) : (
-                                <iframe
-                                    width="100%"
-                                    height="100%"
-                                    src="https://www.youtube-nocookie.com/embed/wW5xMjM0rNk?autoplay=1&rel=0"
-                                    title="1327 Thirteen Twenty Seven — Custom T-Shirts and Uniforms Showcase"
-                                    frameBorder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowFullScreen
-                                    className="absolute inset-0 w-full h-full"
-                                ></iframe>
-                            )}
+                            {/* Glossy Overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-tr from-[#105233]/40 to-transparent pointer-events-none mix-blend-overlay"></div>
                         </div>
                     </motion.div>
 
