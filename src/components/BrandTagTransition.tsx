@@ -186,7 +186,7 @@ export default function BrandTagTransition() {
         >
             {/* Accessible DOM copy */}
             <div className="sr-only">
-                <h3>THE CODE</h3>
+                <h3>BRAND VALUES</h3>
                 <ul>{values.map(v => <li key={v.num}>{v.num} {v.word}</li>)}</ul>
                 <p>MADE IN MALAD WEST — 19.1871° N / 72.8488° E</p>
             </div>
