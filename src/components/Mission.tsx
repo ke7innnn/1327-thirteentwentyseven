@@ -324,22 +324,6 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
                                 <span className="text-xs sm:text-sm">⬇</span>
                             </button>
                         </div>
-
-                        {/* Bottom Bar */}
-                        <div className="flex justify-between items-center text-[8px] sm:text-[9px] md:text-xs font-mono tracking-[0.12em] text-white/40 w-full pt-1 sm:pt-2 border-t border-white/10">
-                            <span className="text-left">19.1871° N / 72.8488° E</span>
-                            <div className="flex flex-col items-center gap-1">
-                                <span className="text-[8px] tracking-[0.3em] font-bold">SCROLL</span>
-                                <div className="w-[1px] h-6 bg-white/20 relative overflow-hidden">
-                                    <motion.div
-                                        animate={{ y: [-24, 24] }}
-                                        transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
-                                        className="absolute left-0 right-0 h-3 bg-[#1EA86E]"
-                                    />
-                                </div>
-                            </div>
-                            <span className="text-right hidden xs:inline">@1327_THIRTEENTWENTYSEVEN</span>
-                        </div>
                     </div>
                 </motion.div>
             </div>
