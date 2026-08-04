@@ -66,11 +66,11 @@ export default function AboutUs() {
                         >
                             <div className="relative aspect-[3/2] sm:aspect-[4/5] w-full overflow-hidden border border-white/15 bg-black/60 rounded-none">
                                 <Image
-                                    src="/aboutus/about-3.png"
-                                    alt="Keith Shah, Founder of 1327 in the Malad West atelier"
+                                    src="/aboutus/keith_shah_founder.jpg"
+                                    alt="Keith Shah, Founder of 1327"
                                     fill
                                     sizes="(max-width: 768px) 100vw, 42vw"
-                                    className="object-cover rounded-none"
+                                    className="object-cover rounded-none object-top"
                                     loading="lazy"
                                 />
 
