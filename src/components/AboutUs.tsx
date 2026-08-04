@@ -48,21 +48,20 @@ export default function AboutUs() {
         <section
             id="about"
             aria-label="About 1327 Thirteen Twenty Seven — Origin & Code"
-            className="relative z-10 py-24 md:py-32 bg-[#0B3C26] text-white overflow-hidden border-b border-white/15"
+            className="relative z-10 py-24 md:py-32 bg-[#090C0A] text-white overflow-hidden border-b border-white/10"
         >
-            {/* Rolex-Style Deep Emerald Craftsmanship Background */}
-            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-[#0B3C26]">
+            {/* Ultra Luxury Dark Studio Background */}
+            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-[#090C0A]">
                 <div
-                    className="absolute inset-0 opacity-[0.35] mix-blend-overlay bg-repeat"
+                    className="absolute inset-0 opacity-[0.6] bg-cover bg-center"
                     style={{
-                        backgroundImage: "url('/bg/rolex_emerald_bg.png')",
-                        backgroundSize: "600px 600px",
+                        backgroundImage: "url('/bg/dark_studio_luxury_bg.png')",
                     }}
                 />
                 <div
                     className="absolute inset-0 pointer-events-none"
                     style={{
-                        background: "radial-gradient(ellipse 90% 90% at 50% 40%, rgba(20,95,58,0.35) 0%, rgba(5,25,15,0.88) 100%)",
+                        background: "radial-gradient(ellipse 85% 85% at 50% 45%, rgba(16,82,51,0.22) 0%, rgba(5,7,6,0.88) 100%)",
                     }}
                 />
             </div>
@@ -81,7 +80,7 @@ export default function AboutUs() {
                             transition={{ duration: 0.7, ease: EASING }}
                             className="lg:col-span-5 relative w-full"
                         >
-                            <div className="relative aspect-[3/2] sm:aspect-[4/5] w-full overflow-hidden border border-white/15 bg-black/60 rounded-none">
+                            <div className="relative aspect-[3/2] sm:aspect-[4/5] w-full overflow-hidden border border-white/15 bg-black/60 rounded-none shadow-2xl">
                                 <Image
                                     src="/aboutus/keith_shah_founder.jpg"
                                     alt="Keith Shah, Founder of 1327"
@@ -91,8 +90,8 @@ export default function AboutUs() {
                                     loading="lazy"
                                 />
 
-                                {/* Solid Rolex Emerald Caption Box Overlay */}
-                                <div className="absolute bottom-0 left-0 p-3 sm:p-4 bg-[#0B3C26] text-white z-10 rounded-none border-t border-r border-white/30 shadow-md">
+                                {/* Solid Brand Green Caption Box Overlay */}
+                                <div className="absolute bottom-0 left-0 p-3 sm:p-4 bg-[#105233] text-white z-10 rounded-none border-t border-r border-white/30 shadow-md">
                                     <div className="font-mono text-[9px] sm:text-[10px] font-bold tracking-[0.22em] uppercase leading-tight">
                                         <p className="text-white">KEITH SHAH</p>
                                         <p className="text-white/80">FOUNDER</p>
