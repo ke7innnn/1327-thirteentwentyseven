@@ -363,11 +363,11 @@ function ServiceRow({
                 animate={{ opacity: isActive ? 1 : 0 }}
                 transition={{ duration: reduced ? 0 : 0.2, ease: EASE }}
                 style={{ zIndex: 0 }}
-                className="absolute inset-x-0 inset-y-0.5 pointer-events-none rounded-sm bg-[#105233]/10 border-l-2 border-[#105233] transform-gpu"
+                className="absolute inset-x-0 inset-y-0.5 pointer-events-none rounded-sm bg-[#105233]/10 border-l-4 border-[#105233] transform-gpu"
             />
 
-            {/* row content — sits above the fill */}
-            <div className="relative z-10">
+            {/* row content — sits above the fill with spacious padding */}
+            <div className="relative z-10 px-5 sm:px-6 py-1 transition-all duration-300">
                 {/* four-column spec grid */}
                 <div
                     style={{
@@ -437,7 +437,7 @@ function ServiceRow({
                 >
                     <div
                         ref={copyRef}
-                        className="pb-4 pt-0 font-sans leading-relaxed flex flex-col gap-2"
+                        className="pb-5 pt-1 font-sans leading-relaxed flex flex-col gap-3.5"
                         style={{
                             fontSize: "0.9375rem",
                             maxWidth: "52ch",
