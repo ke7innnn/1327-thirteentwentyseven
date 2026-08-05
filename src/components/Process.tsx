@@ -337,7 +337,7 @@ export default function Process() {
                         </div>
                     </div>
 
-                    {/* ─── PANEL 7: 1327 LOGO SECTION TRANSITION ────────────────────────── */}
+                    {/* ─── PANEL 7: 1327 GREEN & WHITE LOGO SECTION TRANSITION ───────────── */}
                     <div className="w-full lg:w-[45vw] shrink-0 flex flex-col justify-center items-center p-8 lg:p-16 border-l border-[#F7F5F0]/15 relative z-10 bg-[#14140F] min-h-[440px] lg:min-h-[580px] overflow-hidden">
                         <motion.div
                             style={{ y: logoY }}
@@ -345,14 +345,14 @@ export default function Process() {
                             whileInView={{ opacity: 1 }}
                             viewport={{ once: false, margin: "-10% 0px" }}
                             transition={{ duration: 0.6, ease: "easeOut" }}
-                            className="relative w-48 sm:w-64 lg:w-80 h-32 lg:h-44 flex items-center justify-center"
+                            className="relative w-64 sm:w-80 lg:w-[360px] aspect-[4/3] flex items-center justify-center p-6 bg-[#105233] border border-[#2E8B5A]/40 rounded-none shadow-2xl"
                         >
                             <Image
-                                src="/logo/1327_logo_v2.png"
-                                alt="1327 Logo"
+                                src="/logo/1327_white_transparent_logo.png"
+                                alt="1327 Thirteen Twenty Seven Logo"
                                 fill
-                                sizes="(max-width: 1024px) 256px, 320px"
-                                className="object-contain filter invert brightness-200"
+                                sizes="(max-width: 1024px) 320px, 360px"
+                                className="object-contain p-4"
                                 priority={false}
                             />
                         </motion.div>
