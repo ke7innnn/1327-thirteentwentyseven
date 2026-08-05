@@ -41,21 +41,28 @@ export default function Notes() {
                             <SectionMarker sectionKey="orders" className="!text-white" />
                         </div>
 
-                        <div className="relative max-w-xl mx-auto transform -rotate-1 group">
-                            {/* Tape Effect */}
-                            <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-24 sm:w-32 h-8 sm:h-10 bg-white/40 shadow-sm rotate-2 z-20 pointer-events-none transform origin-center border-l-2 border-r-2 border-white/20 skew-y-1"></div>
-
-                            {/* Note Paper */}
-                            <div className="bg-[#fdfbcf] text-[#103010] p-6 sm:p-8 md:p-12 rounded-sm shadow-[0_10px_40px_-10px_rgba(0,0,0,0.3)] border border-[#E6D5B8] relative overflow-hidden">
+                        <div className="relative max-w-xl mx-auto group">
+                            {/* Luxury Dark Saddle Leather Plaque */}
+                            <div className="bg-[#1A0E08] text-[#F7F5F0] p-6 sm:p-8 md:p-12 rounded-none border border-[#C89B68]/30 relative overflow-hidden shadow-2xl">
+                                {/* Leather texture overlay */}
+                                <div
+                                    className="absolute inset-0 opacity-60 mix-blend-overlay bg-repeat pointer-events-none"
+                                    style={{
+                                        backgroundImage: "url('/bg/leather_card_bg.png')",
+                                        backgroundSize: "300px 300px",
+                                    }}
+                                />
+                                {/* Inner dashed saddle stitch frame */}
+                                <div className="absolute inset-3 border border-dashed border-[#C89B68]/25 pointer-events-none rounded-none" />
 
                                 <motion.h2
                                     initial={{ opacity: 0, y: 20 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={viewportConfig}
                                     transition={{ duration: DURATION.normal, ease: EASING }}
-                                    className="text-4xl md:text-5xl font-black tracking-tight mb-8 font-heading text-center text-[#2A442A] uppercase border-b-4 border-[#103010]/5 pb-4 relative z-10"
+                                    className="text-4xl md:text-5xl font-black tracking-tight mb-8 font-heading text-center text-[#E6B87D] uppercase border-b border-[#C89B68]/25 pb-4 relative z-10"
                                 >
-                                    NOTE
+                                    ORDER GUIDELINES
                                 </motion.h2>
 
                                 <motion.div
@@ -63,26 +70,28 @@ export default function Notes() {
                                     initial="initial"
                                     whileInView="animate"
                                     viewport={viewportConfig}
-                                    className="prose prose-lg text-center mx-auto relative z-10"
+                                    className="prose prose-lg text-center mx-auto relative z-10 flex flex-col gap-6"
                                 >
                                     <motion.p
                                         variants={staggerItem}
-                                        className="text-lg md:text-xl font-serif font-medium leading-relaxed text-[#2F4F2F]"
+                                        className="text-base sm:text-lg md:text-xl font-heading uppercase font-bold leading-relaxed text-[#F7F5F0]"
                                     >
-                                        We have a minimum order quantity of <span className="inline-block px-2 py-0.5 bg-[#E6D5B8]/30 rounded font-bold text-[#D64933] text-2xl -rotate-2 mx-1">50</span> pcs for T-shirts and <span className="inline-block px-2 py-0.5 bg-[#E6D5B8]/30 rounded font-bold text-[#D64933] text-2xl rotate-2 mx-1">30</span> pcs for aprons &amp; caps.
+                                        We have a minimum order quantity of <span className="inline-block px-2.5 py-0.5 bg-[#C89B68]/20 border border-[#C89B68]/40 font-heading font-black text-[#E6B87D] text-2xl mx-1">50</span> pcs for T-shirts and <span className="inline-block px-2.5 py-0.5 bg-[#C89B68]/20 border border-[#C89B68]/40 font-heading font-black text-[#E6B87D] text-2xl mx-1">30</span> pcs for aprons &amp; caps.
                                         For a quote, send us your artwork and requirements.
                                     </motion.p>
                                     <motion.p
                                         variants={staggerItem}
-                                        className="text-lg md:text-xl font-serif font-medium leading-relaxed text-[#2F4F2F] mt-6"
+                                        className="text-base sm:text-lg md:text-xl font-heading uppercase font-bold leading-relaxed text-[#F7F5F0]"
                                     >
-                                        We also do denims and trousers with an MOQ of <span className="inline-block px-2 py-0.5 bg-[#E6D5B8]/30 rounded font-bold text-[#D64933] text-2xl -rotate-1 mx-1">100</span> pcs.
+                                        We also do denims and trousers with an MOQ of <span className="inline-block px-2.5 py-0.5 bg-[#C89B68]/20 border border-[#C89B68]/40 font-heading font-black text-[#E6B87D] text-2xl mx-1">100</span> pcs.
                                     </motion.p>
+
+                                    {/* Contact Copy in 1327 Luxury Display Font (Sugo font-heading) */}
                                     <motion.p
                                         variants={staggerItem}
-                                        className="text-lg md:text-xl font-bold leading-relaxed text-[#103010] mt-8 font-sans border-t border-[#103010]/10 pt-6"
+                                        className="text-lg sm:text-xl md:text-2xl font-heading font-black uppercase tracking-wider leading-snug text-[#F7F5F0] mt-4 border-t border-[#C89B68]/25 pt-6"
                                     >
-                                        To place your order or for more inquiries you can <a href={`tel:${PHONE_NUMBER}`} className="underline hover:text-[#105233]">Call</a> or <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="underline hover:text-[#105233]">WhatsApp us</a> on <span className="whitespace-nowrap">{PHONE_NUMBER}</span> or email <a href={`mailto:${CONTACT_EMAIL}`} className="underline hover:text-[#105233]">{CONTACT_EMAIL}</a>.
+                                        To place your order or for more inquiries you can <a href={`tel:${PHONE_NUMBER}`} className="text-[#E6B87D] hover:text-white underline decoration-[#E6B87D] transition-colors">Call</a> or <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="text-[#E6B87D] hover:text-white underline decoration-[#E6B87D] transition-colors">WhatsApp us</a> on <span className="whitespace-nowrap text-[#E6B87D]">{PHONE_NUMBER}</span> or email <a href={`mailto:${CONTACT_EMAIL}`} className="text-[#E6B87D] hover:text-white underline decoration-[#E6B87D] transition-colors">{CONTACT_EMAIL}</a>.
                                     </motion.p>
                                 </motion.div>
                             </div>
