@@ -124,7 +124,7 @@ export default function AboutUs() {
             id="about"
             aria-label="About 1327 Thirteen Twenty Seven — The Code"
             onMouseLeave={handleMouseLeaveSection}
-            className="code-section relative z-10 w-full bg-[#0D1712] text-[#EDEBE3] pt-28 pb-12 lg:h-screen lg:min-h-[720px] overflow-hidden select-none rounded-none border-b border-[#EDEBE3]/15"
+            className="code-section relative z-10 w-full bg-[#0D1712] text-[#EDEBE3] pt-24 pb-20 md:pt-28 md:pb-24 min-h-screen overflow-hidden select-none rounded-none border-b border-[#EDEBE3]/15"
         >
             {/* Fine Topographic Contour SVG Layer */}
             <div className="absolute inset-0 pointer-events-none z-0 opacity-30 mix-blend-multiply">
@@ -140,7 +140,7 @@ export default function AboutUs() {
             <div className="container mx-auto px-5 sm:px-8 md:px-12 lg:px-16 h-full flex flex-col justify-between relative z-10">
 
                 {/* ─── KICKER & HEADER BAR (CLEAR STICKY NAV) ───────────────────────── */}
-                <div className="w-full mb-4 sm:mb-6">
+                <div className="w-full mb-6 sm:mb-8">
                     <div className="flex justify-between items-center font-mono text-xs font-bold tracking-[0.25em] uppercase text-[#EDEBE3]/45 pb-3 border-b border-[#EDEBE3]/15">
                         <span>&#123; 02 &#125; / THE CODE</span>
                         <span className="hidden sm:inline">MALAD WEST, BOMBAY</span>
@@ -148,10 +148,10 @@ export default function AboutUs() {
                 </div>
 
                 {/* ─── MAIN 12-COLUMN GRID ───────────────────────────────────────────── */}
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center my-auto h-full max-h-[80vh]">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center my-auto">
 
                     {/* Left Column (~52% width = col-span-7): Uniform 9:10 Image Grid */}
-                    <div className="order-2 md:order-1 md:col-span-7 flex flex-col justify-center h-full">
+                    <div className="order-2 md:order-1 md:col-span-7 flex flex-col justify-center w-full max-w-[440px] xl:max-w-[480px] mx-auto md:mx-0">
                         <div className="grid grid-cols-2 gap-4 sm:gap-6 items-center">
                             
                             {/* Column A (Left: Images 1 & 3) */}
