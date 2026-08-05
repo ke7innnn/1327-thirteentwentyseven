@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
-import { Bodoni_Moda, Plus_Jakarta_Sans } from "next/font/google";
+import { Bodoni_Moda, Plus_Jakarta_Sans, Archivo } from "next/font/google";
 import "./globals.css";
 import clsx from "clsx";
 import SmoothScroll from "@/components/SmoothScroll";
@@ -25,6 +25,12 @@ const premiumMono = Plus_Jakarta_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
   variable: "--font-space-mono",
+  display: "swap",
+});
+
+const archivo = Archivo({
+  subsets: ["latin"],
+  variable: "--font-archivo",
   display: "swap",
 });
 
@@ -291,6 +297,7 @@ export default function RootLayout({
           sugo.variable,
           bodoni.variable,
           premiumMono.variable,
+          archivo.variable,
           "antialiased text-white selection:bg-white selection:text-black font-body bg-black"
         )}
       >
