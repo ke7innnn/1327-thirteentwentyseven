@@ -30,24 +30,36 @@ const VALUES_INDEX = [
         title: "COMMUNITY",
         definition: "The crews we dress become the people we know.",
         slug: "community",
+        tag: "THE CREW",
+        image: "/clients/client-1.png",
+        alt: "Crew members wearing custom 1327 uniforms",
     },
     {
         num: "02",
         title: "TRUST",
-        definition: "Sample first, always.",
+        definition: "Sample first, always. You approve the piece before it ever scales.",
         slug: "trust",
+        tag: "APPROVAL",
+        image: "/feed/feed-02.jpg",
+        alt: "Stitched physical sample cap with custom embroidery",
     },
     {
         num: "03",
         title: "RESPECT",
         definition: "Same standard on the floor as in the quote.",
         slug: "respect",
+        tag: "CRAFTSMANSHIP",
+        image: "/feed/feed-04.jpg",
+        alt: "Workshop embroidery detail and gold Devanagari logo",
     },
     {
         num: "04",
         title: "LOYALTY",
-        definition: "We don't chase the next order.",
+        definition: "We don't chase the next order. We keep the last one.",
         slug: "loyalty",
+        tag: "PARTNERSHIP",
+        image: "/feed/feed-03.jpg",
+        alt: "Masa Bakery crew member in custom printed uniform",
     },
 ];
 
@@ -190,8 +202,20 @@ export default function AboutUs() {
 
                 </div>
 
-                {/* ─── VALUE ROWS (LAYER 10 — PASSING BEHIND FIGURE) ──────────────── */}
-                <div className="relative z-10 w-full border-t border-[#F7F5F0]/20">
+                {/* ─── VALUE ROWS (LANDO NORRIS INSPIRED INTERACTIVE REEL) ─────────────── */}
+                <div className="relative z-10 w-full border-t border-[#F7F5F0]/20 mt-12 md:mt-16">
+                    {/* Header bar */}
+                    <div className="flex justify-between items-center py-4 border-b border-[#F7F5F0]/20 font-mono text-xs font-bold tracking-[0.25em] uppercase text-[#F7F5F0]/65">
+                        <div className="flex items-center gap-3">
+                            <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2E8B5A] opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2E8B5A]"></span>
+                            </span>
+                            <span className="text-[#F7F5F0] font-bold">/ THE CODE</span>
+                        </div>
+                        <span className="hidden sm:inline text-[#2E8B5A]">[ FOUR ATELIER PRINCIPLES ]</span>
+                    </div>
+
                     {VALUES_INDEX.map((item, idx) => (
                         <motion.div
                             key={item.num}
@@ -202,33 +226,51 @@ export default function AboutUs() {
                         >
                             <Link
                                 href={`/values/${item.slug}`}
-                                className="group relative block border-b border-[#F7F5F0]/20 py-6 sm:py-7 px-4 sm:px-6 min-h-[88px] transition-all duration-300 cursor-pointer overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F7F5F0]"
+                                className="group relative block border-b border-[#F7F5F0]/20 py-7 sm:py-9 px-4 sm:px-8 min-h-[100px] transition-all duration-300 cursor-pointer overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F7F5F0]"
                                 aria-label={`${item.title} — ${item.definition}`}
                             >
-                                {/* Left-to-Right Hover Fill Wipe (#105233) */}
+                                {/* Left-to-Right Green Hover Fill Wipe (#105233) with Left Border Accent */}
                                 <div
-                                    className="absolute inset-0 bg-[#105233] opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-all duration-240 ease-out pointer-events-none origin-left transform group-hover:scale-x-100"
+                                    className="absolute inset-0 bg-[#105233] border-l-4 border-[#2E8B5A] opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-all duration-240 ease-out pointer-events-none origin-left transform group-hover:scale-x-100"
                                     style={{ transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)" }}
                                 />
 
-                                <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 items-start md:items-center gap-3 md:gap-6 min-h-[44px]">
-                                    {/* Mono Index (col-span-2) */}
-                                    <div className="md:col-span-2 font-mono text-xl sm:text-2xl font-bold tracking-tighter text-[#F7F5F0]/90">
-                                        {item.num}
+                                <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 items-start md:items-center gap-4 md:gap-6 min-h-[52px]">
+                                    {/* Mono Index & Tag (col-span-2) */}
+                                    <div className="md:col-span-2 flex flex-col items-start gap-1">
+                                        <span className="font-mono text-xl sm:text-2xl font-bold tracking-tighter text-[#F7F5F0]/90 transition-transform duration-200 group-hover:translate-x-2">
+                                            {item.num}
+                                        </span>
+                                        <span className="font-mono text-[10px] font-bold tracking-[0.2em] text-[#2E8B5A] uppercase">
+                                            {item.tag}
+                                        </span>
                                     </div>
 
-                                    {/* Display Name (col-span-3) */}
-                                    <div className="md:col-span-3 font-heading font-black text-2xl sm:text-3xl uppercase tracking-tight text-[#F7F5F0]">
+                                    {/* Display Title with Lando Shift (col-span-3) */}
+                                    <div className="md:col-span-3 font-heading font-black text-3xl sm:text-4xl uppercase tracking-tight text-[#F7F5F0] transition-transform duration-200 ease-out group-hover:translate-x-3">
                                         {item.title}
                                     </div>
 
-                                    {/* Definition (col-span-6) */}
-                                    <div className="md:col-span-6 font-sans text-sm sm:text-base text-[#F7F5F0]/80 font-light leading-relaxed">
+                                    {/* Definition Prose (col-span-4) */}
+                                    <div className="md:col-span-4 font-sans text-sm sm:text-base text-[#F7F5F0]/80 font-light leading-relaxed">
                                         {item.definition}
                                     </div>
 
-                                    {/* Arrow (col-span-1) */}
-                                    <div className="md:col-span-1 text-left md:text-right font-mono text-lg text-[#F7F5F0]/65 transition-transform duration-240 group-hover:translate-x-1">
+                                    {/* Floating Image Preview Card (col-span-2) — Lando Norris Signature Feature */}
+                                    <div className="hidden lg:flex md:col-span-2 justify-center items-center">
+                                        <div className="relative w-28 h-16 bg-[#1F1F18] border border-[#F7F5F0]/20 rounded-none overflow-hidden opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-300 ease-out shadow-2xl pointer-events-none">
+                                            <Image
+                                                src={item.image}
+                                                alt={item.alt}
+                                                fill
+                                                sizes="120px"
+                                                className="object-cover rounded-none"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Arrow with Lando Translate (col-span-1) */}
+                                    <div className="md:col-span-1 text-left md:text-right font-mono text-xl text-[#F7F5F0] transition-transform duration-200 ease-out group-hover:translate-x-2 group-hover:-translate-y-1">
                                         ↗
                                     </div>
                                 </div>
