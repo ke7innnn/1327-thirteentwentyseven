@@ -188,6 +188,7 @@ export default function Process() {
 
     // SVG Stitch Line Mask Progress
     const dashOffset = useTransform(scrollYProgress, [0, 1], [1, 0]);
+    const logoY = useTransform(scrollYProgress, [0.65, 1], [140, -140]);
 
     return (
         <section
@@ -334,6 +335,30 @@ export default function Process() {
                                 </span>
                             </a>
                         </div>
+                    </div>
+
+                    {/* ─── PANEL 7: 1327 LOGO SECTION TRANSITION ────────────────────────── */}
+                    <div className="w-full lg:w-[45vw] shrink-0 flex flex-col justify-center items-center p-8 lg:p-16 border-l border-[#F7F5F0]/15 relative z-10 bg-[#14140F] min-h-[440px] lg:min-h-[580px] overflow-hidden">
+                        <motion.div
+                            style={{ y: isDesktop ? logoY : 0 }}
+                            initial={reduced ? false : { y: 60, opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ once: false, margin: "-10% 0px" }}
+                            transition={{ duration: 0.6, ease: "easeOut" }}
+                            className="relative w-48 sm:w-64 lg:w-80 h-32 lg:h-44 flex items-center justify-center"
+                        >
+                            <Image
+                                src="/logo/1327_logo_v2.png"
+                                alt="1327 Logo"
+                                fill
+                                sizes="(max-width: 1024px) 256px, 320px"
+                                className="object-contain filter invert brightness-200"
+                                priority={false}
+                            />
+                        </motion.div>
+                        <span className="font-mono text-[11px] font-bold tracking-[0.3em] uppercase text-[#2E8B5A] mt-6">
+                            THIRTEEN TWENTY SEVEN
+                        </span>
                     </div>
 
                 </motion.div>
