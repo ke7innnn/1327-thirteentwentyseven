@@ -9,10 +9,12 @@ import HappyClients from "@/components/HappyClients";
 import Notes from "@/components/Notes";
 import LocationMap from "@/components/LocationMap";
 import Footer from "@/components/Footer";
+import TravellingObject from "@/components/TravellingObject";
 
 export default function Home() {
   return (
-    <main className="">
+    <main className="relative">
+      <TravellingObject />
       {/* SEO: Single H1 per page — visually hidden but accessible to crawlers */}
       <h1 className="sr-only">
         1327 Thirteen Twenty Seven — Custom T-Shirts, Uniforms &amp; Apparel in Mumbai, Malad
