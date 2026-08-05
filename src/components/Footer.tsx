@@ -1,156 +1,359 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
-import ContactModal from "./ContactModal";
-import { WHATSAPP_URL, PHONE_NUMBER, CONTACT_EMAIL, FOOTER_SIGNATURE } from "@/config/constants";
+import Image from "next/image";
+import { motion, useReducedMotion } from "framer-motion";
+import { WHATSAPP_URL } from "@/config/constants";
 
+const WHATSAPP_FOOTER_URL =
+    WHATSAPP_URL ||
+    "https://wa.me/919819001327?text=Hi%201327%2C%20I%27m%20looking%20to%20place%20an%20order%20for%20custom%20uniforms.";
+
+const CLIENT_LOGOS = [
+    { name: "Berlin Brew", src: "/client logo/BERLIN BREW LOGO-1.png" },
+    { name: "East", src: "/client logo/east.png" },
+    { name: "Home", src: "/client logo/home.png" },
+    { name: "Katha", src: "/client logo/katha.png" },
+    { name: "Magari", src: "/client logo/magari.png" },
+    { name: "Nana", src: "/client logo/nana.png" },
+    { name: "Unscripted", src: "/client logo/unscripted.png" },
+    { name: "Benne", src: "/client logo/benne.png" },
+    { name: "Jaago", src: "/client logo/jaago.png" },
+    { name: "Nadda", src: "/client logo/nadda.png" },
+    { name: "Tiger", src: "/client logo/tiger.png" },
+];
+
+const PAGES_LINKS = [
+    { label: "HOME", href: "#mission" },
+    { label: "SERVICES", href: "#services" },
+    { label: "THE CODE", href: "#about" },
+    { label: "CLIENTS", href: "#clients" },
+];
+
+const SOCIAL_LINKS = [
+    { label: "INSTAGRAM", href: "https://www.instagram.com/1327_thirteentwentyseven/" },
+    { label: "YOUTUBE", href: "https://www.youtube.com/@1327-thirteentwentyseven" },
+    { label: "WHATSAPP", href: WHATSAPP_FOOTER_URL },
+];
+
+// ─── KEITH SHAH SIGNATURE VECTOR OVERLAY ───────────────────────────────────────
+function KeithShahSignature({ className }: { className?: string }) {
+    return (
+        <svg
+            viewBox="0 0 400 120"
+            fill="none"
+            stroke="#F7F5F0"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className={className}
+            aria-hidden="true"
+        >
+            <path d="M25,85 C45,20 55,15 70,70 C80,90 90,85 100,50 C105,35 120,45 130,75 M115,60 C140,55 155,58 170,60 C180,62 190,55 200,50 M215,30 C220,20 225,15 230,80 C235,95 240,60 250,55 C260,50 270,55 280,60 M270,35 C290,30 315,35 340,40 C360,45 375,30 385,25 M275,75 C305,70 335,72 365,75" />
+        </svg>
+    );
+}
+
+// ─── MAIN CLOSING FOOTER COMPONENT ────────────────────────────────────────────
 export default function Footer() {
-    const [isContactOpen, setIsContactOpen] = useState(false);
+    const reduced = useReducedMotion() ?? false;
+    const [policyModal, setPolicyModal] = useState<string | null>(null);
 
     return (
-        <footer id="contact" aria-label="Contact 1327 Thirteen Twenty Seven" className="relative z-10 bg-black text-white py-24 border-t border-white/10 overflow-hidden">
-            <div className="container mx-auto px-6 md:px-16 lg:px-24 relative z-10 flex flex-col gap-16 md:gap-24">
-                
-                {/* Top Section: CTA Title and Button */}
-                <motion.div 
-                    initial={{ opacity: 0, y: 50 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-5% 0px" }}
-                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                    className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 w-full"
-                >
-                    <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold uppercase font-heading tracking-tight leading-[0.95] text-left text-white max-w-2xl">
-                        <span className="block">Have A Crew</span>
-                        <span className="block text-[#1EA86E]">To Dress?</span>
-                    </h2>
-                    
-                    <div className="flex flex-wrap items-center gap-4 self-start md:self-center">
-                        <a 
-                            href={WHATSAPP_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="bg-white text-black hover:bg-[#105233] hover:text-white hover:border-[#105233] border-2 border-white font-heading font-black text-sm sm:text-base md:text-lg uppercase tracking-wider px-8 py-3.5 rounded-none flex items-center gap-2.5 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap shadow-lg cursor-pointer"
-                        >
-                            <span>WHATSAPP</span>
-                            <span>↗</span>
-                        </a>
-                        <a 
-                            href={`tel:${PHONE_NUMBER}`}
-                            className="border-2 border-white/90 text-white hover:bg-white hover:text-black font-heading font-black text-sm sm:text-base md:text-lg uppercase tracking-wider px-8 py-3.5 rounded-none flex items-center gap-2.5 transition-all duration-300 whitespace-nowrap cursor-pointer"
-                        >
-                            <span>CALL US</span>
-                            <span>↗</span>
-                        </a>
-                    </div>
-                </motion.div>
-
-                {/* Divider */}
-                <div className="w-full h-[1px] bg-white/10" />
-
-                {/* Info Grid (4 Columns) */}
-                <motion.div 
-                    initial="initial"
-                    whileInView="animate"
-                    viewport={{ once: true, margin: "-5% 0px" }}
-                    variants={{
-                        initial: { opacity: 0 },
-                        animate: { opacity: 1, transition: { staggerChildren: 0.1 } }
-                    }}
-                    className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 w-full text-left relative z-10"
-                >
-                    {/* Contact */}
-                    <motion.div 
-                        variants={{
-                            initial: { opacity: 0, y: 30 },
-                            animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
-                        }}
-                        className="flex flex-col gap-6"
-                    >
-                        <h3 className="text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-white/40 font-bold">Contact</h3>
-                        <div className="flex flex-col gap-2 font-mono text-xs md:text-sm text-white/60 tracking-wider">
-                            <a href={`tel:${PHONE_NUMBER}`} className="hover:text-[#1EA86E] transition-colors">{PHONE_NUMBER}</a>
-                            <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-[#1EA86E] transition-colors break-all">{CONTACT_EMAIL}</a>
-                        </div>
-                    </motion.div>
-
-                    {/* Social */}
-                    <motion.div 
-                        variants={{
-                            initial: { opacity: 0, y: 30 },
-                            animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
-                        }}
-                        className="flex flex-col gap-6"
-                    >
-                        <h3 className="text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-white/40 font-bold">Social</h3>
-                        <div className="flex flex-col gap-2 font-mono text-xs md:text-sm text-white/60 tracking-wider">
-                            <a href="https://www.instagram.com/1327_thirteentwentyseven/" target="_blank" rel="noopener noreferrer" className="hover:text-[#1EA86E] transition-colors">Instagram — @1327_thirteentwentyseven</a>
-                            <a href="https://www.youtube.com/@1327-thirteentwentyseven" target="_blank" rel="noopener noreferrer" className="hover:text-[#1EA86E] transition-colors">YouTube — @1327-thirteentwentyseven</a>
-                        </div>
-                    </motion.div>
-
-                    {/* Menu */}
-                    <motion.div 
-                        variants={{
-                            initial: { opacity: 0, y: 30 },
-                            animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
-                        }}
-                        className="flex flex-col gap-6"
-                    >
-                        <h3 className="text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-white/40 font-bold">Menu</h3>
-                        <div className="flex flex-col gap-2 font-mono text-xs md:text-sm text-white/60 tracking-wider">
-                            <a href="#manifesto" className="hover:text-[#1EA86E] transition-colors">01 Manifesto</a>
-                            <a href="#services" className="hover:text-[#1EA86E] transition-colors">02 What We Offer</a>
-                            <a href="#process" className="hover:text-[#1EA86E] transition-colors">03 The Process</a>
-                            <a href="#clients" className="hover:text-[#1EA86E] transition-colors">04 Clients</a>
-                            <a href="#orders" className="hover:text-[#1EA86E] transition-colors">05 Orders &amp; MOQ</a>
-                            <a href="#film" className="hover:text-[#1EA86E] transition-colors">06 Brand Film</a>
-                            <a href="#location" className="hover:text-[#1EA86E] transition-colors">07 Location</a>
-                        </div>
-                    </motion.div>
-
-                    {/* Studio */}
-                    <motion.div 
-                        variants={{
-                            initial: { opacity: 0, y: 30 },
-                            animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
-                        }}
-                        className="flex flex-col gap-6"
-                    >
-                        <h3 className="text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-white/40 font-bold">Studio</h3>
-                        <div className="flex flex-col gap-1 font-mono text-xs md:text-sm text-white/60 tracking-wider">
-                            <p>Malad West, Mumbai</p>
-                            <p>Maharashtra, India</p>
-                        </div>
-                    </motion.div>
-                </motion.div>
-
-                {/* Bottom Bar: Copyright and Tagline */}
-                <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-[9px] md:text-xs font-mono tracking-[0.15em] text-white/40 border-t border-white/5 pt-8 w-full relative z-10">
-                    <span className="text-left font-sans">© 2026 1327 - THIRTEEN TWENTY SEVEN</span>
-                    <span className="text-right">{FOOTER_SIGNATURE}</span>
+        <footer
+            id="footer"
+            aria-label="Closing Footer — 1327 Thirteen Twenty Seven"
+            className="relative w-full bg-[#F2EFE8] select-none rounded-none"
+        >
+            {/* ─── MAIN GREEN FIELD (#105233) WITH STEPPED NOTCH ─────────────────────── */}
+            <div
+                className="relative w-full bg-[#105233] text-[#F7F5F0] pt-16 md:pt-20 pb-20 md:pb-28 overflow-hidden rounded-none"
+                style={{
+                    clipPath:
+                        "polygon(0 0, calc(50% - 140px) 0, calc(50% - 140px) 32px, calc(50% + 140px) 32px, calc(50% + 140px) 0, 100% 0, 100% 100%, 0 100%)",
+                }}
+            >
+                {/* LAYER 0: Topographic Contour SVG Pattern Background */}
+                <div className="absolute inset-0 pointer-events-none z-0 opacity-40 mix-blend-multiply">
+                    <Image
+                        src="/footer/contour_pattern.svg"
+                        alt=""
+                        fill
+                        className="object-cover"
+                        priority={false}
+                    />
                 </div>
 
+                <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-20 relative z-10">
+
+                    {/* ─── LAYER 30: OVERSIZED BRAND STATEMENT + SIGNATURE ──────────────── */}
+                    <div className="relative z-30 pt-8 sm:pt-12 mb-10 md:mb-16 flex flex-col items-center">
+                        
+                        {/* Keith Shah Signature Overlay */}
+                        <motion.div
+                            initial={reduced ? false : { opacity: 0, scale: 0.9 }}
+                            whileInView={{ opacity: 0.85, scale: 1 }}
+                            viewport={{ once: true, margin: "-10% 0px" }}
+                            transition={{ duration: 0.9, delay: 0.3, ease: "easeOut" }}
+                            className="hidden sm:block absolute -top-2 left-1/2 -translate-x-1/2 md:-translate-x-3/4 w-64 md:w-80 h-24 z-40 pointer-events-none -rotate-6"
+                        >
+                            <KeithShahSignature className="w-full h-full text-[#F7F5F0]" />
+                        </motion.div>
+
+                        <h2 className="font-heading font-black uppercase text-center leading-[0.82] tracking-[-0.02em] text-[#F7F5F0]">
+                            {/* Desktop/Tablet: 2-line offset composition */}
+                            <div className="hidden md:flex flex-col items-center w-full">
+                                {/* Line 1: DESIGNED (solid) FOR (outlined) */}
+                                <motion.div
+                                    initial={reduced ? false : { opacity: 0, y: 30 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true, margin: "-10% 0px" }}
+                                    transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                                    className="flex items-center gap-3 sm:gap-6 text-[clamp(3.5rem,10vw,11rem)]"
+                                >
+                                    <span className="text-[#F7F5F0]">DESIGNED</span>
+                                    <span
+                                        className="text-transparent"
+                                        style={{
+                                            WebkitTextStroke: "2px #F7F5F0",
+                                        }}
+                                    >
+                                        FOR
+                                    </span>
+                                </motion.div>
+
+                                {/* Line 2: THE (solid) BOLD. (outlined) — offset right ~8% */}
+                                <motion.div
+                                    initial={reduced ? false : { opacity: 0, y: 30 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true, margin: "-10% 0px" }}
+                                    transition={{ duration: 0.6, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+                                    className="flex items-center gap-3 sm:gap-6 text-[clamp(3.5rem,10vw,11rem)] translate-x-[4%] lg:translate-x-[7%]"
+                                >
+                                    <span className="text-[#F7F5F0]">THE</span>
+                                    <span
+                                        className="text-transparent"
+                                        style={{
+                                            WebkitTextStroke: "2px #F7F5F0",
+                                        }}
+                                    >
+                                        BOLD.
+                                    </span>
+                                </motion.div>
+                            </div>
+
+                            {/* Mobile (<768px): 3 stacked left-aligned lines */}
+                            <div className="md:hidden flex flex-col items-start text-left w-full pl-2 text-5xl sm:text-6xl font-black gap-1">
+                                <span>DESIGNED FOR</span>
+                                <span>THE</span>
+                                <span
+                                    className="text-transparent"
+                                    style={{ WebkitTextStroke: "1.5px #F7F5F0" }}
+                                >
+                                    BOLD.
+                                </span>
+                            </div>
+                        </h2>
+                    </div>
+
+                    {/* ─── MIDDLE CONTENT SECTION: NAV COLUMNS + CUTOUT FIGURE ────────── */}
+                    <div className="relative min-h-[420px] md:min-h-[500px] flex flex-col md:flex-row items-center justify-between gap-10 md:gap-0">
+                        
+                        {/* ─── LAYER 10: CLIENT LOGO STRIP (BEHIND FIGURE) ──────────────── */}
+                        <div
+                            aria-label="Client partners"
+                            className="absolute bottom-24 md:bottom-28 inset-x-0 z-10 pointer-events-auto"
+                        >
+                            {/* Desktop: single static row edge-to-edge */}
+                            <div className="hidden md:flex items-center justify-between w-full opacity-45 grayscale invert">
+                                {CLIENT_LOGOS.map((logo, idx) => (
+                                    <div key={idx} className="relative w-20 lg:w-28 h-8 flex items-center justify-center">
+                                        <Image
+                                            src={logo.src}
+                                            alt={logo.name}
+                                            fill
+                                            sizes="120px"
+                                            loading="lazy"
+                                            className="object-contain"
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Mobile / Tablet: 2-row grid */}
+                            <div className="md:hidden grid grid-cols-4 gap-4 w-full opacity-35 grayscale invert px-2">
+                                {CLIENT_LOGOS.slice(0, 8).map((logo, idx) => (
+                                    <div key={idx} className="relative w-full h-7">
+                                        <Image
+                                            src={logo.src}
+                                            alt={logo.name}
+                                            fill
+                                            sizes="120px"
+                                            loading="lazy"
+                                            className="object-contain"
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* ─── LAYER 20: CUT-OUT HOODIE FIGURE (DEAD CENTRE) ───────────── */}
+                        <motion.div
+                            initial={reduced ? false : { opacity: 0, y: 40 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-10% 0px" }}
+                            transition={{ duration: 0.7, ease: "easeOut" }}
+                            className="absolute bottom-0 left-1/2 -translate-x-1/2 z-20 w-[80vw] sm:w-[50vw] md:w-[400px] lg:w-[480px] aspect-[4/5] pointer-events-none"
+                            aria-hidden="true"
+                        >
+                            <Image
+                                src="/footer/hooded_figure.png"
+                                alt=""
+                                fill
+                                sizes="(max-width: 1024px) 70vw, 34vw"
+                                quality={85}
+                                className="object-contain object-bottom"
+                                priority={false}
+                            />
+                        </motion.div>
+
+                        {/* ─── LAYER 40: NAV COLUMNS (FLANKING THE FIGURE) ─────────────── */}
+                        
+                        {/* Left Column — Right-Aligned (PAGES) */}
+                        <nav
+                            aria-label="Footer pages"
+                            className="relative z-40 w-full md:w-1/3 flex flex-col items-start md:items-end text-left md:text-right gap-4 self-start md:self-center"
+                        >
+                            <span className="font-mono text-[11px] tracking-[0.2em] uppercase text-[#F7F5F0]/55 font-bold">
+                                PAGES
+                            </span>
+                            <div className="flex flex-col gap-2 font-heading font-black text-2xl sm:text-3xl uppercase tracking-tight text-[#F7F5F0]">
+                                {PAGES_LINKS.map((link, idx) => (
+                                    <a
+                                        key={idx}
+                                        href={link.href}
+                                        className="transition-transform duration-180 ease-out hover:translate-x-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F7F5F0] focus-visible:ring-offset-2 focus-visible:ring-offset-[#105233]"
+                                    >
+                                        {link.label}
+                                    </a>
+                                ))}
+                            </div>
+
+                            {/* Emphasized GET A QUOTE link */}
+                            <div className="pt-3 mt-2 border-t border-[#F7F5F0]/20 w-full max-w-[200px] text-left md:text-right">
+                                <a
+                                    href={WHATSAPP_FOOTER_URL}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="font-heading font-black text-xl sm:text-2xl uppercase tracking-tight text-[#F7F5F0] hover:text-white border-b border-[#F7F5F0] pb-0.5 inline-block transition-transform duration-180 ease-out hover:translate-x-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F7F5F0]"
+                                >
+                                    GET A QUOTE
+                                </a>
+                            </div>
+                        </nav>
+
+                        {/* Right Column — Left-Aligned (FOLLOW ON) */}
+                        <nav
+                            aria-label="Social links"
+                            className="relative z-40 w-full md:w-1/3 flex flex-col items-start text-left gap-4 self-start md:self-center"
+                        >
+                            <span className="font-mono text-[11px] tracking-[0.2em] uppercase text-[#F7F5F0]/55 font-bold">
+                                FOLLOW ON
+                            </span>
+                            <div className="flex flex-col gap-2 font-heading font-black text-2xl sm:text-3xl uppercase tracking-tight text-[#F7F5F0]">
+                                {SOCIAL_LINKS.map((link, idx) => (
+                                    <a
+                                        key={idx}
+                                        href={link.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="transition-transform duration-180 ease-out hover:-translate-x-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F7F5F0] focus-visible:ring-offset-2 focus-visible:ring-offset-[#105233]"
+                                    >
+                                        {link.label}
+                                    </a>
+                                ))}
+                            </div>
+                        </nav>
+
+                    </div>
+
+                    {/* ─── LAYER 40: PRIMARY CTA BUTTON (DEAD CENTRE OVERLAPPING FIGURE) ──── */}
+                    <div className="relative z-40 mt-12 md:mt-16 flex justify-center w-full">
+                        <a
+                            href={WHATSAPP_FOOTER_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group relative w-full sm:w-[300px] h-[60px] sm:h-[64px] bg-[#F7F5F0] text-[#105233] font-mono text-xs sm:text-sm font-bold uppercase tracking-[0.2em] rounded-none flex items-center justify-center gap-2 border border-[#F7F5F0] transition-all duration-200 ease-out hover:bg-[#105233] hover:text-[#F7F5F0] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F7F5F0] focus-visible:ring-offset-2 focus-visible:ring-offset-[#105233]"
+                        >
+                            <span>START AN ORDER</span>
+                            <span className="transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-1">
+                                ↗
+                            </span>
+                        </a>
+                    </div>
+
+                </div>
             </div>
 
-            {/* Giant Outlined Logo Background Watermark */}
-            <motion.div 
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 0.03, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute bottom-[-10%] left-1/2 -translate-x-1/2 w-full max-w-7xl h-auto select-none pointer-events-none z-0 flex justify-center items-end overflow-hidden"
-            >
-                <span 
-                    className="text-[25vw] font-bold leading-none tracking-tighter font-heading text-white whitespace-nowrap select-none"
-                    style={{ WebkitTextStroke: "2px #fff", color: "transparent" }}
-                >
-                    1327
-                </span>
-            </motion.div>
+            {/* ─── LEGAL BAR (BONE GROUND #F2EFE8 OUTSIDE GREEN FIELD) ───────────────────── */}
+            <div className="w-full bg-[#F2EFE8] text-[#105233] border-t border-[#105233]/20 py-4 px-5 sm:px-8 md:px-16 lg:px-20 min-h-[56px] flex flex-col md:flex-row items-center justify-between gap-3 text-center md:text-left font-mono text-xs uppercase tracking-wider font-semibold rounded-none">
+                {/* Left: Copyright */}
+                <div>
+                    © 2026 1327 — ALL RIGHTS RESERVED
+                </div>
 
-            {/* Contact Modal */}
-            <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+                {/* Centre: Coordinates (Bookend to Location section) */}
+                <div className="hidden md:block text-[#105233]/70 font-bold tracking-[0.2em]">
+                    19.1871° N / 72.8488° E
+                </div>
+
+                {/* Right: Privacy & Terms links */}
+                <div className="flex items-center gap-4">
+                    <button
+                        type="button"
+                        onClick={() => setPolicyModal("Privacy Policy")}
+                        className="hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#105233]"
+                    >
+                        PRIVACY POLICY
+                    </button>
+                    <span>·</span>
+                    <button
+                        type="button"
+                        onClick={() => setPolicyModal("Terms & Conditions")}
+                        className="hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#105233]"
+                    >
+                        TERMS
+                    </button>
+                </div>
+            </div>
+
+            {/* Policy Modal Placeholder */}
+            {policyModal && (
+                <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-6">
+                    <div className="bg-[#F2EFE8] text-[#105233] p-8 max-w-lg w-full border border-[#105233] font-mono flex flex-col gap-4">
+                        <div className="flex justify-between items-center border-b border-[#105233]/20 pb-3">
+                            <h3 className="font-heading font-black text-xl uppercase">{policyModal}</h3>
+                            <button
+                                type="button"
+                                onClick={() => setPolicyModal(null)}
+                                className="font-bold text-lg px-2 py-0.5 border border-[#105233] hover:bg-[#105233] hover:text-white"
+                            >
+                                ✕
+                            </button>
+                        </div>
+                        <p className="text-xs leading-relaxed font-sans text-[#105233]/90">
+                            1327 Thirteen Twenty Seven operates in Bombay, Malad West. All custom orders, apparel production, client specifications, and transactions are governed under standard Indian commercial apparel manufacturing guidelines. Contact us directly via WhatsApp or Phone for detailed terms.
+                        </p>
+                        <button
+                            type="button"
+                            onClick={() => setPolicyModal(null)}
+                            className="bg-[#105233] text-[#F7F5F0] py-2 text-xs uppercase tracking-widest font-bold mt-2"
+                        >
+                            CLOSE
+                        </button>
+                    </div>
+                </div>
+            )}
         </footer>
     );
 }
