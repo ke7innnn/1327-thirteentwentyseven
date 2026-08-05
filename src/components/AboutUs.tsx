@@ -7,12 +7,12 @@ import { motion, useReducedMotion } from "framer-motion";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
-function KeithShahSignatureBone({ className }: { className?: string }) {
+function KeithShahSignatureGreen({ className }: { className?: string }) {
     return (
         <svg
             viewBox="0 0 400 120"
             fill="none"
-            stroke="#F7F5F0"
+            stroke="#2E8B5A"
             strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -24,47 +24,95 @@ function KeithShahSignatureBone({ className }: { className?: string }) {
     );
 }
 
-const VALUES_INDEX = [
+function StitchWaveUnderline({ active, id }: { active: boolean; id: string }) {
+    return (
+        <svg
+            className="w-full h-3 overflow-visible pointer-events-none mt-1"
+            viewBox="0 0 300 12"
+            fill="none"
+            aria-hidden="true"
+        >
+            <defs>
+                <mask id={`stitch-mask-${id}`}>
+                    <path
+                        d="M0,6 Q75,1 150,6 T300,6"
+                        pathLength="1"
+                        stroke="white"
+                        strokeWidth="12"
+                        fill="none"
+                        style={{
+                            strokeDasharray: "1",
+                            strokeDashoffset: active ? 0 : 1,
+                            transition: "stroke-dashoffset 300ms cubic-bezier(0.22, 1, 0.36, 1)",
+                        }}
+                    />
+                </mask>
+            </defs>
+            <path
+                d="M0,6 Q75,1 150,6 T300,6"
+                mask={`url(#stitch-mask-${id})`}
+                stroke="#2E8B5A"
+                strokeWidth="2.5"
+                fill="none"
+                strokeDasharray="10 7"
+                strokeLinecap="round"
+            />
+        </svg>
+    );
+}
+
+interface ValueItem {
+    num: string;
+    title: string;
+    slug: string;
+    image: string;
+    alt: string;
+    aspect: string;
+    staggerClass: string;
+}
+
+const VALUES_DATA: ValueItem[] = [
     {
         num: "01",
         title: "COMMUNITY",
-        definition: "The crews we dress become the people we know.",
         slug: "community",
-        tag: "THE CREW",
-        image: "/clients/client-1.png",
-        alt: "Crew members wearing custom 1327 uniforms",
+        image: "/aboutus/about-4.png",
+        alt: "1327 crew members wearing custom apparel",
+        aspect: "aspect-[4/5]",
+        staggerClass: "mt-0",
     },
     {
         num: "02",
         title: "TRUST",
-        definition: "Sample first, always. You approve the piece before it ever scales.",
         slug: "trust",
-        tag: "APPROVAL",
-        image: "/feed/feed-02.jpg",
-        alt: "Stitched physical sample cap with custom embroidery",
+        image: "/aboutus/about-2.png",
+        alt: "Atelier embroidery precision sample detail",
+        aspect: "aspect-[3/4]",
+        staggerClass: "mt-8 md:mt-12",
     },
     {
         num: "03",
         title: "RESPECT",
-        definition: "Same standard on the floor as in the quote.",
         slug: "respect",
-        tag: "CRAFTSMANSHIP",
-        image: "/feed/feed-04.jpg",
-        alt: "Workshop embroidery detail and gold Devanagari logo",
+        image: "/aboutus/about-3.png",
+        alt: "Workshop floor craftsman at stitching machine",
+        aspect: "aspect-[4/5]",
+        staggerClass: "mt-0 md:-mt-6",
     },
     {
         num: "04",
         title: "LOYALTY",
-        definition: "We don't chase the next order. We keep the last one.",
         slug: "loyalty",
-        tag: "PARTNERSHIP",
-        image: "/feed/feed-03.jpg",
-        alt: "Masa Bakery crew member in custom printed uniform",
+        image: "/aboutus/about-1.png",
+        alt: "1327 custom apparel product lineup",
+        aspect: "aspect-[3/4]",
+        staggerClass: "mt-8 md:mt-6",
     },
 ];
 
 export default function AboutUs() {
     const reduced = useReducedMotion() ?? false;
+    const [activeIndex, setActiveIndex] = useState<number>(0); // Default: 01 COMMUNITY active
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
@@ -74,209 +122,155 @@ export default function AboutUs() {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
+    // Revert to 01 COMMUNITY on section mouse leave
+    const handleMouseLeaveSection = () => {
+        setActiveIndex(0);
+    };
+
     return (
         <section
             id="about"
-            aria-label="About 1327 Thirteen Twenty Seven — The Origin"
-            className="relative z-10 w-full bg-[#14140F] text-[#F7F5F0] py-20 md:py-28 overflow-hidden select-none rounded-none border-b border-[#F7F5F0]/15"
+            aria-label="About 1327 Thirteen Twenty Seven — The Code"
+            onMouseLeave={handleMouseLeaveSection}
+            className="relative z-10 w-full bg-[#0B1710] text-[#F7F5F0] py-20 md:py-28 overflow-hidden select-none rounded-none border-b border-[#F7F5F0]/15 min-h-[105vh]"
         >
+            {/* Fine Topographic Contour SVG Layer */}
+            <div className="absolute inset-0 pointer-events-none z-0 opacity-35 mix-blend-multiply">
+                <Image
+                    src="/bg/contour_dark_green.svg"
+                    alt=""
+                    fill
+                    className="object-cover"
+                    priority={false}
+                />
+            </div>
+
             <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-20 relative z-10">
 
-                {/* ─── KICKER & TOP RULE ────────────────────────────────────────────── */}
+                {/* ─── KICKER & HEADER BAR ────────────────────────────────────────────── */}
                 <div className="w-full mb-10 md:mb-14">
-                    <div className="flex justify-between items-center font-mono text-xs font-bold tracking-[0.25em] uppercase text-[#F7F5F0]/65 pb-4">
-                        <span>&#123; 02 &#125; / THE ORIGIN</span>
+                    <div className="flex justify-between items-center font-mono text-xs font-bold tracking-[0.25em] uppercase text-[#F7F5F0]/65 pb-4 border-b border-[#F7F5F0]/20">
+                        <span>&#123; 02 &#125; / THE CODE</span>
                         <span className="hidden sm:inline">MALAD WEST, BOMBAY</span>
                     </div>
-                    <motion.div
-                        initial={reduced ? false : { scaleX: 0 }}
-                        whileInView={{ scaleX: 1 }}
-                        viewport={{ once: true, margin: "-10% 0px" }}
-                        transition={{ duration: 0.6, ease: EASE }}
-                        style={{ transformOrigin: "left" }}
-                        className="w-full h-px bg-[#F7F5F0]/20"
-                    />
                 </div>
 
-                {/* ─── 12-COLUMN MAIN FOUNDER BLOCK ──────────────────────────────────── */}
-                <div className="relative min-h-[500px] lg:min-h-[620px] grid grid-cols-1 md:grid-cols-12 gap-8 items-end mb-16 lg:mb-20">
+                {/* ─── MAIN ASYMMETRIC COLLAGE + VALUE LIST GRID ─────────────────────── */}
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-16 items-start">
 
-                    {/* Left Column (Cols 1–7): Headline, Body & Signature */}
-                    <div className="md:col-span-7 flex flex-col justify-between h-full relative z-30 pb-4">
+                    {/* Left Column (~54%): Asymmetric Photo Collage */}
+                    <div className="order-2 md:order-1 md:col-span-7 lg:col-span-7 flex flex-col gap-10">
                         
-                        {/* Headline Stack with Green Silhouette Mask Overlay */}
-                        <div className="relative mb-8">
-                            
-                            {/* Base Headline (Bone Text) */}
-                            <motion.h2
-                                initial={reduced ? false : { clipPath: "inset(100% 0 0 0)" }}
-                                whileInView={{ clipPath: "inset(0% 0 0 0)" }}
-                                viewport={{ once: true, margin: "-10% 0px" }}
-                                transition={{ duration: 0.7, ease: EASE }}
-                                className="font-heading font-black uppercase text-left leading-[0.84] tracking-[-0.025em] text-[#F7F5F0]"
-                                style={{ fontSize: "clamp(3rem, 8.5vw, 9.5rem)" }}
-                            >
-                                IT RUNS ON
-                                <br />
-                                FAMILY.
-                            </motion.h2>
-
-                            {/* Masked Headline Overlay (Green Color #2E8B5A over Keith Silhouette) */}
-                            {!isMobile && (
-                                <motion.h2
-                                    aria-hidden="true"
-                                    initial={reduced ? false : { opacity: 0 }}
-                                    whileInView={{ opacity: 1 }}
-                                    viewport={{ once: true, margin: "-10% 0px" }}
-                                    transition={{ duration: 0.5, delay: 0.8, ease: EASE }}
-                                    className="absolute inset-0 font-heading font-black uppercase text-left leading-[0.84] tracking-[-0.025em] text-[#2E8B5A] pointer-events-none select-none"
-                                    style={{
-                                        fontSize: "clamp(3rem, 8.5vw, 9.5rem)",
-                                        WebkitMaskImage: "url('/origin/keith_silhouette_mask.png')",
-                                        maskImage: "url('/origin/keith_silhouette_mask.png')",
-                                        WebkitMaskSize: "contain",
-                                        maskSize: "contain",
-                                        WebkitMaskPosition: "right bottom",
-                                        maskPosition: "right bottom",
-                                        WebkitMaskRepeat: "no-repeat",
-                                        maskRepeat: "no-repeat",
-                                    }}
-                                >
-                                    IT RUNS ON
-                                    <br />
-                                    FAMILY.
-                                </motion.h2>
-                            )}
+                        {/* 4 Staggered Photographs Grid */}
+                        <div className="grid grid-cols-2 gap-4 sm:gap-6 md:gap-8 items-start">
+                            {VALUES_DATA.map((item, idx) => {
+                                const isActive = activeIndex === idx;
+                                return (
+                                    <Link
+                                        key={item.num}
+                                        href={`/values/${item.slug}`}
+                                        onMouseEnter={() => setActiveIndex(idx)}
+                                        onFocus={() => setActiveIndex(idx)}
+                                        className={`relative w-full ${item.aspect} ${item.staggerClass} block rounded-none overflow-hidden border border-[#F7F5F0]/15 transition-all duration-400 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E8B5A] ${
+                                            isActive ? "z-30 scale-[1.03]" : "z-10 scale-100"
+                                        }`}
+                                    >
+                                        <Image
+                                            src={item.image}
+                                            alt={item.alt}
+                                            fill
+                                            sizes="(max-width: 768px) 48vw, 26vw"
+                                            quality={80}
+                                            style={{
+                                                willChange: isActive ? "filter" : "auto",
+                                            }}
+                                            className={`object-cover rounded-none transition-all duration-400 ease-out ${
+                                                isMobile || isActive
+                                                    ? "grayscale-0 brightness-100"
+                                                    : "grayscale brightness-[0.75]"
+                                            }`}
+                                            loading="lazy"
+                                        />
+                                    </Link>
+                                );
+                            })}
                         </div>
 
-                        {/* Body Copy & Signature Block */}
-                        <div className="flex flex-col gap-6 max-w-[42ch]">
-                            <motion.p
-                                initial={reduced ? false : { opacity: 0, y: 12 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "-10% 0px" }}
-                                transition={{ duration: 0.5, delay: 0.2, ease: EASE }}
-                                className="font-sans text-base sm:text-lg md:text-xl font-light text-[#F7F5F0]/80 leading-relaxed"
-                            >
-                                1327 is a number that came off the street, borrowed from the films we grew up on. It stands for one thing: nothing matters more than family. We didn&apos;t build a merch company — we built a crew that happens to make uniforms.
-                            </motion.p>
-
-                            {/* Signature Block */}
-                            <motion.div
-                                initial={reduced ? false : { opacity: 0, y: 12 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "-10% 0px" }}
-                                transition={{ duration: 0.5, delay: 0.35, ease: EASE }}
-                                className="pt-3 border-t border-[#F7F5F0]/20 flex flex-col items-start gap-1"
-                            >
-                                <div className="w-44 sm:w-56 h-14 relative opacity-90">
-                                    <KeithShahSignatureBone className="w-full h-full" />
-                                </div>
-                                <span className="font-mono text-xs uppercase tracking-[0.25em] text-[#F7F5F0]/60 font-bold">
-                                    KEITH SHAH — FOUNDER
-                                </span>
-                            </motion.div>
-                        </div>
-                    </div>
-
-                    {/* Right Column (Cols 8–12): Cut-Out Portrait of Keith (Layer 20) */}
-                    <motion.div
-                        initial={reduced ? false : { opacity: 0, y: 48 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: "-10% 0px" }}
-                        transition={{ duration: 0.8, delay: 0.2, ease: EASE }}
-                        className="md:col-span-5 relative w-full h-[400px] sm:h-[500px] lg:h-[600px] z-20 flex justify-center md:justify-end items-end pointer-events-none"
-                    >
-                        <div className="relative w-[85vw] sm:w-[50vw] md:w-[100%] h-full max-w-[480px]">
-                            <Image
-                                src="/origin/keith_founder.png"
-                                alt="Keith Shah, Founder of 1327"
-                                fill
-                                sizes="(max-width: 768px) 85vw, 42vw"
-                                quality={85}
-                                className="object-contain object-bottom"
-                                priority={false}
-                            />
-                        </div>
-                    </motion.div>
-
-                </div>
-
-                {/* ─── VALUE ROWS (LANDO NORRIS INSPIRED INTERACTIVE REEL) ─────────────── */}
-                <div className="relative z-10 w-full border-t border-[#F7F5F0]/20 mt-12 md:mt-16">
-                    {/* Header bar */}
-                    <div className="flex justify-between items-center py-4 border-b border-[#F7F5F0]/20 font-mono text-xs font-bold tracking-[0.25em] uppercase text-[#F7F5F0]/65">
-                        <div className="flex items-center gap-3">
-                            <span className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2E8B5A] opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2E8B5A]"></span>
-                            </span>
-                            <span className="text-[#F7F5F0] font-bold">/ THE CODE</span>
-                        </div>
-                        <span className="hidden sm:inline text-[#2E8B5A]">[ FOUR ATELIER PRINCIPLES ]</span>
-                    </div>
-
-                    {VALUES_INDEX.map((item, idx) => (
-                        <motion.div
-                            key={item.num}
-                            initial={reduced ? false : { opacity: 0, y: 16 }}
+                        {/* Short Origin Lead Copy (Bottom-Left) */}
+                        <motion.p
+                            initial={reduced ? false : { opacity: 0, y: 12 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-5% 0px" }}
-                            transition={{ duration: 0.5, delay: 0.07 * idx, ease: EASE }}
+                            viewport={{ once: true, margin: "-10% 0px" }}
+                            transition={{ duration: 0.5, delay: 0.2, ease: EASE }}
+                            className="font-sans text-sm sm:text-base font-light text-[#F7F5F0]/70 leading-relaxed max-w-[38ch] pt-2"
                         >
-                            <Link
-                                href={`/values/${item.slug}`}
-                                className="group relative block border-b border-[#F7F5F0]/20 py-7 sm:py-9 px-4 sm:px-8 min-h-[100px] transition-all duration-300 cursor-pointer overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F7F5F0]"
-                                aria-label={`${item.title} — ${item.definition}`}
-                            >
-                                {/* Left-to-Right Green Hover Fill Wipe (#105233) with Left Border Accent */}
-                                <div
-                                    className="absolute inset-0 bg-[#105233] border-l-4 border-[#2E8B5A] opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-all duration-240 ease-out pointer-events-none origin-left transform group-hover:scale-x-100"
-                                    style={{ transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)" }}
-                                />
+                            1327 is a number that came off the street, borrowed from the films we grew up on. It stands for one thing: nothing matters more than family.
+                        </motion.p>
+                    </div>
 
-                                <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 items-start md:items-center gap-4 md:gap-6 min-h-[52px]">
-                                    {/* Mono Index & Tag (col-span-2) */}
-                                    <div className="md:col-span-2 flex flex-col items-start gap-1">
-                                        <span className="font-mono text-xl sm:text-2xl font-bold tracking-tighter text-[#F7F5F0]/90 transition-transform duration-200 group-hover:translate-x-2">
-                                            {item.num}
-                                        </span>
-                                        <span className="font-mono text-[10px] font-bold tracking-[0.2em] text-[#2E8B5A] uppercase">
-                                            {item.tag}
-                                        </span>
-                                    </div>
+                    {/* Right Column (~38%): Value List & Signature Block */}
+                    <div className="order-1 md:order-2 md:col-span-5 lg:col-span-5 flex flex-col justify-between h-full pt-2">
+                        
+                        {/* 4 Right-Aligned Display Value Entries */}
+                        <ol aria-label="Atelier Values" className="flex flex-col gap-6 sm:gap-8 w-full">
+                            {VALUES_DATA.map((item, idx) => {
+                                const isActive = activeIndex === idx;
+                                return (
+                                    <li key={item.num} className="w-full text-left md:text-right">
+                                        <Link
+                                            href={`/values/${item.slug}`}
+                                            onMouseEnter={() => setActiveIndex(idx)}
+                                            onFocus={() => setActiveIndex(idx)}
+                                            className="group relative inline-flex flex-col items-start md:items-end focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E8B5A] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B1710]"
+                                        >
+                                            <div className="flex items-baseline gap-3 md:flex-row-reverse">
+                                                {/* Display Title */}
+                                                <span
+                                                    className={`font-heading font-black uppercase text-3xl sm:text-5xl lg:text-[clamp(2.5rem,5.5vw,6rem)] leading-[0.95] tracking-[-0.02em] transition-colors duration-300 ${
+                                                        isActive ? "text-[#2E8B5A]" : "text-[#F7F5F0]/55 hover:text-[#F7F5F0]/80"
+                                                    }`}
+                                                >
+                                                    {item.title}
+                                                </span>
 
-                                    {/* Display Title with Lando Shift (col-span-3) */}
-                                    <div className="md:col-span-3 font-heading font-black text-3xl sm:text-4xl uppercase tracking-tight text-[#F7F5F0] transition-transform duration-200 ease-out group-hover:translate-x-3">
-                                        {item.title}
-                                    </div>
+                                                {/* Mono Index */}
+                                                <span className="font-mono text-xs sm:text-sm font-bold text-[#F7F5F0]/40 tracking-wider">
+                                                    {item.num}
+                                                </span>
+                                            </div>
 
-                                    {/* Definition Prose (col-span-4) */}
-                                    <div className="md:col-span-4 font-sans text-sm sm:text-base text-[#F7F5F0]/80 font-light leading-relaxed">
-                                        {item.definition}
-                                    </div>
+                                            {/* Hand-sewn Wave Running-Stitch Underline */}
+                                            <div className="w-full max-w-[240px] sm:max-w-[320px]">
+                                                <StitchWaveUnderline active={isActive} id={item.num} />
+                                            </div>
+                                        </Link>
+                                    </li>
+                                );
+                            })}
+                        </ol>
 
-                                    {/* Floating Image Preview Card (col-span-2) — Lando Norris Signature Feature */}
-                                    <div className="hidden lg:flex md:col-span-2 justify-center items-center">
-                                        <div className="relative w-28 h-16 bg-[#1F1F18] border border-[#F7F5F0]/20 rounded-none overflow-hidden opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-300 ease-out shadow-2xl pointer-events-none">
-                                            <Image
-                                                src={item.image}
-                                                alt={item.alt}
-                                                fill
-                                                sizes="120px"
-                                                className="object-cover rounded-none"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    {/* Arrow with Lando Translate (col-span-1) */}
-                                    <div className="md:col-span-1 text-left md:text-right font-mono text-xl text-[#F7F5F0] transition-transform duration-200 ease-out group-hover:translate-x-2 group-hover:-translate-y-1">
-                                        ↗
-                                    </div>
-                                </div>
-                            </Link>
+                        {/* Signature & Attribution Block (Beneath List) */}
+                        <motion.div
+                            initial={reduced ? false : { opacity: 0, y: 12 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-10% 0px" }}
+                            transition={{ duration: 0.5, delay: 0.3, ease: EASE }}
+                            className="mt-12 sm:mt-16 pt-6 border-t border-[#F7F5F0]/20 flex flex-col items-start md:items-end gap-2 w-full"
+                        >
+                            {/* Keith Shah Signature Vector in #2E8B5A */}
+                            <div className="w-44 sm:w-56 h-14 relative opacity-95">
+                                <KeithShahSignatureGreen className="w-full h-full" />
+                            </div>
+                            <span className="font-mono text-xs uppercase tracking-[0.25em] text-[#F7F5F0]/55 font-bold">
+                                KEITH SHAH — FOUNDER
+                            </span>
+                            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-[#F7F5F0]/40 font-bold">
+                                FOUNDED IN MALAD WEST, BOMBAY
+                            </span>
                         </motion.div>
-                    ))}
+
+                    </div>
+
                 </div>
 
             </div>

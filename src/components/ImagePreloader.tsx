@@ -53,6 +53,7 @@ const CRITICAL_IMAGES = [
     "/client logo/nadda.png",
     "/client logo/tiger.png",
     // Backgrounds & logo
+    "/bg/contour_dark_green.svg",
     "/bg/craftsmanship_bg.png",
     "/bg/clothing_fabric_bg.png",
     "/logo/1327_logo_v2.png",
