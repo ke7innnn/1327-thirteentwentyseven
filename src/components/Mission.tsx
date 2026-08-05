@@ -279,46 +279,44 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
             <div className="absolute inset-0 z-10 w-full h-full flex items-center justify-center">
                 <motion.div
                     style={{ opacity: opacityHero, y: yHero, pointerEvents: pointerEventsHero }}
-                    className="absolute inset-0 w-full h-full flex flex-col justify-between px-5 sm:px-8 md:px-16 lg:px-24 pt-20 pb-4 sm:pt-24 sm:pb-6 md:py-28 animate-[fadeIn_0.5s_ease-out]"
+                    className="absolute inset-0 w-full h-full flex flex-col justify-between px-6 sm:px-12 md:px-16 lg:px-24 pt-20 pb-8 sm:py-24 animate-[fadeIn_0.5s_ease-out]"
                 >
                     {/* Top Bar */}
-                    <div className="flex justify-end items-center text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-white/50 w-full">
-                        <span className="text-right hidden sm:inline">Malad West — Mumbai, IN</span>
+                    <div className="flex justify-between items-center text-xs font-mono font-bold tracking-[0.25em] uppercase text-white/60 w-full border-b border-white/10 pb-3">
+                        <span className="text-white/80 font-bold">&#123; 01 &#125; / OUR MISSION</span>
+                        <span className="text-right">MALAD WEST — MUMBAI, IN</span>
                     </div>
 
-                    {/* Center Number */}
-                    <div className="w-full flex justify-start items-center">
-                        <h1 className="text-[22vw] md:text-[22vw] font-bold leading-none tracking-tight flex items-center font-heading select-none text-[#F2F9F4]">
-                            <span>13</span>
-                            <span>27</span>
+                    {/* Unified Left-Aligned Hero Typography Stack */}
+                    <div className="w-full max-w-5xl flex flex-col items-start text-left gap-3 sm:gap-5 my-auto pt-6">
+                        {/* Giant 1327 Header */}
+                        <h1 className="font-heading font-black text-[18vw] sm:text-[14vw] md:text-[12vw] lg:text-[11rem] xl:text-[13rem] leading-[0.82] tracking-tighter text-[#F2F9F4] select-none -ml-1 sm:-ml-2">
+                            1327
                         </h1>
-                    </div>
 
-                    {/* Bottom Content */}
-                    <div className="w-full flex flex-col gap-3 sm:gap-5">
-                        {/* Heading & Description */}
-                        <div className="flex flex-col items-start text-left gap-2 sm:gap-3">
-                            <h2 className="text-2xl xs:text-3xl sm:text-5xl md:text-7xl lg:text-[5rem] xl:text-[5.5rem] font-black uppercase text-white tracking-tight leading-[0.9] font-sans">
-                                <span className="block">Designed for the</span>
-                                <span className="block text-[#1EA86E]">Bold.</span>
-                            </h2>
-                            <p className="text-xs sm:text-sm md:text-lg text-white/70 max-w-2xl font-sans leading-relaxed hidden sm:block">
-                                Premium custom apparel and uniforms for crews that move like family — cut, printed and embroidered in Mumbai.
-                            </p>
-                        </div>
+                        {/* Subheading Statement */}
+                        <h2 className="font-heading font-black text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl uppercase tracking-tight leading-[0.88] text-white">
+                            <span className="block text-white">DESIGNED FOR THE</span>
+                            <span className="block text-[#2E8B5A]">BOLD.</span>
+                        </h2>
 
-                        {/* Buttons — Styled in 1327 Logo Font (Sugo / font-heading) with Lando hover shift */}
-                        <div className="flex flex-wrap items-center gap-3.5">
+                        {/* Description Copy */}
+                        <p className="font-sans text-sm sm:text-base md:text-lg text-white/80 max-w-xl font-light leading-relaxed pt-1">
+                            Premium custom apparel and uniforms for crews that move like family — cut, printed and embroidered in Mumbai.
+                        </p>
+
+                        {/* Buttons — Lando Norris Style Inward Hover Shift */}
+                        <div className="flex flex-wrap items-center gap-4 pt-3">
                             <button
                                 onClick={() => setIsContactOpen(true)}
-                                className="group bg-white text-black hover:bg-[#105233] hover:text-white hover:border-[#105233] border-2 border-white font-heading font-black text-sm sm:text-base md:text-lg uppercase tracking-wider px-6 sm:px-8 py-3 sm:py-3.5 rounded-none flex items-center gap-2.5 transition-all duration-200 ease-out whitespace-nowrap cursor-pointer shadow-lg"
+                                className="group bg-white text-black hover:bg-[#105233] hover:text-white hover:border-[#105233] border-2 border-white font-heading font-black text-sm sm:text-base md:text-lg uppercase tracking-wider px-6 sm:px-8 py-3.5 rounded-none flex items-center gap-2.5 transition-all duration-200 ease-out whitespace-nowrap cursor-pointer shadow-lg"
                             >
                                 <span>REACH OUT</span>
                                 <span className="text-xs sm:text-sm transition-transform duration-200 ease-out group-hover:translate-x-1 group-hover:-translate-y-1">↗</span>
                             </button>
                             <button
                                 onClick={handleScrollToNext}
-                                className="group border-2 border-white/90 text-white hover:bg-white hover:text-black font-heading font-black text-sm sm:text-base md:text-lg uppercase tracking-wider px-6 sm:px-8 py-3 sm:py-3.5 rounded-none flex items-center gap-2.5 transition-all duration-200 ease-out whitespace-nowrap cursor-pointer"
+                                className="group border-2 border-white/90 text-white hover:bg-white hover:text-black font-heading font-black text-sm sm:text-base md:text-lg uppercase tracking-wider px-6 sm:px-8 py-3.5 rounded-none flex items-center gap-2.5 transition-all duration-200 ease-out whitespace-nowrap cursor-pointer"
                             >
                                 <span>SEE THE WORK</span>
                                 <span className="text-xs sm:text-sm transition-transform duration-200 ease-out group-hover:translate-y-1">⬇</span>
