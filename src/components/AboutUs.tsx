@@ -7,6 +7,23 @@ import { motion, useReducedMotion } from "framer-motion";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
+function KeithShahSignatureGreen({ className }: { className?: string }) {
+    return (
+        <svg
+            viewBox="0 0 400 120"
+            fill="none"
+            stroke="#4FB47E"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className={className}
+            aria-hidden="true"
+        >
+            <path d="M25,85 C45,20 55,15 70,70 C80,90 90,85 100,50 C105,35 120,45 130,75 M115,60 C140,55 155,58 170,60 C180,62 190,55 200,50 M215,30 C220,20 225,15 230,80 C235,95 240,60 250,55 C260,50 270,55 280,60 M270,35 C290,30 315,35 340,40 C360,45 375,30 385,25 M275,75 C305,70 335,72 365,75" />
+        </svg>
+    );
+}
+
 const VALUES_DATA = [
     {
         num: "01",
@@ -266,47 +283,21 @@ export default function AboutUs() {
                             })}
                         </ol>
 
-                        {/* Bottom-Right Quadrant: Monogram, Provenance & Links */}
-                        <div className="flex flex-col items-center text-center gap-3 pt-4 border-t border-[#EDEBE3]/15 w-full max-w-sm">
-                            {/* 1327 Monogram Mark */}
-                            <div className="relative w-14 h-8 opacity-45">
-                                <Image
-                                    src="/logo/1327_white_transparent_logo.png"
-                                    alt="1327 Monogram"
-                                    fill
-                                    className="object-contain"
-                                />
+                        {/* Bottom-Right Quadrant: Keith Shah Founder Signature & Atelier Creed */}
+                        <div className="flex flex-col items-center text-center gap-2 pt-4 border-t border-[#EDEBE3]/15 w-full max-w-sm">
+                            {/* Keith Shah Signature Vector in #4FB47E Green */}
+                            <div className="w-44 sm:w-52 h-12 relative opacity-90">
+                                <KeithShahSignatureGreen className="w-full h-full" />
                             </div>
 
-                            {/* Provenance Line */}
-                            <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-[#EDEBE3]/40 font-bold">
-                                FOUNDED IN MALAD WEST, BOMBAY
+                            <span className="font-mono text-xs uppercase tracking-[0.25em] text-[#4FB47E] font-bold">
+                                KEITH SHAH — FOUNDER
                             </span>
 
-                            {/* Start An Order CTA Link */}
-                            <a
-                                href="https://wa.me/919819001327?text=Hi%201327%2C%20I%27m%20looking%20to%20place%20an%20order%20for%20custom%20uniforms."
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="font-mono text-xs font-bold text-[#EDEBE3] hover:text-[#4FB47E] tracking-[0.2em] uppercase border-b border-[#EDEBE3]/30 pb-0.5 transition-colors my-1 inline-block"
-                            >
-                                START AN ORDER ↗
-                            </a>
-
-                            {/* Social & Channel Links */}
-                            <div className="flex items-center justify-center gap-3 font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[#EDEBE3]/45">
-                                <a href="https://www.instagram.com/1327_thirteentwentyseven/" target="_blank" rel="noopener noreferrer" className="hover:text-[#EDEBE3] transition-colors">
-                                    INSTAGRAM
-                                </a>
-                                <span>·</span>
-                                <a href="https://www.youtube.com/@1327-thirteentwentyseven" target="_blank" rel="noopener noreferrer" className="hover:text-[#EDEBE3] transition-colors">
-                                    YOUTUBE
-                                </a>
-                                <span>·</span>
-                                <a href="https://wa.me/919819001327?text=Hi%201327%2C%20I%27m%20looking%20to%20place%20an%20order%20for%20custom%20uniforms." target="_blank" rel="noopener noreferrer" className="hover:text-[#EDEBE3] transition-colors">
-                                    WHATSAPP
-                                </a>
-                            </div>
+                            {/* Founder Creed Statement */}
+                            <p className="font-sans text-xs sm:text-sm font-light text-[#EDEBE3]/75 leading-relaxed max-w-xs pt-1">
+                                &ldquo;We didn&apos;t build a merch company — we built a crew that happens to make uniforms.&rdquo;
+                            </p>
                         </div>
 
                     </div>
