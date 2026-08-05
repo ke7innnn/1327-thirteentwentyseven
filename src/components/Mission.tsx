@@ -334,31 +334,21 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
 }
 
 function ManifestoSection() {
-    const containerVariants = {
-        initial: {},
-        animate: {
-            transition: {
-                staggerChildren: 0.12
-            }
-        }
-    };
+    const sectionRef = useRef<HTMLDivElement>(null);
+    const { scrollYProgress } = useScroll({
+        target: sectionRef,
+        offset: ["start end", "end start"],
+    });
 
-    const itemVariants = {
-        initial: { opacity: 0, y: 40 },
-        animate: {
-            opacity: 1,
-            y: 0,
-            transition: {
-                duration: 0.8,
-                ease: [0.16, 1, 0.3, 1] as const
-            }
-        }
-    };
+    // Parallax transforms for Lando Norris inspired scroll depth
+    const watermarkX = useTransform(scrollYProgress, [0, 1], [-80, 120]);
+    const watermarkOpacity = useTransform(scrollYProgress, [0.2, 0.5, 0.8], [0.03, 0.08, 0.03]);
 
     return (
         <section
+            ref={sectionRef}
             id="manifesto"
-            className="relative z-20 bg-[#eae6df] text-[#0a0a0a] py-16 md:py-28 border-b border-black/10 w-full overflow-hidden"
+            className="relative z-20 bg-[#eae6df] text-[#0a0a0a] py-20 md:py-32 border-b border-black/10 w-full overflow-hidden select-none rounded-none"
         >
             {/* Woven Linen Apparel Fabric Texture Overlay */}
             <div
@@ -373,97 +363,127 @@ function ManifestoSection() {
             <div
                 className="absolute inset-0 pointer-events-none z-0"
                 style={{
-                    background: "radial-gradient(ellipse 80% 70% at 50% 25%, rgba(255,255,255,0.6) 0%, transparent 85%)",
+                    background: "radial-gradient(ellipse 80% 70% at 50% 25%, rgba(255,255,255,0.65) 0%, transparent 85%)",
                 }}
             />
 
-            {/* Giant 1327 Brand Watermark */}
-            <div className="absolute right-4 lg:right-16 top-1/2 -translate-y-1/2 pointer-events-none select-none z-0 opacity-[0.06]">
-                <span className="font-heading font-black text-9xl sm:text-[14rem] md:text-[20rem] tracking-tighter text-[#105233]">
+            {/* Giant 1327 Brand Watermark with Lando Scroll Parallax */}
+            <motion.div
+                style={{ x: watermarkX, opacity: watermarkOpacity }}
+                className="absolute right-2 lg:right-12 top-1/2 -translate-y-1/2 pointer-events-none select-none z-0"
+            >
+                <span className="font-heading font-black text-9xl sm:text-[16rem] md:text-[24rem] tracking-tighter text-[#105233]">
                     1327
                 </span>
-            </div>
+            </motion.div>
 
-            <motion.div 
-                initial="initial"
-                whileInView="animate"
-                viewport={{ once: true, margin: "-10% 0px" }}
-                variants={containerVariants}
-                className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24 flex flex-col justify-between min-h-0 md:min-h-[65vh] gap-8 md:gap-0 relative z-10"
-            >
+            <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24 flex flex-col justify-between min-h-0 md:min-h-[70vh] gap-10 md:gap-0 relative z-10">
                 {/* Top Bar */}
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-4">
                     <motion.div
-                        variants={itemVariants}
-                        className="inline-flex items-center gap-2 px-3.5 py-1 rounded-sm bg-[#105233] text-white shadow-sm self-start"
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true, margin: "-5% 0px" }}
+                        transition={{ duration: 0.5, ease: "easeOut" }}
+                        className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-none bg-[#105233] text-white shadow-sm self-start"
                     >
-                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                        <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
                         <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-white">
                             1327 — BRAND MANIFESTO
                         </span>
                     </motion.div>
 
-                    <motion.div 
-                        variants={itemVariants}
-                        className="flex justify-between items-center border-b border-black/10 pb-3 w-full"
-                    >
+                    <div className="flex justify-between items-center border-b border-black/15 pb-4 w-full">
                         <SectionMarker sectionKey="mission" />
-                        <span className="text-right font-mono text-xs uppercase tracking-[0.2em] text-black/50">The Manifesto</span>
-                    </motion.div>
+                        <span className="text-right font-mono text-xs font-bold uppercase tracking-[0.2em] text-black/50">
+                            THE MANIFESTO
+                        </span>
+                    </div>
                 </div>
 
-                {/* Central Title */}
-                <div className="w-full flex justify-start items-center my-auto py-8">
-                    <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold uppercase tracking-tight leading-[0.95] text-left text-black max-w-5xl font-sans flex flex-col items-start">
-                        <motion.span variants={itemVariants} className="block">
-                            We don&apos;t make
-                        </motion.span>
-                        <motion.span variants={itemVariants} className="block mt-2">
-                            Merch.
-                        </motion.span>
-                        <motion.span variants={itemVariants} className="block mt-2">
-                            We build{" "}
-                            <span className="text-[#105233] font-black uppercase">
-                                Identity.
-                            </span>
-                        </motion.span>
-                        
-                        {/* Horizontal black bar divider */}
-                        <motion.div 
-                            variants={{
-                                initial: { width: 0, opacity: 0 },
-                                animate: { width: "64px", opacity: 1, transition: { duration: 0.6, ease: "easeOut" } }
-                            }}
-                            className="h-1 bg-[#105233] my-6 rounded-full"
-                        />
-                        
-                        <motion.span 
-                            variants={itemVariants} 
+                {/* Central Title with Lando Norris Styling & Motion */}
+                <div className="w-full flex justify-start items-center my-auto py-6">
+                    <h2 className="font-heading font-black text-4xl sm:text-6xl md:text-7xl lg:text-[5.75rem] uppercase tracking-tight leading-[0.88] text-left text-[#0a0a0a] max-w-5xl flex flex-col items-start gap-1">
+                        <motion.span
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-5% 0px" }}
+                            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                             className="block"
-                            style={{ WebkitTextStroke: "1.5px #0a0a0a", color: "transparent" }}
                         >
-                            Stitch by Stitch.
+                            WE DON&apos;T MAKE
+                        </motion.span>
+
+                        <motion.span
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-5% 0px" }}
+                            transition={{ duration: 0.6, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+                            className="block"
+                        >
+                            MERCH.
+                        </motion.span>
+
+                        <motion.span
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-5% 0px" }}
+                            transition={{ duration: 0.6, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
+                            className="block relative"
+                        >
+                            WE BUILD{" "}
+                            <span className="text-[#105233] font-black uppercase">
+                                IDENTITY.
+                            </span>
+                            
+                            {/* Running-Stitch Needle Line in #105233 */}
+                            <svg className="w-full h-4 overflow-visible pointer-events-none mt-2" viewBox="0 0 400 12" fill="none">
+                                <motion.path
+                                    d="M 0,6 Q 100,2 200,6 T 400,6"
+                                    stroke="#105233"
+                                    strokeWidth="3.5"
+                                    fill="none"
+                                    strokeDasharray="12 8"
+                                    strokeLinecap="round"
+                                    initial={{ pathLength: 0, opacity: 0 }}
+                                    whileInView={{ pathLength: 1, opacity: 1 }}
+                                    viewport={{ once: true, margin: "-5% 0px" }}
+                                    transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+                                />
+                            </svg>
+                        </motion.span>
+
+                        <motion.span
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-5% 0px" }}
+                            transition={{ duration: 0.6, delay: 0.24, ease: [0.16, 1, 0.3, 1] }}
+                            className="block mt-4 text-transparent"
+                            style={{ WebkitTextStroke: "2px #105233" }}
+                        >
+                            STITCH BY STITCH.
                         </motion.span>
                     </h2>
                 </div>
 
                 {/* Bottom Row */}
-                <motion.div 
-                    variants={itemVariants}
-                    className="w-full grid grid-cols-1 md:grid-cols-12 gap-6 items-end mt-4 pt-4 border-t border-black/10"
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-5% 0px" }}
+                    transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                    className="w-full grid grid-cols-1 md:grid-cols-12 gap-6 items-end mt-4 pt-6 border-t border-black/15"
                 >
-                    <div className="md:col-span-4 text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-[#105233] font-bold self-start md:self-end text-left flex items-center gap-2">
-                        <span>/ Why We Exist</span>
+                    <div className="md:col-span-4 text-xs font-mono tracking-[0.2em] uppercase text-[#105233] font-bold text-left flex items-center gap-2">
+                        <span>/ WHY WE EXIST</span>
                         <span className="text-black/30 font-normal">| 1327</span>
                     </div>
-                    <div
-                        style={{ fontFamily: '"Times New Roman", serif' }}
-                        className="md:col-span-8 text-sm sm:text-base md:text-lg lg:text-xl font-light text-black/90 leading-relaxed text-left"
-                    >
+
+                    <div className="md:col-span-8 font-sans text-base sm:text-lg md:text-xl font-light text-[#0a0a0a]/85 leading-relaxed text-left max-w-2xl">
                         Every crew deserves a uniform worth belonging to. We cut premium fabric, obsess over embroidery and skip every shortcut — so your people feel like a team, and your brand becomes impossible to miss.
                     </div>
                 </motion.div>
-            </motion.div>
+            </div>
         </section>
     );
 }
