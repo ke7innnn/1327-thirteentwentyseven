@@ -1,287 +1,249 @@
 "use client";
 
-import { useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
+import { EASING } from "@/lib/motion";
 
-const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+// ─── PROOF BAR PLACEHOLDERS (FLAGGED FOR CLIENT VERIFICATION) ─────────────────
+const PROOF_CELLS = [
+    { label: "ESTABLISHED", value: "EST. 2024" },
+    { label: "CREWS SERVED", value: "50+ CREWS DRESSED" },
+    { label: "PIECES PRODUCED", value: "10,000+ PIECES STITCHED" },
+    { label: "ATELIER LOCATION", value: "MALAD WEST, BOMBAY" },
+];
 
-// ─── KEITH SHAH VECTOR SIGNATURE (DEEP GREEN #105233) ────────────────────────
-function KeithShahSignature({ className }: { className?: string }) {
-    return (
-        <svg
-            viewBox="0 0 400 120"
-            fill="none"
-            stroke="#105233"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className={className}
-            aria-hidden="true"
-        >
-            <path d="M25,85 C45,20 55,15 70,70 C80,90 90,85 100,50 C105,35 120,45 130,75 M115,60 C140,55 155,58 170,60 C180,62 190,55 200,50 M215,30 C220,20 225,15 230,80 C235,95 240,60 250,55 C260,50 270,55 280,60 M270,35 C290,30 315,35 340,40 C360,45 375,30 385,25 M275,75 C305,70 335,72 365,75" />
-        </svg>
-    );
-}
-
-// ─── VALUE TILES DATA ─────────────────────────────────────────────────────────
-interface ValueTileData {
-    num: string;
-    title: string;
-    definition: string;
-    slug: string;
-    baseImage: string;
-    hoverImage: string;
-    alt: string;
-}
-
-const VALUE_TILES: ValueTileData[] = [
+// ─── MOVEMENT 2: THE CODE (VALUES INDEX) ──────────────────────────────────────
+const VALUES_INDEX = [
     {
         num: "01",
         title: "COMMUNITY",
         definition: "The crews we dress become the people we know.",
         slug: "community",
-        baseImage: "/aboutus/about-4.png",
-        hoverImage: "/feed/feed-01.jpg",
-        alt: "1327 crew members wearing custom uniforms",
     },
     {
         num: "02",
         title: "TRUST",
-        definition: "Sample first, always. You approve before it scales.",
+        definition: "Sample first, always. You approve the piece before it ever scales.",
         slug: "trust",
-        baseImage: "/aboutus/about-2.png",
-        hoverImage: "/feed/feed-02.jpg",
-        alt: "Craftsman inspecting sample embroidery precision",
     },
     {
         num: "03",
         title: "RESPECT",
         definition: "Same standard on the workshop floor as in the quote.",
         slug: "respect",
-        baseImage: "/aboutus/about-3.png",
-        hoverImage: "/feed/feed-04.jpg",
-        alt: "1327 Malad West workshop floor and cutting table",
     },
     {
         num: "04",
         title: "LOYALTY",
         definition: "We don't chase the next order. We keep the last one.",
         slug: "loyalty",
-        baseImage: "/aboutus/about-1.png",
-        hoverImage: "/feed/feed-05.jpg",
-        alt: "Full 1327 apparel and hospitality product range",
     },
 ];
 
-// ─── MAIN COMPRESSED ORIGIN SECTION ──────────────────────────────────────────
 export default function AboutUs() {
     const reduced = useReducedMotion() ?? false;
-    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
     return (
         <section
             id="about"
-            aria-labelledby="origin-kicker"
-            className="relative z-10 bg-[#F2EFE8] text-[#105233] py-16 md:py-24 border-b border-[#105233]/15 overflow-hidden select-none rounded-none"
+            aria-label="About 1327 Thirteen Twenty Seven — Origin & Code"
+            className="relative z-10 py-24 md:py-32 bg-black text-white overflow-hidden border-b border-white/10"
         >
-            <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-20 relative z-10">
+            {/* Gemini Generated Leather & Apparel Craftsmanship Background */}
+            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+                <Image
+                    src="/bg/leather_apparel_craftsmanship_bg.png"
+                    alt="Craftsmanship and Leather Atelier Background"
+                    fill
+                    sizes="100vw"
+                    className="object-cover object-center brightness-[0.45] contrast-[1.08]"
+                    priority
+                />
+                {/* Subtle dark vignette overlay for optimal text readability */}
+                <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/70 via-black/45 to-black/75" />
+            </div>
 
-                {/* ─── MOVEMENT 1 — THE FOUNDER ───────────────────────────────────────── */}
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 lg:gap-16 items-center mb-16 md:mb-20">
-                    
-                    {/* Left Column (Cols 1–4 Desktop / Aspect 3:4): Founder Portrait */}
-                    <motion.div
-                        initial={reduced ? false : { clipPath: "inset(100% 0 0 0)" }}
-                        whileInView={{ clipPath: "inset(0% 0 0 0)" }}
-                        viewport={{ once: true, margin: "-10% 0px" }}
-                        transition={{ duration: 0.7, ease: EASE }}
-                        className="md:col-span-4 relative aspect-[3/4] w-full overflow-hidden border border-[#105233]/15 rounded-none shadow-none bg-[#105233]/5"
-                    >
-                        <Image
-                            src="/aboutus/about-3.png"
-                            alt="Keith Shah, Founder of 1327 in Malad West workshop"
-                            fill
-                            priority
-                            sizes="(max-width: 768px) 100vw, 32vw"
-                            className="object-cover rounded-none object-center"
-                        />
-
-                        {/* Solid #105233 Caption Box Bottom-Left */}
-                        <div className="absolute bottom-0 left-0 p-3 bg-[#105233] text-[#F7F5F0] z-10 rounded-none border-t border-r border-[#F7F5F0]/20">
-                            <div className="font-mono text-[10px] font-bold tracking-[0.2em] uppercase leading-tight">
-                                <p className="text-[#F7F5F0]">KEITH SHAH</p>
-                                <p className="text-[#F7F5F0]/75">FOUNDER</p>
-                            </div>
-                        </div>
-                    </motion.div>
-
-                    {/* Right Column (Cols 6–11 Desktop): Text & Proof Line */}
-                    <div className="md:col-span-8 lg:col-span-7 md:col-start-5 flex flex-col gap-5 text-left">
+            <div className="relative z-10 w-full">
+                
+                {/* ─── MOVEMENT 1 — THE ORIGIN ──────────────────────────────────────────────── */}
+                <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24 mb-20 md:mb-28">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
                         
-                        {/* Kicker */}
+                        {/* Left Column (cols 1–5): Founder Portrait */}
                         <motion.div
-                            initial={reduced ? false : { opacity: 0, x: -15 }}
+                            initial={reduced ? false : { opacity: 0, x: -30 }}
                             whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true, margin: "-5% 0px" }}
-                            transition={{ duration: 0.5, ease: EASE }}
-                            id="origin-kicker"
-                            className="font-mono text-xs font-bold tracking-[0.22em] uppercase text-[#105233]"
+                            viewport={{ once: true, margin: "-10% 0px" }}
+                            transition={{ duration: 0.7, ease: EASING }}
+                            className="lg:col-span-5 relative w-full"
                         >
-                            / THE ORIGIN
-                        </motion.div>
+                            <div className="relative aspect-[3/2] sm:aspect-[4/5] w-full overflow-hidden border border-white/15 bg-black/60 rounded-none shadow-2xl">
+                                <Image
+                                    src="/aboutus/keith_shah_founder.jpg"
+                                    alt="Keith Shah, Founder of 1327"
+                                    fill
+                                    sizes="(max-width: 768px) 100vw, 42vw"
+                                    className="object-cover rounded-none object-top"
+                                    loading="lazy"
+                                />
 
-                        {/* Headline — Two lines */}
-                        <motion.h2
-                            initial={reduced ? false : { opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-5% 0px" }}
-                            transition={{ duration: 0.6, ease: EASE, delay: 0.08 }}
-                            className="font-heading font-black text-4xl sm:text-5xl lg:text-6xl uppercase tracking-tight text-[#105233] leading-[0.88]"
-                        >
-                            <span className="block">It Runs On</span>
-                            <span className="block">Family.</span>
-                        </motion.h2>
-
-                        {/* Lead Paragraph */}
-                        <motion.p
-                            initial={reduced ? false : { opacity: 0, y: 12 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-5% 0px" }}
-                            transition={{ duration: 0.5, delay: 0.16, ease: EASE }}
-                            className="font-sans text-base sm:text-lg text-[#105233]/90 font-light leading-relaxed max-w-xl"
-                        >
-                            1327 is a number that came off the street, borrowed from the films we grew up on. It stands for one thing: nothing matters more than family. We didn&apos;t build a merch company — we built a crew that happens to make uniforms.
-                        </motion.p>
-
-                        {/* Signature Block */}
-                        <motion.div
-                            initial={reduced ? false : { opacity: 0 }}
-                            whileInView={{ opacity: 1 }}
-                            viewport={{ once: true, margin: "-5% 0px" }}
-                            transition={{ duration: 0.6, delay: 0.24, ease: EASE }}
-                            className="flex flex-col items-start gap-1 mt-2"
-                        >
-                            <div className="w-44 h-12 relative opacity-90">
-                                <KeithShahSignature className="w-full h-full text-[#105233]" />
+                                {/* Solid Brand Green Caption Box Overlay */}
+                                <div className="absolute bottom-0 left-0 p-3 sm:p-4 bg-[#105233] text-white z-10 rounded-none border-t border-r border-white/30 shadow-md">
+                                    <div className="font-mono text-[9px] sm:text-[10px] font-bold tracking-[0.22em] uppercase leading-tight">
+                                        <p className="text-white">KEITH SHAH</p>
+                                        <p className="text-white/80">FOUNDER</p>
+                                        <p className="text-white/60">MALAD WEST</p>
+                                    </div>
+                                </div>
                             </div>
-                            <span className="font-mono text-xs font-bold tracking-[0.18em] uppercase text-[#105233]">
-                                KEITH SHAH — FOUNDER
-                            </span>
                         </motion.div>
 
-                        {/* Single-Row Proof Line */}
-                        <motion.div
-                            initial={reduced ? false : { opacity: 0 }}
-                            whileInView={{ opacity: 1 }}
-                            viewport={{ once: true, margin: "-5% 0px" }}
-                            transition={{ duration: 0.4, delay: 0.32, ease: EASE }}
-                            className="font-mono text-xs font-bold tracking-[0.18em] uppercase text-[#105233]/85 border-t border-[#105233]/15 pt-4 mt-2"
-                        >
-                            EST. 2026 · 150+ CREWS DRESSED · MALAD WEST, BOMBAY
-                        </motion.div>
+                        {/* Right Column (cols 7–12): Origin Prose & Signature */}
+                        <div className="lg:col-span-7 flex flex-col justify-center gap-6">
+                            {/* Kicker */}
+                            <motion.div
+                                initial={reduced ? false : { opacity: 0, y: 10 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, margin: "-10% 0px" }}
+                                transition={{ duration: 0.5, ease: EASING }}
+                                className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-white flex items-center gap-2"
+                            >
+                                <span className="text-white font-bold">&#123; 01 &#125;</span>
+                                <span>/ THE ORIGIN</span>
+                            </motion.div>
+
+                            {/* Headline — Hard-broken 2 lines */}
+                            <motion.h2
+                                initial={reduced ? false : { opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, margin: "-10% 0px" }}
+                                transition={{ duration: 0.7, ease: EASING, delay: 0.08 }}
+                                className="font-heading font-black text-5xl sm:text-6xl md:text-7xl lg:text-8xl uppercase tracking-tighter leading-[0.9] text-white"
+                            >
+                                <span className="block text-white">It Runs On</span>
+                                <span className="block text-white">Family.</span>
+                            </motion.h2>
+
+                            <motion.div
+                                initial={reduced ? false : { scaleX: 0 }}
+                                whileInView={{ scaleX: 1 }}
+                                viewport={{ once: true, margin: "-10% 0px" }}
+                                transition={{ duration: 0.6, ease: EASING }}
+                                style={{ transformOrigin: "left" }}
+                                className="w-full h-px bg-white/20 my-1"
+                            />
+
+                            {/* Lead Paragraph — Prose at Scale */}
+                            <motion.p
+                                initial={reduced ? false : { opacity: 0, y: 15 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, margin: "-10% 0px" }}
+                                transition={{ duration: 0.6, ease: EASING, delay: 0.12 }}
+                                className="font-sans text-lg sm:text-xl md:text-2xl font-light text-white leading-relaxed max-w-2xl"
+                            >
+                                1327 is a number that came off the street, borrowed from the films we grew up on, and it stands for one thing: nothing matters more than family. We didn&apos;t build a merch company. We built a crew that happens to make uniforms.
+                            </motion.p>
+
+                            {/* Founder Note — Body Size */}
+                            <motion.p
+                                initial={reduced ? false : { opacity: 0, y: 15 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, margin: "-10% 0px" }}
+                                transition={{ duration: 0.6, ease: EASING, delay: 0.16 }}
+                                className="font-sans text-sm sm:text-base text-white/80 leading-relaxed max-w-2xl font-light"
+                            >
+                                I started this in Malad West, working shoulder-to-shoulder with cafés, kitchens, studios and crews across Bombay — designing, stitching and embroidering uniforms their teams are proud to pull on every shift. We don&apos;t chase orders. We keep the ones we&apos;ve got, and they keep us.
+                            </motion.p>
+
+                            {/* Signature Block */}
+                            <motion.div
+                                initial={reduced ? false : { opacity: 0, y: 15 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, margin: "-10% 0px" }}
+                                transition={{ duration: 0.6, ease: EASING, delay: 0.2 }}
+                                className="pt-4 flex flex-col items-start gap-1.5 border-t border-white/15"
+                            >
+                                <span className="font-heading italic text-xl sm:text-2xl text-white tracking-widest uppercase">
+                                    Keith Shah
+                                </span>
+                                <span className="font-mono text-xs uppercase tracking-[0.25em] text-white/60 font-bold">
+                                    KEITH SHAH — FOUNDER
+                                </span>
+                            </motion.div>
+                        </div>
 
                     </div>
                 </div>
 
-                {/* ─── MOVEMENT 2 — THE CODE ──────────────────────────────────────────── */}
-                <div className="w-full flex flex-col gap-6 pt-6 border-t border-[#105233]/15">
+                {/* ─── PROOF BAR ──────────────────────────────────────────────────────────── */}
+                <div className="border-t border-b border-white/20 py-4 bg-black/20">
+                    <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24">
+                        <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/20">
+                            {PROOF_CELLS.map((cell, idx) => (
+                                <div key={idx} className="px-3 sm:px-6 py-2 flex flex-col gap-1 text-center md:text-left">
+                                    <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/50">
+                                        {cell.label}
+                                    </span>
+                                    <span className="font-mono text-xs sm:text-sm font-bold uppercase tracking-[0.18em] text-white">
+                                        {cell.value}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* ─── MOVEMENT 2 — THE CODE (VALUES INDEX) ────────────────────────────────── */}
+                <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24 pt-20 md:pt-28">
                     
-                    {/* Header Label */}
-                    <div className="font-mono text-xs font-bold tracking-[0.22em] uppercase text-[#105233]">
-                        / THE CODE
+                    {/* Header */}
+                    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 pb-4 border-b border-white/20">
+                        <div className="flex items-center gap-3">
+                            <span className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-white">
+                                / THE CODE
+                            </span>
+                        </div>
+                        <span className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-white/60">
+                            FOUR PRINCIPLES
+                        </span>
                     </div>
 
-                    {/* 4 Value Image Tiles (2x2 on Mobile / 4 in a row on Desktop) */}
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 w-full">
-                        {VALUE_TILES.map((tile, idx) => {
-                            const isSelfHovered = hoveredIndex === idx;
-                            const isSiblingHovered = hoveredIndex !== null && !isSelfHovered;
+                    {/* 4 Tabular Ruled Rows */}
+                    <div className="border-b border-white/20">
+                        {VALUES_INDEX.map((item) => (
+                            <Link
+                                key={item.num}
+                                href={`/values/${item.slug}`}
+                                className="group relative block border-t border-white/20 py-6 sm:py-8 px-4 sm:px-6 transition-all duration-300 cursor-pointer overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B3C26]"
+                                aria-label={`${item.title} — ${item.definition}`}
+                            >
+                                {/* Green Fill Wipe on Hover / Focus */}
+                                <div className="absolute inset-0 bg-[#072618] opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-240 ease-out pointer-events-none" />
 
-                            return (
-                                <Link
-                                    key={tile.slug}
-                                    href={`/values/${tile.slug}`}
-                                    onMouseEnter={() => setHoveredIndex(idx)}
-                                    onMouseLeave={() => setHoveredIndex(null)}
-                                    onFocus={() => setHoveredIndex(idx)}
-                                    onBlur={() => setHoveredIndex(null)}
-                                    aria-label={`${tile.title} — ${tile.definition}`}
-                                    className={`group relative w-full aspect-[4/5] bg-[#105233]/10 border border-[#105233]/15 overflow-hidden rounded-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#105233] focus-visible:ring-offset-2 transition-all duration-320 ease-out transform-gpu ${
-                                        isSiblingHovered ? "opacity-55" : "opacity-100"
-                                    } ${isSelfHovered ? "scale-[1.02] z-20" : "z-10"}`}
-                                >
-                                    {/* Base Image */}
-                                    <Image
-                                        src={tile.baseImage}
-                                        alt={tile.alt}
-                                        fill
-                                        sizes="(max-width: 768px) 50vw, 24vw"
-                                        quality={80}
-                                        className={`object-cover rounded-none transition-transform duration-600 ease-out ${
-                                            isSelfHovered ? "scale-105" : "scale-100"
-                                        }`}
-                                        loading="lazy"
-                                    />
-
-                                    {/* Hover Image Crossfade (if hovered) */}
-                                    <Image
-                                        src={tile.hoverImage}
-                                        alt={`${tile.alt} detail`}
-                                        fill
-                                        sizes="(max-width: 768px) 50vw, 24vw"
-                                        quality={80}
-                                        className={`object-cover rounded-none transition-opacity duration-320 ease-out ${
-                                            isSelfHovered ? "opacity-100" : "opacity-0"
-                                        }`}
-                                        loading="lazy"
-                                    />
-
-                                    {/* Mono Index Top-Left */}
-                                    <div className="absolute top-3 left-3 font-mono text-xs font-bold tracking-widest text-[#F7F5F0] z-20">
-                                        {tile.num}
+                                <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 items-start md:items-center gap-3 md:gap-6 min-h-[64px]">
+                                    {/* Mono Index (1fr = col-span-2) */}
+                                    <div className="md:col-span-2 font-mono text-xl sm:text-2xl font-bold tracking-tighter text-white/90 group-hover:text-white transition-colors">
+                                        {item.num}
                                     </div>
 
-                                    {/* Arrow Top-Right (Fade-in on Hover) */}
-                                    <div
-                                        className={`absolute top-3 right-3 font-mono text-sm text-[#F7F5F0] z-20 transition-opacity duration-320 ${
-                                            isSelfHovered ? "opacity-100" : "opacity-0 md:opacity-0"
-                                        }`}
-                                    >
+                                    {/* Display Name (3fr = col-span-3) */}
+                                    <div className="md:col-span-3 font-heading font-black text-2xl sm:text-3xl uppercase tracking-tight text-white group-hover:text-white transition-colors">
+                                        {item.title}
+                                    </div>
+
+                                    {/* Definition (6fr = col-span-6) */}
+                                    <div className="md:col-span-6 font-sans text-sm sm:text-base text-white/80 group-hover:text-white font-light leading-relaxed transition-colors">
+                                        {item.definition}
+                                    </div>
+
+                                    {/* Arrow (1fr = col-span-1) */}
+                                    <div className="md:col-span-1 text-left md:text-right font-mono text-lg text-white/60 group-hover:text-white group-hover:translate-x-1 transition-all duration-240">
                                         ↗
                                     </div>
-
-                                    {/* Green Vertical Gradient (scaleY 35% -> 65% on hover) */}
-                                    <div
-                                        className="absolute inset-0 bg-gradient-to-t from-[#105233] via-[#105233]/75 to-transparent origin-bottom transition-transform duration-320 ease-out z-10 pointer-events-none"
-                                        style={{
-                                            transform: isSelfHovered ? "scaleY(0.70)" : "scaleY(0.40)",
-                                        }}
-                                    />
-
-                                    {/* Bottom Content: Value Title + Slide-up Definition */}
-                                    <div className="absolute bottom-0 inset-x-0 p-3 sm:p-4 z-20 flex flex-col justify-end text-left">
-                                        <h3 className="font-heading font-black text-xl sm:text-2xl uppercase tracking-tight text-[#F7F5F0]">
-                                            {tile.title}
-                                        </h3>
-                                        
-                                        {/* Definition text: Accessible & Slide-up Reveal */}
-                                        <div
-                                            className={`transition-all duration-320 ease-out overflow-hidden ${
-                                                isSelfHovered
-                                                    ? "max-h-20 opacity-100 pt-1"
-                                                    : "max-h-0 md:max-h-0 md:opacity-0 max-h-20 opacity-100 pt-1"
-                                            }`}
-                                        >
-                                            <p className="font-sans text-xs sm:text-sm text-[#F7F5F0]/90 font-light leading-snug">
-                                                {tile.definition}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </Link>
-                            );
-                        })}
+                                </div>
+                            </Link>
+                        ))}
                     </div>
 
                 </div>
