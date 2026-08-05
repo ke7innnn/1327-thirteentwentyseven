@@ -1,19 +1,29 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { EASING } from "@/lib/motion";
+import { motion, useReducedMotion } from "framer-motion";
 
-// ─── PROOF BAR PLACEHOLDERS (FLAGGED FOR CLIENT VERIFICATION) ─────────────────
-const PROOF_CELLS = [
-    { label: "ESTABLISHED", value: "EST. 2024" },
-    { label: "CREWS SERVED", value: "50+ CREWS DRESSED" },
-    { label: "PIECES PRODUCED", value: "10,000+ PIECES STITCHED" },
-    { label: "ATELIER LOCATION", value: "MALAD WEST, BOMBAY" },
-];
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
-// ─── MOVEMENT 2: THE CODE (VALUES INDEX) ──────────────────────────────────────
+function KeithShahSignatureBone({ className }: { className?: string }) {
+    return (
+        <svg
+            viewBox="0 0 400 120"
+            fill="none"
+            stroke="#F7F5F0"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className={className}
+            aria-hidden="true"
+        >
+            <path d="M25,85 C45,20 55,15 70,70 C80,90 90,85 100,50 C105,35 120,45 130,75 M115,60 C140,55 155,58 170,60 C180,62 190,55 200,50 M215,30 C220,20 225,15 230,80 C235,95 240,60 250,55 C260,50 270,55 280,60 M270,35 C290,30 315,35 340,40 C360,45 375,30 385,25 M275,75 C305,70 335,72 365,75" />
+        </svg>
+    );
+}
+
 const VALUES_INDEX = [
     {
         num: "01",
@@ -24,228 +34,207 @@ const VALUES_INDEX = [
     {
         num: "02",
         title: "TRUST",
-        definition: "Sample first, always. You approve the piece before it ever scales.",
+        definition: "Sample first, always.",
         slug: "trust",
     },
     {
         num: "03",
         title: "RESPECT",
-        definition: "Same standard on the workshop floor as in the quote.",
+        definition: "Same standard on the floor as in the quote.",
         slug: "respect",
     },
     {
         num: "04",
         title: "LOYALTY",
-        definition: "We don't chase the next order. We keep the last one.",
+        definition: "We don't chase the next order.",
         slug: "loyalty",
     },
 ];
 
 export default function AboutUs() {
     const reduced = useReducedMotion() ?? false;
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        handleResize();
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
     return (
         <section
             id="about"
-            aria-label="About 1327 Thirteen Twenty Seven — Origin & Code"
-            className="relative z-10 py-24 md:py-32 bg-black text-white overflow-hidden border-b border-white/10"
+            aria-label="About 1327 Thirteen Twenty Seven — The Origin"
+            className="relative z-10 w-full bg-[#14140F] text-[#F7F5F0] py-20 md:py-28 overflow-hidden select-none rounded-none border-b border-[#F7F5F0]/15"
         >
-            {/* Gemini Generated Leather & Apparel Craftsmanship Background */}
-            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-                <Image
-                    src="/bg/leather_apparel_craftsmanship_bg.png"
-                    alt="Craftsmanship and Leather Atelier Background"
-                    fill
-                    sizes="100vw"
-                    className="object-cover object-center brightness-[0.45] contrast-[1.08]"
-                    priority
-                />
-                {/* Subtle dark vignette overlay for optimal text readability */}
-                <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/70 via-black/45 to-black/75" />
-            </div>
+            <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-20 relative z-10">
 
-            <div className="relative z-10 w-full">
-                
-                {/* ─── MOVEMENT 1 — THE ORIGIN ──────────────────────────────────────────────── */}
-                <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24 mb-20 md:mb-28">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+                {/* ─── KICKER & TOP RULE ────────────────────────────────────────────── */}
+                <div className="w-full mb-10 md:mb-14">
+                    <div className="flex justify-between items-center font-mono text-xs font-bold tracking-[0.25em] uppercase text-[#F7F5F0]/65 pb-4">
+                        <span>&#123; 02 &#125; / THE ORIGIN</span>
+                        <span className="hidden sm:inline">MALAD WEST, BOMBAY</span>
+                    </div>
+                    <motion.div
+                        initial={reduced ? false : { scaleX: 0 }}
+                        whileInView={{ scaleX: 1 }}
+                        viewport={{ once: true, margin: "-10% 0px" }}
+                        transition={{ duration: 0.6, ease: EASE }}
+                        style={{ transformOrigin: "left" }}
+                        className="w-full h-px bg-[#F7F5F0]/20"
+                    />
+                </div>
+
+                {/* ─── 12-COLUMN MAIN FOUNDER BLOCK ──────────────────────────────────── */}
+                <div className="relative min-h-[500px] lg:min-h-[620px] grid grid-cols-1 md:grid-cols-12 gap-8 items-end mb-16 lg:mb-20">
+
+                    {/* Left Column (Cols 1–7): Headline, Body & Signature */}
+                    <div className="md:col-span-7 flex flex-col justify-between h-full relative z-30 pb-4">
                         
-                        {/* Left Column (cols 1–5): Founder Portrait */}
-                        <motion.div
-                            initial={reduced ? false : { opacity: 0, x: -30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true, margin: "-10% 0px" }}
-                            transition={{ duration: 0.7, ease: EASING }}
-                            className="lg:col-span-5 relative w-full"
-                        >
-                            <div className="relative aspect-[3/2] sm:aspect-[4/5] w-full overflow-hidden border border-white/15 bg-black/60 rounded-none shadow-2xl">
-                                <Image
-                                    src="/aboutus/keith_shah_founder.jpg"
-                                    alt="Keith Shah, Founder of 1327"
-                                    fill
-                                    sizes="(max-width: 768px) 100vw, 42vw"
-                                    className="object-cover rounded-none object-top"
-                                    loading="lazy"
-                                />
-
-                                {/* Solid Brand Green Caption Box Overlay */}
-                                <div className="absolute bottom-0 left-0 p-3 sm:p-4 bg-[#105233] text-white z-10 rounded-none border-t border-r border-white/30 shadow-md">
-                                    <div className="font-mono text-[9px] sm:text-[10px] font-bold tracking-[0.22em] uppercase leading-tight">
-                                        <p className="text-white">KEITH SHAH</p>
-                                        <p className="text-white/80">FOUNDER</p>
-                                        <p className="text-white/60">MALAD WEST</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </motion.div>
-
-                        {/* Right Column (cols 7–12): Origin Prose & Signature */}
-                        <div className="lg:col-span-7 flex flex-col justify-center gap-6">
-                            {/* Kicker */}
-                            <motion.div
-                                initial={reduced ? false : { opacity: 0, y: 10 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "-10% 0px" }}
-                                transition={{ duration: 0.5, ease: EASING }}
-                                className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-white flex items-center gap-2"
-                            >
-                                <span className="text-white font-bold">&#123; 01 &#125;</span>
-                                <span>/ THE ORIGIN</span>
-                            </motion.div>
-
-                            {/* Headline — Hard-broken 2 lines */}
+                        {/* Headline Stack with Green Silhouette Mask Overlay */}
+                        <div className="relative mb-8">
+                            
+                            {/* Base Headline (Bone Text) */}
                             <motion.h2
-                                initial={reduced ? false : { opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
+                                initial={reduced ? false : { clipPath: "inset(100% 0 0 0)" }}
+                                whileInView={{ clipPath: "inset(0% 0 0 0)" }}
                                 viewport={{ once: true, margin: "-10% 0px" }}
-                                transition={{ duration: 0.7, ease: EASING, delay: 0.08 }}
-                                className="font-heading font-black text-5xl sm:text-6xl md:text-7xl lg:text-8xl uppercase tracking-tighter leading-[0.9] text-white"
+                                transition={{ duration: 0.7, ease: EASE }}
+                                className="font-heading font-black uppercase text-left leading-[0.84] tracking-[-0.025em] text-[#F7F5F0]"
+                                style={{ fontSize: "clamp(3rem, 8.5vw, 9.5rem)" }}
                             >
-                                <span className="block text-white">It Runs On</span>
-                                <span className="block text-white">Family.</span>
+                                IT RUNS ON
+                                <br />
+                                FAMILY.
                             </motion.h2>
 
-                            <motion.div
-                                initial={reduced ? false : { scaleX: 0 }}
-                                whileInView={{ scaleX: 1 }}
-                                viewport={{ once: true, margin: "-10% 0px" }}
-                                transition={{ duration: 0.6, ease: EASING }}
-                                style={{ transformOrigin: "left" }}
-                                className="w-full h-px bg-white/20 my-1"
-                            />
+                            {/* Masked Headline Overlay (Green Color #2E8B5A over Keith Silhouette) */}
+                            {!isMobile && (
+                                <motion.h2
+                                    aria-hidden="true"
+                                    initial={reduced ? false : { opacity: 0 }}
+                                    whileInView={{ opacity: 1 }}
+                                    viewport={{ once: true, margin: "-10% 0px" }}
+                                    transition={{ duration: 0.5, delay: 0.8, ease: EASE }}
+                                    className="absolute inset-0 font-heading font-black uppercase text-left leading-[0.84] tracking-[-0.025em] text-[#2E8B5A] pointer-events-none select-none"
+                                    style={{
+                                        fontSize: "clamp(3rem, 8.5vw, 9.5rem)",
+                                        WebkitMaskImage: "url('/origin/keith_silhouette_mask.png')",
+                                        maskImage: "url('/origin/keith_silhouette_mask.png')",
+                                        WebkitMaskSize: "contain",
+                                        maskSize: "contain",
+                                        WebkitMaskPosition: "right bottom",
+                                        maskPosition: "right bottom",
+                                        WebkitMaskRepeat: "no-repeat",
+                                        maskRepeat: "no-repeat",
+                                    }}
+                                >
+                                    IT RUNS ON
+                                    <br />
+                                    FAMILY.
+                                </motion.h2>
+                            )}
+                        </div>
 
-                            {/* Lead Paragraph — Prose at Scale */}
+                        {/* Body Copy & Signature Block */}
+                        <div className="flex flex-col gap-6 max-w-[42ch]">
                             <motion.p
-                                initial={reduced ? false : { opacity: 0, y: 15 }}
+                                initial={reduced ? false : { opacity: 0, y: 12 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, margin: "-10% 0px" }}
-                                transition={{ duration: 0.6, ease: EASING, delay: 0.12 }}
-                                className="font-sans text-lg sm:text-xl md:text-2xl font-light text-white leading-relaxed max-w-2xl"
+                                transition={{ duration: 0.5, delay: 0.2, ease: EASE }}
+                                className="font-sans text-base sm:text-lg md:text-xl font-light text-[#F7F5F0]/80 leading-relaxed"
                             >
-                                1327 is a number that came off the street, borrowed from the films we grew up on, and it stands for one thing: nothing matters more than family. We didn&apos;t build a merch company. We built a crew that happens to make uniforms.
-                            </motion.p>
-
-                            {/* Founder Note — Body Size */}
-                            <motion.p
-                                initial={reduced ? false : { opacity: 0, y: 15 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "-10% 0px" }}
-                                transition={{ duration: 0.6, ease: EASING, delay: 0.16 }}
-                                className="font-sans text-sm sm:text-base text-white/80 leading-relaxed max-w-2xl font-light"
-                            >
-                                I started this in Malad West, working shoulder-to-shoulder with cafés, kitchens, studios and crews across Bombay — designing, stitching and embroidering uniforms their teams are proud to pull on every shift. We don&apos;t chase orders. We keep the ones we&apos;ve got, and they keep us.
+                                1327 is a number that came off the street, borrowed from the films we grew up on. It stands for one thing: nothing matters more than family. We didn&apos;t build a merch company — we built a crew that happens to make uniforms.
                             </motion.p>
 
                             {/* Signature Block */}
                             <motion.div
-                                initial={reduced ? false : { opacity: 0, y: 15 }}
+                                initial={reduced ? false : { opacity: 0, y: 12 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, margin: "-10% 0px" }}
-                                transition={{ duration: 0.6, ease: EASING, delay: 0.2 }}
-                                className="pt-4 flex flex-col items-start gap-1.5 border-t border-white/15"
+                                transition={{ duration: 0.5, delay: 0.35, ease: EASE }}
+                                className="pt-3 border-t border-[#F7F5F0]/20 flex flex-col items-start gap-1"
                             >
-                                <span className="font-heading italic text-xl sm:text-2xl text-white tracking-widest uppercase">
-                                    Keith Shah
-                                </span>
-                                <span className="font-mono text-xs uppercase tracking-[0.25em] text-white/60 font-bold">
+                                <div className="w-44 sm:w-56 h-14 relative opacity-90">
+                                    <KeithShahSignatureBone className="w-full h-full" />
+                                </div>
+                                <span className="font-mono text-xs uppercase tracking-[0.25em] text-[#F7F5F0]/60 font-bold">
                                     KEITH SHAH — FOUNDER
                                 </span>
                             </motion.div>
                         </div>
-
                     </div>
+
+                    {/* Right Column (Cols 8–12): Cut-Out Portrait of Keith (Layer 20) */}
+                    <motion.div
+                        initial={reduced ? false : { opacity: 0, y: 48 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-10% 0px" }}
+                        transition={{ duration: 0.8, delay: 0.2, ease: EASE }}
+                        className="md:col-span-5 relative w-full h-[400px] sm:h-[500px] lg:h-[600px] z-20 flex justify-center md:justify-end items-end pointer-events-none"
+                    >
+                        <div className="relative w-[85vw] sm:w-[50vw] md:w-[100%] h-full max-w-[480px]">
+                            <Image
+                                src="/origin/keith_founder.png"
+                                alt="Keith Shah, Founder of 1327"
+                                fill
+                                sizes="(max-width: 768px) 85vw, 42vw"
+                                quality={85}
+                                className="object-contain object-bottom"
+                                priority={false}
+                            />
+                        </div>
+                    </motion.div>
+
                 </div>
 
-                {/* ─── PROOF BAR ──────────────────────────────────────────────────────────── */}
-                <div className="border-t border-b border-white/20 py-4 bg-black/20">
-                    <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24">
-                        <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/20">
-                            {PROOF_CELLS.map((cell, idx) => (
-                                <div key={idx} className="px-3 sm:px-6 py-2 flex flex-col gap-1 text-center md:text-left">
-                                    <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/50">
-                                        {cell.label}
-                                    </span>
-                                    <span className="font-mono text-xs sm:text-sm font-bold uppercase tracking-[0.18em] text-white">
-                                        {cell.value}
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-
-                {/* ─── MOVEMENT 2 — THE CODE (VALUES INDEX) ────────────────────────────────── */}
-                <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24 pt-20 md:pt-28">
-                    
-                    {/* Header */}
-                    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 pb-4 border-b border-white/20">
-                        <div className="flex items-center gap-3">
-                            <span className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-white">
-                                / THE CODE
-                            </span>
-                        </div>
-                        <span className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-white/60">
-                            FOUR PRINCIPLES
-                        </span>
-                    </div>
-
-                    {/* 4 Tabular Ruled Rows */}
-                    <div className="border-b border-white/20">
-                        {VALUES_INDEX.map((item) => (
+                {/* ─── VALUE ROWS (LAYER 10 — PASSING BEHIND FIGURE) ──────────────── */}
+                <div className="relative z-10 w-full border-t border-[#F7F5F0]/20">
+                    {VALUES_INDEX.map((item, idx) => (
+                        <motion.div
+                            key={item.num}
+                            initial={reduced ? false : { opacity: 0, y: 16 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-5% 0px" }}
+                            transition={{ duration: 0.5, delay: 0.07 * idx, ease: EASE }}
+                        >
                             <Link
-                                key={item.num}
                                 href={`/values/${item.slug}`}
-                                className="group relative block border-t border-white/20 py-6 sm:py-8 px-4 sm:px-6 transition-all duration-300 cursor-pointer overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B3C26]"
+                                className="group relative block border-b border-[#F7F5F0]/20 py-6 sm:py-7 px-4 sm:px-6 min-h-[88px] transition-all duration-300 cursor-pointer overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F7F5F0]"
                                 aria-label={`${item.title} — ${item.definition}`}
                             >
-                                {/* Green Fill Wipe on Hover / Focus */}
-                                <div className="absolute inset-0 bg-[#072618] opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-240 ease-out pointer-events-none" />
+                                {/* Left-to-Right Hover Fill Wipe (#105233) */}
+                                <div
+                                    className="absolute inset-0 bg-[#105233] opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-all duration-240 ease-out pointer-events-none origin-left transform group-hover:scale-x-100"
+                                    style={{ transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)" }}
+                                />
 
-                                <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 items-start md:items-center gap-3 md:gap-6 min-h-[64px]">
-                                    {/* Mono Index (1fr = col-span-2) */}
-                                    <div className="md:col-span-2 font-mono text-xl sm:text-2xl font-bold tracking-tighter text-white/90 group-hover:text-white transition-colors">
+                                <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 items-start md:items-center gap-3 md:gap-6 min-h-[44px]">
+                                    {/* Mono Index (col-span-2) */}
+                                    <div className="md:col-span-2 font-mono text-xl sm:text-2xl font-bold tracking-tighter text-[#F7F5F0]/90">
                                         {item.num}
                                     </div>
 
-                                    {/* Display Name (3fr = col-span-3) */}
-                                    <div className="md:col-span-3 font-heading font-black text-2xl sm:text-3xl uppercase tracking-tight text-white group-hover:text-white transition-colors">
+                                    {/* Display Name (col-span-3) */}
+                                    <div className="md:col-span-3 font-heading font-black text-2xl sm:text-3xl uppercase tracking-tight text-[#F7F5F0]">
                                         {item.title}
                                     </div>
 
-                                    {/* Definition (6fr = col-span-6) */}
-                                    <div className="md:col-span-6 font-sans text-sm sm:text-base text-white/80 group-hover:text-white font-light leading-relaxed transition-colors">
+                                    {/* Definition (col-span-6) */}
+                                    <div className="md:col-span-6 font-sans text-sm sm:text-base text-[#F7F5F0]/80 font-light leading-relaxed">
                                         {item.definition}
                                     </div>
 
-                                    {/* Arrow (1fr = col-span-1) */}
-                                    <div className="md:col-span-1 text-left md:text-right font-mono text-lg text-white/60 group-hover:text-white group-hover:translate-x-1 transition-all duration-240">
+                                    {/* Arrow (col-span-1) */}
+                                    <div className="md:col-span-1 text-left md:text-right font-mono text-lg text-[#F7F5F0]/65 transition-transform duration-240 group-hover:translate-x-1">
                                         ↗
                                     </div>
                                 </div>
                             </Link>
-                        ))}
-                    </div>
-
+                        </motion.div>
+                    ))}
                 </div>
 
             </div>

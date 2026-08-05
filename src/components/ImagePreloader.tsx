@@ -24,6 +24,9 @@ const CRITICAL_IMAGES = [
     "/servicepics/veganleather-coasters.jpg",
     "/servicepics/veganleather-sleeves.jpg",
     "/servicepics/veganleather-placemats.jpg",
+    // Origin / Founder
+    "/origin/keith_founder.png",
+    "/origin/keith_silhouette_mask.png",
     // About us
     "/aboutus/about-1.png",
     "/aboutus/about-2.png",
