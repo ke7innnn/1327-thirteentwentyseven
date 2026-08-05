@@ -53,6 +53,14 @@ const CRITICAL_IMAGES = [
     "/bg/craftsmanship_bg.png",
     "/bg/clothing_fabric_bg.png",
     "/logo/1327_logo_v2.png",
+    // Feed images
+    "/feed/feed-01.jpg",
+    "/feed/feed-02.jpg",
+    "/feed/feed-03.jpg",
+    "/feed/feed-04.jpg",
+    "/feed/feed-05.jpg",
+    "/feed/feed-06.jpg",
+    "/feed/feed-07.jpg",
 ];
 
 export default function ImagePreloader() {

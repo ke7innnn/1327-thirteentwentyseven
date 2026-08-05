@@ -28,26 +28,26 @@ export const SECTIONS: Record<string, SectionConfig> = {
         kicker: "HOW WE WORK",
         title: "THE PROCESS",
     },
-    clients: {
-        id: "clients",
+    feed: {
+        id: "feed",
         number: 4,
         marker: "{ 04 }",
+        kicker: "ON THE FEED",
+        title: "WORN EVERY SHIFT",
+    },
+    clients: {
+        id: "clients",
+        number: 5,
+        marker: "{ 05 }",
         kicker: "TRUSTED BY CREWS",
         title: "OUR HAPPY CLIENTS",
     },
     orders: {
         id: "orders",
-        number: 5,
-        marker: "{ 05 }",
-        kicker: "GUIDELINES",
-        title: "ORDERS & MOQ",
-    },
-    film: {
-        id: "film",
         number: 6,
         marker: "{ 06 }",
-        kicker: "TAKE A LOOK",
-        title: "BRAND FILM",
+        kicker: "GUIDELINES",
+        title: "ORDERS & MOQ",
     },
     location: {
         id: "location",

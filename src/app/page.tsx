@@ -4,6 +4,7 @@ import Mission from "@/components/Mission";
 import AboutUs from "@/components/AboutUs";
 import Services from "@/components/Services";
 import Process from "@/components/Process";
+import SocialFeed from "@/components/SocialFeed";
 import HappyClients from "@/components/HappyClients";
 import Notes from "@/components/Notes";
 import LocationMap from "@/components/LocationMap";
@@ -21,6 +22,7 @@ export default function Home() {
       <AboutUs />
       <Services />
       <Process />
+      <SocialFeed />
       <HappyClients />
       <Notes />
       <LocationMap />
