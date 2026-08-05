@@ -340,8 +340,8 @@ export default function Process() {
                     {/* ─── PANEL 7: 1327 LOGO SECTION TRANSITION ────────────────────────── */}
                     <div className="w-full lg:w-[45vw] shrink-0 flex flex-col justify-center items-center p-8 lg:p-16 border-l border-[#F7F5F0]/15 relative z-10 bg-[#14140F] min-h-[440px] lg:min-h-[580px] overflow-hidden">
                         <motion.div
-                            style={{ y: isDesktop ? logoY : 0 }}
-                            initial={reduced ? false : { y: 60, opacity: 0 }}
+                            style={{ y: logoY }}
+                            initial={reduced ? false : { opacity: 0 }}
                             whileInView={{ opacity: 1 }}
                             viewport={{ once: false, margin: "-10% 0px" }}
                             transition={{ duration: 0.6, ease: "easeOut" }}
