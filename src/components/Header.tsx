@@ -82,13 +82,13 @@ export default function Header() {
                 <div className="w-auto flex justify-end">
                     <button
                         onClick={() => setIsContactOpen(true)}
-                        className="flex items-center gap-2.5 relative z-50 text-white hover:text-white/80 transition-colors focus:outline-none group cursor-pointer"
+                        className="flex items-center gap-2.5 relative z-50 text-white hover:text-white/80 transition-all duration-180 ease-out focus:outline-none group cursor-pointer hover:translate-x-1"
                         aria-label="Reach Out"
                     >
                         <span className="hidden sm:block text-[11px] font-mono font-bold tracking-[0.2em] uppercase text-white transition-colors">
                             REACH OUT
                         </span>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-white group-hover:scale-110 transition-transform">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-white group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform duration-180 ease-out">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
                         </svg>
                     </button>
@@ -142,7 +142,7 @@ export default function Header() {
                                                     toggleMenu();
                                                 }
                                             }}
-                                            className="text-3xl md:text-5xl font-thin uppercase tracking-tighter hover:text-[#1EA86E] transition-colors block font-heading"
+                                            className="text-3xl md:text-5xl font-heading font-black uppercase tracking-tight text-white hover:text-[#1EA86E] transition-transform duration-180 ease-out hover:translate-x-3 block"
                                         >
                                             {item.label}
                                         </Link>

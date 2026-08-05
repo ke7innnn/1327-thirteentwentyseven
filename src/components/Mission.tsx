@@ -307,21 +307,21 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
                             </p>
                         </div>
 
-                        {/* Buttons — Styled in 1327 Logo Font (Sugo / font-heading) */}
+                        {/* Buttons — Styled in 1327 Logo Font (Sugo / font-heading) with Lando hover shift */}
                         <div className="flex flex-wrap items-center gap-3.5">
                             <button
                                 onClick={() => setIsContactOpen(true)}
-                                className="bg-white text-black hover:bg-[#105233] hover:text-white hover:border-[#105233] border-2 border-white font-heading font-black text-sm sm:text-base md:text-lg uppercase tracking-wider px-6 sm:px-8 py-3 sm:py-3.5 rounded-none flex items-center gap-2.5 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap cursor-pointer shadow-lg"
+                                className="group bg-white text-black hover:bg-[#105233] hover:text-white hover:border-[#105233] border-2 border-white font-heading font-black text-sm sm:text-base md:text-lg uppercase tracking-wider px-6 sm:px-8 py-3 sm:py-3.5 rounded-none flex items-center gap-2.5 transition-all duration-200 ease-out whitespace-nowrap cursor-pointer shadow-lg"
                             >
                                 <span>REACH OUT</span>
-                                <span className="text-xs sm:text-sm">↗</span>
+                                <span className="text-xs sm:text-sm transition-transform duration-200 ease-out group-hover:translate-x-1 group-hover:-translate-y-1">↗</span>
                             </button>
                             <button
                                 onClick={handleScrollToNext}
-                                className="border-2 border-white/90 text-white hover:bg-white hover:text-black font-heading font-black text-sm sm:text-base md:text-lg uppercase tracking-wider px-6 sm:px-8 py-3 sm:py-3.5 rounded-none flex items-center gap-2.5 transition-all duration-300 whitespace-nowrap cursor-pointer"
+                                className="group border-2 border-white/90 text-white hover:bg-white hover:text-black font-heading font-black text-sm sm:text-base md:text-lg uppercase tracking-wider px-6 sm:px-8 py-3 sm:py-3.5 rounded-none flex items-center gap-2.5 transition-all duration-200 ease-out whitespace-nowrap cursor-pointer"
                             >
                                 <span>SEE THE WORK</span>
-                                <span className="text-xs sm:text-sm">⬇</span>
+                                <span className="text-xs sm:text-sm transition-transform duration-200 ease-out group-hover:translate-y-1">⬇</span>
                             </button>
                         </div>
                     </div>
