@@ -159,41 +159,50 @@ export default function Footer() {
                     {/* ─── MIDDLE CONTENT SECTION: NAV COLUMNS + CUTOUT FIGURE ────────── */}
                     <div className="relative min-h-[420px] md:min-h-[500px] flex flex-col md:flex-row items-center justify-between gap-10 md:gap-0">
                         
-                        {/* ─── LAYER 10: CLIENT LOGO STRIP (BEHIND FIGURE) ──────────────── */}
+                        {/* ─── LAYER 10: DYNAMIC INFINITE MOVING CLIENT LOGO MARQUEE (BEHIND FIGURE) ──────────────── */}
                         <div
                             aria-label="Client partners"
-                            className="absolute bottom-24 md:bottom-28 inset-x-0 z-10 pointer-events-auto"
+                            className="absolute bottom-16 md:bottom-20 left-1/2 -translate-x-1/2 w-screen z-10 pointer-events-auto overflow-hidden py-4"
+                            style={{
+                                maskImage: "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
+                                WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
+                            }}
                         >
-                            {/* Desktop: single static row edge-to-edge */}
-                            <div className="hidden md:flex items-center justify-between w-full opacity-45 grayscale invert">
-                                {CLIENT_LOGOS.map((logo, idx) => (
-                                    <div key={idx} className="relative w-20 lg:w-28 h-8 flex items-center justify-center">
-                                        <Image
-                                            src={logo.src}
-                                            alt={logo.name}
-                                            fill
-                                            sizes="120px"
-                                            loading="lazy"
-                                            className="object-contain"
-                                        />
-                                    </div>
-                                ))}
-                            </div>
+                            <div
+                                className="flex items-center gap-12 sm:gap-16 md:gap-24 animate-infinite-scroll will-change-transform opacity-75 hover:opacity-100 transition-opacity duration-300"
+                                style={{ width: "max-content" }}
+                            >
+                                {/* Track 1 */}
+                                <div className="flex items-center gap-12 sm:gap-16 md:gap-24 grayscale invert">
+                                    {CLIENT_LOGOS.map((logo, idx) => (
+                                        <div key={`logo-1-${idx}`} className="relative flex-shrink-0 w-32 sm:w-44 md:w-56 lg:w-64 h-12 sm:h-16 md:h-20 lg:h-24 flex items-center justify-center transition-transform duration-300 hover:scale-110">
+                                            <Image
+                                                src={logo.src}
+                                                alt={logo.name}
+                                                fill
+                                                sizes="(max-width: 768px) 180px, 260px"
+                                                loading="lazy"
+                                                className="object-contain"
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
 
-                            {/* Mobile / Tablet: 2-row grid */}
-                            <div className="md:hidden grid grid-cols-4 gap-4 w-full opacity-35 grayscale invert px-2">
-                                {CLIENT_LOGOS.slice(0, 8).map((logo, idx) => (
-                                    <div key={idx} className="relative w-full h-7">
-                                        <Image
-                                            src={logo.src}
-                                            alt={logo.name}
-                                            fill
-                                            sizes="120px"
-                                            loading="lazy"
-                                            className="object-contain"
-                                        />
-                                    </div>
-                                ))}
+                                {/* Track 2 (Duplicate for seamless loop) */}
+                                <div className="flex items-center gap-12 sm:gap-16 md:gap-24 grayscale invert" aria-hidden="true">
+                                    {CLIENT_LOGOS.map((logo, idx) => (
+                                        <div key={`logo-2-${idx}`} className="relative flex-shrink-0 w-32 sm:w-44 md:w-56 lg:w-64 h-12 sm:h-16 md:h-20 lg:h-24 flex items-center justify-center transition-transform duration-300 hover:scale-110">
+                                            <Image
+                                                src={logo.src}
+                                                alt=""
+                                                fill
+                                                sizes="(max-width: 768px) 180px, 260px"
+                                                loading="lazy"
+                                                className="object-contain"
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </div>
 

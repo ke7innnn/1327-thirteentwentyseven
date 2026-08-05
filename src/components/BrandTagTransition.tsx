@@ -358,16 +358,10 @@ export default function BrandTagTransition() {
                                     <div className="flex-1 h-px bg-[#105233]/20" />
                                 </div>
 
-                                {/* Location */}
+                                {/* Quality Spec */}
                                 <div className="text-center">
                                     <p className="font-heading font-bold text-[#105233] uppercase tracking-wide text-xs sm:text-sm leading-tight">
-                                        MALAD WEST
-                                    </p>
-                                    <p className="font-mono text-[8px] sm:text-[9px] tracking-[0.2em] text-[#105233]/50 mt-0.5 uppercase">
-                                        MADE IN MALAD WEST
-                                    </p>
-                                    <p className="font-mono text-[8px] sm:text-[9px] tracking-[0.12em] text-[#105233]/35 mt-0.5">
-                                        19.1871° N &nbsp;/&nbsp; 72.8488° E
+                                        QUALITY
                                     </p>
                                 </div>
                             </div>

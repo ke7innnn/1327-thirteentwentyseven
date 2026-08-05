@@ -98,7 +98,7 @@ export default function Notes() {
                         </div>
                     </motion.div>
 
-                    {/* Video Column (Right) — Exact Original YouTube Embed */}
+                    {/* Video Column (Right) — Continuous Floating & Levitation Card */}
                     <motion.div
                         initial={{ opacity: 0, y: 80 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -106,31 +106,49 @@ export default function Notes() {
                         transition={{ duration: 0.8, ease: EASING, delay: 0.1 }}
                         className="w-full md:w-1/2 relative mt-6 md:mt-0"
                     >
-                        {/* TAKE A LOOK Label */}
-                        <div id="film" className="flex items-center gap-3 mb-4">
-                            <span className="relative flex h-3 w-3">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#fdfbcf] opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-3 w-3 bg-[#fdfbcf]"></span>
-                            </span>
-                            <span className="text-sm font-bold tracking-[0.2em] text-[#fdfbcf] font-heading">TAKE A LOOK</span>
-                        </div>
+                        <motion.div
+                            animate={{
+                                y: [-10, 10, -10],
+                                rotateZ: [-0.75, 0.75, -0.75],
+                            }}
+                            transition={{
+                                duration: 4.8,
+                                repeat: Infinity,
+                                ease: "easeInOut",
+                            }}
+                            whileHover={{
+                                scale: 1.03,
+                                y: -14,
+                                rotateZ: 0,
+                            }}
+                            className="w-full relative group transition-shadow duration-500"
+                        >
+                            {/* TAKE A LOOK Label */}
+                            <div id="film" className="flex items-center gap-3 mb-4">
+                                <span className="relative flex h-3 w-3">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#fdfbcf] opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-[#fdfbcf]"></span>
+                                </span>
+                                <span className="text-sm font-bold tracking-[0.2em] text-[#fdfbcf] font-heading">TAKE A LOOK</span>
+                            </div>
 
-                        <div className="relative aspect-video w-full overflow-hidden rounded-sm border border-white/10 group shadow-2xl shadow-[#fdfbcf]/10">
-                            <iframe
-                                width="100%"
-                                height="100%"
-                                src="https://www.youtube.com/embed/wW5xMjM0rNk?si=JixVJUilbeboumbv"
-                                title="1327 Thirteen Twenty Seven — Custom T-Shirts and Uniforms Showcase"
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowFullScreen
-                                loading="lazy"
-                                className="absolute inset-0 w-full h-full"
-                            ></iframe>
+                            <div className="relative aspect-video w-full overflow-hidden rounded-sm border border-white/10 shadow-2xl shadow-[#fdfbcf]/10 group-hover:shadow-[0_20px_40px_rgba(253,251,207,0.25)] transition-shadow duration-500">
+                                <iframe
+                                    width="100%"
+                                    height="100%"
+                                    src="https://www.youtube.com/embed/wW5xMjM0rNk?si=JixVJUilbeboumbv"
+                                    title="1327 Thirteen Twenty Seven — Custom T-Shirts and Uniforms Showcase"
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowFullScreen
+                                    loading="lazy"
+                                    className="absolute inset-0 w-full h-full"
+                                ></iframe>
 
-                            {/* Glossy Overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-tr from-[#105233]/40 to-transparent pointer-events-none mix-blend-overlay"></div>
-                        </div>
+                                {/* Glossy Overlay */}
+                                <div className="absolute inset-0 bg-gradient-to-tr from-[#105233]/40 to-transparent pointer-events-none mix-blend-overlay"></div>
+                            </div>
+                        </motion.div>
                     </motion.div>
 
                 </div>

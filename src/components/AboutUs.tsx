@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform, useSpring } from "framer-motion";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -95,11 +95,127 @@ function HandDrawnStitchWave({ active, id, width }: { active: boolean; id: strin
     );
 }
 
+function InteractiveImageCard({
+    item,
+    origIndex,
+    isActive,
+    onActivate,
+    isMobile,
+    yParallax,
+}: {
+    item: (typeof VALUES_DATA)[0];
+    origIndex: number;
+    isActive: boolean;
+    onActivate: () => void;
+    isMobile: boolean;
+    yParallax: any;
+}) {
+    const cardRef = useRef<HTMLAnchorElement>(null);
+    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+    const [isHovered, setIsHovered] = useState(false);
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        if (!cardRef.current || isMobile) return;
+        const rect = cardRef.current.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        setMousePos({ x, y });
+    };
+
+    const handleMouseEnter = () => {
+        setIsHovered(true);
+        onActivate();
+    };
+
+    const handleMouseLeave = () => {
+        setIsHovered(false);
+        setMousePos({ x: 0, y: 0 });
+    };
+
+    return (
+        <motion.div style={{ y: yParallax }} className="w-full relative">
+            <motion.div
+                whileHover={{
+                    scale: 1.05,
+                    y: -8,
+                    rotateZ: origIndex % 2 === 0 ? 1.5 : -1.5,
+                }}
+                transition={{ type: "spring", stiffness: 350, damping: 22 }}
+                className="w-full h-full"
+            >
+                <Link
+                    ref={cardRef}
+                    href={`/values/${item.slug}`}
+                    onMouseEnter={handleMouseEnter}
+                    onFocus={onActivate}
+                    onMouseMove={handleMouseMove}
+                    onMouseLeave={handleMouseLeave}
+                    className={`relative w-full aspect-[9/10] block rounded-none overflow-hidden border transition-all duration-400 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4FB47E] ${
+                        isActive
+                            ? "z-30 border-[#4FB47E] shadow-[0_12px_32px_rgba(79,180,126,0.3)]"
+                            : "z-10 border-[#EDEBE3]/15 hover:border-[#EDEBE3]/40"
+                    }`}
+                >
+                    <motion.div
+                        className="w-full h-full relative"
+                        animate={{
+                            x: isHovered ? mousePos.x * 24 : 0,
+                            y: isHovered ? mousePos.y * 24 : 0,
+                            scale: isActive || isHovered ? 1.12 : 1,
+                        }}
+                        transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                    >
+                        <Image
+                            src={item.image}
+                            alt={item.alt}
+                            fill
+                            sizes="(max-width: 768px) 48vw, 26vw"
+                            quality={85}
+                            style={{
+                                willChange: "transform, filter",
+                            }}
+                            className={`object-cover rounded-none transition-all duration-500 ease-out ${
+                                isMobile || isActive || isHovered
+                                    ? "grayscale-0 brightness-100"
+                                    : "grayscale brightness-[0.72]"
+                            }`}
+                            loading="lazy"
+                        />
+                    </motion.div>
+                </Link>
+            </motion.div>
+        </motion.div>
+    );
+}
+
 export default function AboutUs() {
+    const sectionRef = useRef<HTMLElement>(null);
     const reduced = useReducedMotion() ?? false;
     const [activeIndex, setActiveIndex] = useState<number>(0); // Default: 01 COMMUNITY active
     const [isMobile, setIsMobile] = useState<boolean>(false);
     const [wordWidths, setWordWidths] = useState<Record<string, number>>({});
+
+    const { scrollYProgress } = useScroll({
+        target: sectionRef,
+        offset: ["start end", "end start"],
+    });
+
+    const smoothProgress = useSpring(scrollYProgress, {
+        stiffness: 90,
+        damping: 25,
+        restDelta: 0.001,
+    });
+
+    // Scroll-driven parallax offsets for columns & items
+    const yColA = useTransform(smoothProgress, [0, 1], reduced ? [0, 0] : [50, -50]);
+    const yColB = useTransform(smoothProgress, [0, 1], reduced ? [0, 0] : [-40, 40]);
+
+    const yImg0 = useTransform(smoothProgress, [0, 1], reduced ? [0, 0] : [20, -20]);
+    const yImg1 = useTransform(smoothProgress, [0, 1], reduced ? [0, 0] : [-15, 15]);
+    const yImg2 = useTransform(smoothProgress, [0, 1], reduced ? [0, 0] : [25, -25]);
+    const yImg3 = useTransform(smoothProgress, [0, 1], reduced ? [0, 0] : [-30, 30]);
+
+    const itemParallaxes = [yImg0, yImg1, yImg2, yImg3];
 
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -138,6 +254,7 @@ export default function AboutUs() {
 
     return (
         <section
+            ref={sectionRef}
             id="about"
             aria-label="About 1327 Thirteen Twenty Seven — The Code"
             onMouseLeave={handleMouseLeaveSection}
@@ -172,76 +289,42 @@ export default function AboutUs() {
                         <div className="grid grid-cols-2 gap-4 sm:gap-6 items-center">
                             
                             {/* Column A (Left: Images 1 & 3) */}
-                            <div className="flex flex-col gap-4 sm:gap-6">
+                            <motion.div style={{ y: yColA }} className="flex flex-col gap-4 sm:gap-6">
                                 {[VALUES_DATA[0], VALUES_DATA[2]].map((item) => {
                                     const origIndex = item.num === "01" ? 0 : 2;
                                     const isActive = activeIndex === origIndex;
                                     return (
-                                        <Link
+                                        <InteractiveImageCard
                                             key={item.num}
-                                            href={`/values/${item.slug}`}
-                                            onMouseEnter={() => setActiveIndex(origIndex)}
-                                            onFocus={() => setActiveIndex(origIndex)}
-                                            className={`relative w-full aspect-[9/10] block rounded-none overflow-hidden border border-[#EDEBE3]/15 transition-all duration-400 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4FB47E] ${
-                                                isActive ? "z-30 scale-[1.03]" : "z-10 scale-100"
-                                            }`}
-                                        >
-                                            <Image
-                                                src={item.image}
-                                                alt={item.alt}
-                                                fill
-                                                sizes="(max-width: 768px) 48vw, 26vw"
-                                                quality={85}
-                                                style={{
-                                                    willChange: isActive ? "filter" : "auto",
-                                                }}
-                                                className={`object-cover rounded-none transition-all duration-400 ease-out ${
-                                                    isMobile || isActive
-                                                        ? "grayscale-0 brightness-100"
-                                                        : "grayscale brightness-[0.72]"
-                                                }`}
-                                                loading="lazy"
-                                            />
-                                        </Link>
+                                            item={item}
+                                            origIndex={origIndex}
+                                            isActive={isActive}
+                                            onActivate={() => setActiveIndex(origIndex)}
+                                            isMobile={isMobile}
+                                            yParallax={itemParallaxes[origIndex]}
+                                        />
                                     );
                                 })}
-                            </div>
+                            </motion.div>
 
                             {/* Column B (Right: Images 2 & 4) — Offset UP by 8% */}
-                            <div className="flex flex-col gap-4 sm:gap-6 -translate-y-0 md:-translate-y-[8%]">
+                            <motion.div style={{ y: yColB }} className="flex flex-col gap-4 sm:gap-6 -translate-y-0 md:-translate-y-[8%]">
                                 {[VALUES_DATA[1], VALUES_DATA[3]].map((item) => {
                                     const origIndex = item.num === "02" ? 1 : 3;
                                     const isActive = activeIndex === origIndex;
                                     return (
-                                        <Link
+                                        <InteractiveImageCard
                                             key={item.num}
-                                            href={`/values/${item.slug}`}
-                                            onMouseEnter={() => setActiveIndex(origIndex)}
-                                            onFocus={() => setActiveIndex(origIndex)}
-                                            className={`relative w-full aspect-[9/10] block rounded-none overflow-hidden border border-[#EDEBE3]/15 transition-all duration-400 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4FB47E] ${
-                                                isActive ? "z-30 scale-[1.03]" : "z-10 scale-100"
-                                            }`}
-                                        >
-                                            <Image
-                                                src={item.image}
-                                                alt={item.alt}
-                                                fill
-                                                sizes="(max-width: 768px) 48vw, 26vw"
-                                                quality={85}
-                                                style={{
-                                                    willChange: isActive ? "filter" : "auto",
-                                                }}
-                                                className={`object-cover rounded-none transition-all duration-400 ease-out ${
-                                                    isMobile || isActive
-                                                        ? "grayscale-0 brightness-100"
-                                                        : "grayscale brightness-[0.72]"
-                                                }`}
-                                                loading="lazy"
-                                            />
-                                        </Link>
+                                            item={item}
+                                            origIndex={origIndex}
+                                            isActive={isActive}
+                                            onActivate={() => setActiveIndex(origIndex)}
+                                            isMobile={isMobile}
+                                            yParallax={itemParallaxes[origIndex]}
+                                        />
                                     );
                                 })}
-                            </div>
+                            </motion.div>
 
                         </div>
                     </div>

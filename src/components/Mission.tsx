@@ -6,6 +6,7 @@ import NextImage from "next/image";
 import ContactModal from "./ContactModal";
 import BrandTagTransition from "./BrandTagTransition";
 import SectionMarker from "./ui/SectionMarker";
+import { ArrowUpRight, ArrowDown } from "lucide-react";
 import { HERO_MOQ_LINE } from "@/config/constants";
 
 const TOTAL_FRAMES = 240;
@@ -26,8 +27,8 @@ export default function Mission() {
 
     return (
         <div id="mission" className="relative w-full z-10">
-            {/* Smooth Hero sequence container */}
-            <div ref={heroRef} className="relative w-full h-[110vh]">
+            {/* Smooth Hero sequence container with 250vh sticky scroll pin length */}
+            <div ref={heroRef} className="relative w-full h-[250vh]">
                 <section className="sticky top-0 w-full h-screen overflow-hidden">
                     {/* Instant fallback frame 1 for 0ms initial render before JS canvas hydratation */}
                     <NextImage
@@ -64,58 +65,42 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const imagesRef = useRef<(HTMLImageElement | null)[]>(new Array(TOTAL_FRAMES).fill(null));
     const lastDrawnFrame = useRef(-1);
-    const lastScheduledFrame = useRef(-1);
-    const rafId = useRef(0);
-    const pendingFrame = useRef(-1);
+    const autoPlayFrame = useRef(0);
+    const lastScrollTime = useRef(0);
+    const isScrolling = useRef(false);
+
     const [canvasSize, setCanvasSize] = useState(() =>
         typeof window !== "undefined" ? { width: window.innerWidth, height: window.innerHeight } : { width: 1920, height: 1080 }
     );
 
-    // Draw a frame with cover-style scaling (memoised, no deps)
+    // Draw a frame with cover-style scaling
     const drawFrame = useCallback((frameIndex: number) => {
-        if (frameIndex === lastDrawnFrame.current) return; // skip if already drawn
+        if (frameIndex === lastDrawnFrame.current) return;
         const canvas = canvasRef.current;
         if (!canvas) return;
         const ctx = canvas.getContext("2d", { alpha: false, desynchronized: true });
         if (!ctx) return;
         ctx.imageSmoothingQuality = "medium";
 
-        // Try to draw the requested frame
         let img = imagesRef.current[frameIndex];
         if (!img || !img.complete || img.naturalWidth === 0) {
-            // Find the nearest loaded frame backward and forward to avoid flashing stutters
-            let foundNearest = false;
+            // Find nearest loaded frame
             for (let offset = 1; offset < 30; offset++) {
-                const prev = frameIndex - offset;
-                if (prev >= 0) {
-                    const prevImg = imagesRef.current[prev];
-                    if (prevImg && prevImg.complete && prevImg.naturalWidth > 0) {
-                        img = prevImg;
-                        foundNearest = true;
-                        break;
-                    }
-                }
-                const next = frameIndex + offset;
-                if (next < TOTAL_FRAMES) {
-                    const nextImg = imagesRef.current[next];
-                    if (nextImg && nextImg.complete && nextImg.naturalWidth > 0) {
-                        img = nextImg;
-                        foundNearest = true;
-                        break;
-                    }
+                const prev = (frameIndex - offset + TOTAL_FRAMES) % TOTAL_FRAMES;
+                const prevImg = imagesRef.current[prev];
+                if (prevImg && prevImg.complete && prevImg.naturalWidth > 0) {
+                    img = prevImg;
+                    break;
                 }
             }
-            if (!foundNearest) return; // wait until at least one frame is loaded
         }
-
-        if (!img) return;
+        if (!img || !img.complete || img.naturalWidth === 0) return;
 
         const cw = canvas.width;
         const ch = canvas.height;
         const iw = img.naturalWidth;
         const ih = img.naturalHeight;
 
-        // Cover-style: fill canvas without distortion
         const scale = Math.max(cw / iw, ch / ih);
         const sw = cw / scale;
         const sh = ch / scale;
@@ -126,81 +111,70 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }
         lastDrawnFrame.current = frameIndex;
     }, []);
 
-    // RAF-throttled draw: only one draw per animation frame
-    const scheduleDrawFrame = useCallback((frameIndex: number) => {
-        pendingFrame.current = frameIndex;
-        if (rafId.current) return; // already scheduled
-        rafId.current = requestAnimationFrame(() => {
-            rafId.current = 0;
-            if (pendingFrame.current >= 0) {
-                drawFrame(pendingFrame.current);
+    // Scroll listener to detect active scrolling
+    useEffect(() => {
+        let scrollTimer: ReturnType<typeof setTimeout>;
+        const handleScroll = () => {
+            isScrolling.current = true;
+            lastScrollTime.current = Date.now();
+            clearTimeout(scrollTimer);
+            scrollTimer = setTimeout(() => {
+                isScrolling.current = false;
+            }, 300);
+        };
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        return () => {
+            clearTimeout(scrollTimer);
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
+
+    // Continuous Autoplay RAF loop (~25 FPS) when standing still
+    useEffect(() => {
+        let rafId: number;
+        let lastTimestamp = 0;
+        const frameInterval = 1000 / 25; // 25 FPS video playback
+
+        const loop = (timestamp: number) => {
+            if (!lastTimestamp) lastTimestamp = timestamp;
+            const elapsed = timestamp - lastTimestamp;
+
+            if (!isScrolling.current && elapsed >= frameInterval) {
+                lastTimestamp = timestamp;
+                autoPlayFrame.current = (autoPlayFrame.current + 1) % TOTAL_FRAMES;
+                drawFrame(autoPlayFrame.current);
             }
-        });
+
+            rafId = requestAnimationFrame(loop);
+        };
+
+        rafId = requestAnimationFrame(loop);
+        return () => cancelAnimationFrame(rafId);
     }, [drawFrame]);
 
-    // Preload frames progressively: first batch eagerly, then rest in idle callbacks
+    // Preload all 240 frames eagerly
     useEffect(() => {
         let mounted = true;
         const images = imagesRef.current;
 
-        // Load a single frame and return a promise
-        const loadImage = (i: number): Promise<void> => {
-            return new Promise((resolve) => {
-                const img = new Image();
-                img.decoding = "async";
-                img.src = getFramePath(i);
-                img.onload = () => {
-                    if (mounted) {
-                        images[i] = img;
-                        // Draw frame 0 as soon as it's loaded
-                        if (i === 0) drawFrame(0);
-                    }
-                    resolve();
-                };
-                img.onerror = () => resolve();
-            });
-        };
-
-        // Load first batch eagerly (critical frames the user sees first)
-        const loadFirstBatch = async () => {
-            const promises: Promise<void>[] = [];
-            for (let i = 0; i < Math.min(FIRST_BATCH, TOTAL_FRAMES); i++) {
-                promises.push(loadImage(i));
-            }
-            await Promise.all(promises);
-        };
-
-        // Load remaining frames in small batches using requestIdleCallback / setTimeout
-        const loadRemainingFrames = () => {
-            let i = FIRST_BATCH;
-            const BATCH = 20;
-
-            const loadBatch = () => {
-                if (!mounted || i >= TOTAL_FRAMES) return;
-                const end = Math.min(i + BATCH, TOTAL_FRAMES);
-                for (let j = i; j < end; j++) {
-                    loadImage(j);
-                }
-                i = end;
-                // Use requestIdleCallback if available, else setTimeout
-                if (typeof requestIdleCallback !== "undefined") {
-                    requestIdleCallback(loadBatch);
-                } else {
-                    setTimeout(loadBatch, 16);
+        for (let i = 0; i < TOTAL_FRAMES; i++) {
+            const img = new Image();
+            img.decoding = "async";
+            img.src = getFramePath(i);
+            img.onload = () => {
+                if (mounted) {
+                    images[i] = img;
+                    if (i === 0) drawFrame(0);
                 }
             };
-            loadBatch();
-        };
-
-        loadFirstBatch().then(loadRemainingFrames);
+        }
 
         return () => {
             mounted = false;
-            if (rafId.current) cancelAnimationFrame(rafId.current);
         };
     }, [drawFrame]);
 
-    // Handle canvas resize with debounce
+    // Handle canvas resize
     useEffect(() => {
         let timeout: ReturnType<typeof setTimeout>;
         function handleResize() {
@@ -212,7 +186,6 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }
                 });
             }, 100);
         }
-        // Set initial size immediately
         requestAnimationFrame(() => {
             setCanvasSize({
                 width: window.innerWidth,
@@ -229,21 +202,19 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }
     // Redraw current frame on resize
     useEffect(() => {
         if (canvasSize.width > 0) {
-            lastDrawnFrame.current = -1; // force redraw
-            drawFrame(0);
+            lastDrawnFrame.current = -1;
+            drawFrame(autoPlayFrame.current);
         }
     }, [canvasSize, drawFrame]);
 
-    // Map scroll progress (0..1.176) → frame index (0..239) with clamping.
-    // Pinned lock plays 85% of frames (0..204) up to scrollProgress = 1.0.
-    // At scrollProgress = 1.0, lock breaks and section unpins while remaining 15% of frames (204..239) continue playing as user scrolls down!
-    const frameIndex = useTransform(scrollProgress, [0, 1.176], [0, TOTAL_FRAMES - 1], { clamp: true });
+    // Scroll-driven frame transform when scrolling
+    const frameIndex = useTransform(scrollProgress, [0, 1], [0, TOTAL_FRAMES - 1], { clamp: true });
 
     useMotionValueEvent(frameIndex, "change", (latest) => {
-        const index = Math.min(TOTAL_FRAMES - 1, Math.max(0, Math.round(latest)));
-        if (index !== lastScheduledFrame.current) {
-            lastScheduledFrame.current = index;
-            scheduleDrawFrame(index);
+        if (isScrolling.current) {
+            const index = Math.min(TOTAL_FRAMES - 1, Math.max(0, Math.round(latest)));
+            autoPlayFrame.current = index;
+            drawFrame(index);
         }
     });
 
@@ -252,7 +223,7 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }
             ref={canvasRef}
             width={canvasSize.width}
             height={canvasSize.height}
-            className="absolute inset-0 w-full h-full z-0"
+            className="absolute inset-0 w-full h-full z-[1]"
             style={{ display: "block" }}
         />
     );
@@ -281,11 +252,7 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
                     style={{ opacity: opacityHero, y: yHero, pointerEvents: pointerEventsHero }}
                     className="absolute inset-0 w-full h-full flex flex-col justify-between px-6 sm:px-12 md:px-16 lg:px-24 pt-20 pb-8 sm:py-24 animate-[fadeIn_0.5s_ease-out]"
                 >
-                    {/* Top Bar */}
-                    <div className="flex justify-between items-center text-xs font-mono font-bold tracking-[0.25em] uppercase text-white/60 w-full border-b border-white/10 pb-3">
-                        <span className="text-white/80 font-bold">&#123; 01 &#125; / OUR MISSION</span>
-                        <span className="text-right">MALAD WEST — MUMBAI, IN</span>
-                    </div>
+
 
                     {/* Unified Left-Aligned Hero Typography Stack */}
                     <div className="w-full max-w-5xl flex flex-col items-start text-left gap-3 sm:gap-5 my-auto pt-6">
@@ -294,33 +261,53 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
                             1327
                         </h1>
 
-                        {/* Subheading Statement */}
-                        <h2 className="font-heading font-black text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl uppercase tracking-tight leading-[0.88] text-white">
-                            <span className="block text-white">DESIGNED FOR THE</span>
-                            <span className="block text-[#2E8B5A]">BOLD.</span>
-                        </h2>
 
-                        {/* Description Copy */}
-                        <p className="font-sans text-sm sm:text-base md:text-lg text-white/80 max-w-xl font-light leading-relaxed pt-1">
-                            Premium custom apparel and uniforms for crews that move like family — cut, printed and embroidered in Mumbai.
-                        </p>
 
-                        {/* Buttons — Lando Norris Style Inward Hover Shift */}
-                        <div className="flex flex-wrap items-center gap-4 pt-3">
-                            <button
+                        {/* F1 Racing Pill & Liquid Fill Buttons */}
+                        <div className="flex flex-wrap items-center gap-4 pt-4">
+                            {/* REACH OUT Pill Button */}
+                            <motion.button
                                 onClick={() => setIsContactOpen(true)}
-                                className="group bg-white text-black hover:bg-[#105233] hover:text-white hover:border-[#105233] border-2 border-white font-heading font-black text-sm sm:text-base md:text-lg uppercase tracking-wider px-6 sm:px-8 py-3.5 rounded-none flex items-center gap-2.5 transition-all duration-200 ease-out whitespace-nowrap cursor-pointer shadow-lg"
+                                whileHover={{ scale: 1.05, y: -3 }}
+                                whileTap={{ scale: 0.95 }}
+                                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                                className="group relative overflow-hidden rounded-full bg-white text-[#0D1712] font-heading font-black text-xs sm:text-sm md:text-base uppercase tracking-[0.2em] px-7 sm:px-9 py-3.5 sm:py-4 flex items-center gap-3.5 cursor-pointer shadow-[0_10px_30px_rgba(0,0,0,0.3)] transition-all duration-300 border border-white"
                             >
-                                <span>REACH OUT</span>
-                                <span className="text-xs sm:text-sm transition-transform duration-200 ease-out group-hover:translate-x-1 group-hover:-translate-y-1">↗</span>
-                            </button>
-                            <button
+                                {/* Animated Liquid Background Layer */}
+                                <span className="absolute inset-0 rounded-full bg-[#4FB47E] scale-0 group-hover:scale-100 transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] origin-center z-0" />
+
+                                {/* Text Label */}
+                                <span className="relative z-10 transition-colors duration-300 group-hover:text-[#0D1712]">
+                                    REACH OUT
+                                </span>
+
+                                {/* Animated Circular Badge Icon */}
+                                <span className="relative z-10 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#0D1712] text-white group-hover:bg-white group-hover:text-[#0D1712] flex items-center justify-center transition-all duration-300 shrink-0">
+                                    <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                                </span>
+                            </motion.button>
+
+                            {/* SEE THE WORK Pill Button */}
+                            <motion.button
                                 onClick={handleScrollToNext}
-                                className="group border-2 border-white/90 text-white hover:bg-white hover:text-black font-heading font-black text-sm sm:text-base md:text-lg uppercase tracking-wider px-6 sm:px-8 py-3.5 rounded-none flex items-center gap-2.5 transition-all duration-200 ease-out whitespace-nowrap cursor-pointer"
+                                whileHover={{ scale: 1.05, y: -3 }}
+                                whileTap={{ scale: 0.95 }}
+                                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                                className="group relative overflow-hidden rounded-full bg-white/10 backdrop-blur-md text-white border border-white/40 font-heading font-black text-xs sm:text-sm md:text-base uppercase tracking-[0.2em] px-7 sm:px-9 py-3.5 sm:py-4 flex items-center gap-3.5 cursor-pointer transition-all duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.2)]"
                             >
-                                <span>SEE THE WORK</span>
-                                <span className="text-xs sm:text-sm transition-transform duration-200 ease-out group-hover:translate-y-1">⬇</span>
-                            </button>
+                                {/* Animated Liquid Background Layer */}
+                                <span className="absolute inset-0 rounded-full bg-white scale-0 group-hover:scale-100 transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] origin-center z-0" />
+
+                                {/* Text Label */}
+                                <span className="relative z-10 transition-colors duration-300 group-hover:text-[#0D1712]">
+                                    SEE THE WORK
+                                </span>
+
+                                {/* Animated Circular Badge Icon */}
+                                <span className="relative z-10 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/20 text-white group-hover:bg-[#0D1712] group-hover:text-white flex items-center justify-center transition-all duration-300 shrink-0">
+                                    <ArrowDown className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:translate-y-1" />
+                                </span>
+                            </motion.button>
                         </div>
                     </div>
                 </motion.div>
