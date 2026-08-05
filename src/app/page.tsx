@@ -1,6 +1,7 @@
 "use client";
 
 import Mission from "@/components/Mission";
+import Manifesto from "@/components/Manifesto";
 import AboutUs from "@/components/AboutUs";
 import Services from "@/components/Services";
 import Process from "@/components/Process";
@@ -19,6 +20,7 @@ export default function Home() {
       </h1>
       <p className="sr-only">1327 Thirteen Twenty Seven — Custom T-Shirts, Uniforms &amp; Apparel in Mumbai, Malad.</p>
       <Mission />
+      <Manifesto />
       <AboutUs />
       <Services />
       <Process />
