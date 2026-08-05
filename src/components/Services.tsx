@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import SectionMarker from "./ui/SectionMarker";
@@ -299,25 +299,60 @@ const FAMILIES: Family[] = [
 const ALL_ITEMS: ServiceItem[] = FAMILIES.flatMap(f => f.items);
 const TOTAL = ALL_ITEMS.length;
 
-// ─── ROW ─────────────────────────────────────────────────────────────────────
-// Four-column CSS grid: name | spec | MOQ label | MOQ value
-// 60px at rest; expands to hold copy inside the green fill.
+// Pre-computed image views stack for instant zero-blank preloading
+interface PreloadedView {
+    key: string;
+    itemId: string;
+    image: string;
+    title: string;
+    isPriority?: boolean;
+}
+
+const ALL_VIEWS: PreloadedView[] = ALL_ITEMS.flatMap(item => {
+    if (item.gallery && item.gallery.length > 0) {
+        return item.gallery.map((gItem, gIdx) => ({
+            key: `${item.id}-gal-${gIdx}`,
+            itemId: item.id,
+            image: gItem.image,
+            title: item.title,
+            isPriority: item.priority && gIdx === 0,
+        }));
+    }
+    if (item.subSections && item.subSections.length > 0) {
+        return item.subSections.map(sItem => ({
+            key: `${item.id}-${sItem.id}`,
+            itemId: item.id,
+            image: sItem.image,
+            title: item.title,
+            isPriority: item.priority,
+        }));
+    }
+    return [{
+        key: item.id,
+        itemId: item.id,
+        image: item.image,
+        title: item.title,
+        isPriority: item.priority,
+    }];
+});
+
+// ─── DESKTOP SERVICE ROW ──────────────────────────────────────────────────────
 function ServiceRow({
     item,
     isActive,
     onActivate,
+    onHover,
     activeSubId,
     onSelectSubSection,
     reduced,
-    entryDelay,
 }: {
     item: ServiceItem;
     isActive: boolean;
     onActivate: () => void;
+    onHover: () => void;
     activeSubId?: string;
     onSelectSubSection?: (subId: string) => void;
     reduced: boolean;
-    entryDelay: number;
 }) {
     const copyRef = useRef<HTMLDivElement>(null);
     const [copyH, setCopyH] = useState(0);
@@ -327,73 +362,61 @@ function ServiceRow({
     }, [item.copy, item.subSections, activeSubId]);
 
     const handleKey = (e: React.KeyboardEvent) => {
-        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onActivate(); }
+        if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onActivate();
+        }
     };
 
-    const ROW_H = 60; // px, at rest
+    const ROW_H = 60; // px at rest
 
     return (
-        <motion.div
-            initial={reduced ? false : { opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true, margin: "-3% 0px" }}
-            transition={{ duration: 0.35, ease: EASE, delay: entryDelay }}
+        <div
+            data-product-id={item.id}
             role="button"
             tabIndex={0}
             aria-expanded={isActive}
             aria-label={`${item.title}${item.spec ? ` — ${item.spec}` : ""}`}
-            onMouseEnter={onActivate}
+            onMouseEnter={onHover}
             onClick={onActivate}
-            onFocus={onActivate}
+            onFocus={onHover}
             onKeyDown={handleKey}
-            className="relative cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-[#1EA86E] select-none"
+            className="js-product-row relative cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-white select-none"
             style={{ minHeight: ROW_H }}
         >
-            {/* hairline rule — draws scaleX 0→1 on entry */}
-            <motion.div
-                initial={reduced ? false : { scaleX: 0 }}
-                whileInView={{ scaleX: 1 }}
-                viewport={{ once: true, margin: "-3% 0px" }}
-                transition={{ duration: 0.4, ease: EASE, delay: entryDelay }}
-                style={{ transformOrigin: "left" }}
-                className="absolute top-0 left-0 right-0 h-px bg-white/15 pointer-events-none"
-            />
+            {/* Top hairline rule */}
+            <div className="absolute top-0 left-0 right-0 h-px bg-white/15 pointer-events-none" />
 
-            {/* active highlight — sleek white-bordered fill on brand green */}
+            {/* Active highlight fill */}
             <motion.div
                 animate={{ opacity: isActive ? 1 : 0 }}
                 transition={{ duration: reduced ? 0 : 0.2, ease: EASE }}
                 style={{ zIndex: 0 }}
-                className="absolute inset-x-0 inset-y-0.5 pointer-events-none rounded-sm bg-white/15 border-l-4 border-white transform-gpu"
+                className="absolute inset-x-0 inset-y-0.5 pointer-events-none rounded-none bg-white/15 border-l-2 border-white transform-gpu"
             />
 
-            {/* row content — sits above the fill with spacious padding */}
-            <div className="relative z-10 px-5 sm:px-6 py-1 transition-all duration-300">
-                {/* four-column spec grid */}
+            {/* Row Content */}
+            <div className="relative z-10 px-4 sm:px-6 py-1 transition-all duration-300">
+                {/* Flexible Spec Grid — Ensures title NEVER truncates */}
                 <div
-                    style={{
-                        display: "grid",
-                        gridTemplateColumns: "1fr 190px 72px 56px",
-                        alignItems: "center",
-                        height: ROW_H,
-                        gap: "0 16px",
-                    }}
+                    className="flex items-center justify-between gap-4"
+                    style={{ height: ROW_H }}
                 >
-                    {/* col 1: item name */}
+                    {/* Item title — flex-1 to take all available space, zero truncation */}
                     <span
-                        className="font-heading font-black uppercase tracking-tight leading-none pr-4 truncate"
+                        className="font-heading font-black uppercase tracking-tight leading-snug flex-1 min-w-0 pr-2"
                         style={{
-                            fontSize: "clamp(1.125rem, 1.4vw, 1.5rem)",
-                            color: isActive ? "#FFFFFF" : "rgba(255,255,255,0.75)",
+                            fontSize: "clamp(1.125rem, 1.35vw, 1.5rem)",
+                            color: isActive ? "#FFFFFF" : "rgba(255,255,255,0.8)",
                             transition: "color 0.15s",
                         }}
                     >
                         {item.title}
                     </span>
 
-                    {/* col 2: technique / spec */}
+                    {/* Technique / Spec — hides on narrow desktop screens if space is tight */}
                     <span
-                        className="font-mono uppercase tracking-[0.14em] text-right"
+                        className="font-mono uppercase tracking-[0.14em] text-right hidden xl:block shrink-0"
                         style={{
                             fontSize: "0.6875rem",
                             fontVariantNumeric: "tabular-nums",
@@ -404,41 +427,28 @@ function ServiceRow({
                         {item.spec}
                     </span>
 
-                    {/* col 3: MOQ label */}
-                    <span
-                        className="font-mono uppercase tracking-[0.14em] text-right"
-                        style={{
-                            fontSize: "0.6875rem",
-                            color: isActive ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.4)",
-                            transition: "color 0.15s",
-                        }}
-                    >
-                        {item.moqNum ? "MOQ" : ""}
-                    </span>
-
-                    {/* col 4: MOQ value — right-aligned, tabular */}
-                    <span
-                        className="font-mono uppercase tracking-[0.14em] text-right"
-                        style={{
-                            fontSize: "0.6875rem",
-                            fontVariantNumeric: "tabular-nums",
-                            color: isActive ? "#FFFFFF" : "rgba(255,255,255,0.55)",
-                            transition: "color 0.15s",
-                        }}
-                    >
-                        {item.moqNum}
-                    </span>
+                    {/* MOQ Badge */}
+                    {item.moqNum && (
+                        <div className="font-mono uppercase tracking-[0.14em] text-right shrink-0 flex items-center gap-1.5">
+                            <span style={{ fontSize: "0.6875rem", color: isActive ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.4)" }}>
+                                MOQ
+                            </span>
+                            <span style={{ fontSize: "0.6875rem", color: isActive ? "#FFFFFF" : "rgba(255,255,255,0.6)", fontVariantNumeric: "tabular-nums", fontWeight: 600 }}>
+                                {item.moqNum}
+                            </span>
+                        </div>
+                    )}
                 </div>
 
-                {/* expandable copy — inside the highlight */}
+                {/* Expandable Copy */}
                 <motion.div
                     animate={{ height: isActive ? copyH : 0, opacity: isActive ? 1 : 0 }}
-                    transition={{ duration: reduced ? 0 : 0.42, ease: EASE }}
+                    transition={{ duration: reduced ? 0 : 0.35, ease: EASE }}
                     style={{ overflow: "hidden" }}
                 >
                     <div
                         ref={copyRef}
-                        className="pb-5 pt-1 font-sans leading-relaxed flex flex-col gap-3.5 pl-6 sm:pl-8 text-white"
+                        className="pb-5 pt-1 font-sans leading-relaxed flex flex-col gap-3.5 pl-2 sm:pl-4 text-white"
                         style={{
                             fontSize: "0.9375rem",
                             maxWidth: "52ch",
@@ -449,7 +459,7 @@ function ServiceRow({
                         {/* Subsections selector (Full, Half, Vest Aprons) */}
                         {item.subSections && item.subSections.length > 0 && (
                             <div
-                                className="flex items-center gap-2 pt-2"
+                                className="flex items-center gap-2 pt-1.5"
                                 onClick={(e) => e.stopPropagation()}
                             >
                                 <span className="font-mono text-[10px] tracking-widest text-white/60 uppercase mr-1">
@@ -467,9 +477,9 @@ function ServiceRow({
                                                     onSelectSubSection?.(sub.id);
                                                 }}
                                                 onMouseEnter={() => onSelectSubSection?.(sub.id)}
-                                                className={`font-mono text-[10px] tracking-wider uppercase px-2.5 py-1 rounded transition-all cursor-pointer ${
+                                                className={`font-mono text-[10px] tracking-wider uppercase px-2.5 py-1 rounded-none transition-all cursor-pointer ${
                                                     isSubActive
-                                                        ? "bg-white text-[#105233] font-bold shadow-sm"
+                                                        ? "bg-white text-[#105233] font-bold"
                                                         : "bg-white/10 text-white hover:bg-white/20 border border-white/20"
                                                 }`}
                                             >
@@ -484,173 +494,109 @@ function ServiceRow({
                 </motion.div>
             </div>
 
-            {/* bottom hairline (only when collapsed) */}
+            {/* Bottom hairline rule (when collapsed) */}
             {!isActive && (
                 <div className="absolute bottom-0 left-0 right-0 h-px bg-white/15 pointer-events-none" />
             )}
-        </motion.div>
+        </div>
     );
 }
 
-// ─── MEDIA PANEL ─────────────────────────────────────────────────────────────
+// ─── DESKTOP MEDIA PANEL (STICKY + SCROLL LINKED) ───────────────────────────
 function MediaPanel({
-    item,
+    activeItem,
     activeSubSection,
     globalIndex,
     reduced,
 }: {
-    item: ServiceItem;
+    activeItem: ServiceItem;
     activeSubSection?: SubSection;
     globalIndex: number;
     reduced: boolean;
 }) {
     const [galleryIdx, setGalleryIdx] = useState(0);
-    const [prevItemId, setPrevItemId] = useState(item.id);
 
-    if (prevItemId !== item.id) {
-        setPrevItemId(item.id);
-        setGalleryIdx(0);
-    }
-
-    const activeGalleryItem = item.gallery?.[galleryIdx];
-
-    // Current display image & details (from gallery, active subSection, or main item)
-    const currentView = {
-        id: activeGalleryItem
-            ? `${item.id}-gal-${galleryIdx}`
-            : activeSubSection
-            ? `${item.id}-${activeSubSection.id}`
-            : item.id,
-        image: activeGalleryItem
-            ? activeGalleryItem.image
-            : activeSubSection
-            ? activeSubSection.image
-            : item.image,
-        caption: activeGalleryItem
-            ? activeGalleryItem.caption
-            : activeSubSection
-            ? activeSubSection.caption
-            : item.caption,
-        spec: activeGalleryItem
-            ? activeGalleryItem.spec
-            : activeSubSection
-            ? activeSubSection.spec
-            : item.spec,
-        specStrip: activeGalleryItem
-            ? activeGalleryItem.specStrip
-            : activeSubSection
-            ? activeSubSection.specStrip
-            : item.specStrip,
-        title: item.title,
-    };
-
-    const [displayed, setDisplayed] = useState(currentView);
-    const [incoming, setIncoming] = useState<typeof currentView | null>(null);
-    const [imgKey, setImgKey] = useState(0);
-
+    // Reset gallery index when active product changes
     useEffect(() => {
-        if (currentView.id === displayed.id) return;
-        const raf = requestAnimationFrame(() => {
-            setIncoming(currentView);
-            setImgKey(k => k + 1);
-        });
-        const t = setTimeout(() => {
-            setDisplayed(currentView);
-            setIncoming(null);
-        }, 380);
-        return () => {
-            cancelAnimationFrame(raf);
-            clearTimeout(t);
-        };
-    }, [currentView.id]); // eslint-disable-line react-hooks/exhaustive-deps
+        setGalleryIdx(0);
+    }, [activeItem.id]);
 
-    const indexLabel =
-        String(globalIndex + 1).padStart(2, "0") + " / " + String(TOTAL).padStart(2, "0");
+    const activeGalleryItem = activeItem.gallery?.[galleryIdx];
+
+    // Current view key
+    const currentViewKey = activeGalleryItem
+        ? `${activeItem.id}-gal-${galleryIdx}`
+        : activeSubSection
+        ? `${activeItem.id}-${activeSubSection.id}`
+        : activeItem.id;
+
+    // Current spec info
+    const currentSpec = activeGalleryItem?.spec || activeSubSection?.spec || activeItem.spec;
+    const currentCaption = activeGalleryItem?.caption || activeSubSection?.caption || activeItem.caption;
+    const currentSpecStrip = activeGalleryItem?.specStrip || activeSubSection?.specStrip || activeItem.specStrip;
+
+    const indexLabel = `${String(globalIndex + 1).padStart(2, "0")} / ${String(TOTAL).padStart(2, "0")}`;
 
     const prevPhoto = (e: React.MouseEvent) => {
         e.stopPropagation();
-        if (!item.gallery) return;
-        setGalleryIdx(prev => (prev - 1 + item.gallery!.length) % item.gallery!.length);
+        if (!activeItem.gallery) return;
+        setGalleryIdx(prev => (prev - 1 + activeItem.gallery!.length) % activeItem.gallery!.length);
     };
 
     const nextPhoto = (e: React.MouseEvent) => {
         e.stopPropagation();
-        if (!item.gallery) return;
-        setGalleryIdx(prev => (prev + 1) % item.gallery!.length);
+        if (!activeItem.gallery) return;
+        setGalleryIdx(prev => (prev + 1) % activeItem.gallery!.length);
     };
 
     return (
-        <motion.div
-            initial={reduced ? false : { opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-5% 0px" }}
-            transition={{ duration: 0.5, ease: EASE }}
-            className="w-full flex flex-col"
-        >
-            {/* IMAGE — tight aspect ratio alignment without empty gap */}
-            <div
-                className="relative w-full overflow-hidden rounded-lg group select-none shadow-md aspect-[4/5] max-h-[540px]"
-            >
-                {/* outgoing image */}
-                <motion.div
-                    key={`out-${displayed.id}`}
-                    initial={{ opacity: 1 }}
-                    animate={incoming ? { opacity: 0 } : { opacity: 1 }}
-                    transition={{ duration: reduced ? 0 : 0.35, ease: "linear" }}
-                    className="absolute inset-0 cursor-pointer"
-                    onClick={item.gallery ? nextPhoto : undefined}
-                >
-                    <Image
-                        src={displayed.image}
-                        alt={displayed.title}
-                        fill
-                        sizes="(min-width: 1024px) 38vw, 0px"
-                        className="object-cover"
-                        loading="eager"
-                        priority
-                    />
-                </motion.div>
-
-                {/* incoming image */}
-                <AnimatePresence>
-                    {incoming && (
-                        <motion.div
-                            key={`in-${incoming.id}-${imgKey}`}
-                            initial={{ opacity: 0, scale: reduced ? 1 : 1.04 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
-                            className="absolute inset-0 cursor-pointer"
-                            onClick={item.gallery ? nextPhoto : undefined}
+        <div className="w-full flex flex-col h-full max-h-full">
+            {/* IMAGE CONTAINER — 4:5 Aspect ratio, absorbs flex space */}
+            <div className="relative w-full aspect-[4/5] overflow-hidden rounded-none border border-white/20 bg-black/40 shadow-none group select-none flex-1 min-h-0">
+                {/* PRELOADED IMAGE STACK */}
+                {ALL_VIEWS.map((view) => {
+                    const isActive = view.key === currentViewKey;
+                    return (
+                        <div
+                            key={view.key}
+                            className="absolute inset-0 transition-opacity ease-out"
+                            style={{
+                                opacity: isActive ? 1 : 0,
+                                transitionDuration: reduced ? "0ms" : "200ms",
+                                pointerEvents: isActive ? "auto" : "none",
+                                zIndex: isActive ? 10 : 0,
+                            }}
                         >
                             <Image
-                                src={incoming.image}
-                                alt={incoming.title}
+                                src={view.image}
+                                alt={view.title}
                                 fill
-                                sizes="(min-width: 1024px) 38vw, 0px"
-                                className="object-cover"
-                                loading="eager"
-                                priority
+                                sizes="(max-width: 1024px) 100vw, 40vw"
+                                quality={80}
+                                className="object-cover rounded-none"
+                                priority={view.isPriority || view.key === ALL_VIEWS[0].key}
+                                loading={view.isPriority || view.key === ALL_VIEWS[0].key ? "eager" : "lazy"}
                             />
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+                        </div>
+                    );
+                })}
 
-                {/* bottom gradient scrim for caption legibility */}
+                {/* Bottom gradient scrim for caption readability */}
                 <div
-                    className="absolute bottom-0 left-0 right-0 pointer-events-none"
+                    className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none"
                     style={{
                         height: 96,
-                        background: "linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 100%)",
+                        background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%)",
                     }}
                 />
 
-                {/* Gallery Arrow Controls (if item has gallery) */}
-                {item.gallery && item.gallery.length > 1 && (
+                {/* Gallery Arrow Controls */}
+                {activeItem.gallery && activeItem.gallery.length > 1 && (
                     <>
                         <button
                             type="button"
                             onClick={prevPhoto}
-                            className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/50 hover:bg-black/80 text-white flex items-center justify-center text-sm font-mono border border-white/20 transition-all cursor-pointer backdrop-blur-sm"
+                            className="absolute left-3 top-1/2 -translate-y-1/2 z-30 px-2.5 py-1 rounded-none bg-black/80 hover:bg-black text-white font-mono text-xs border border-white/20 transition-all cursor-pointer"
                             aria-label="Previous photo"
                         >
                             ‹
@@ -658,87 +604,52 @@ function MediaPanel({
                         <button
                             type="button"
                             onClick={nextPhoto}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/50 hover:bg-black/80 text-white flex items-center justify-center text-sm font-mono border border-white/20 transition-all cursor-pointer backdrop-blur-sm"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 z-30 px-2.5 py-1 rounded-none bg-black/80 hover:bg-black text-white font-mono text-xs border border-white/20 transition-all cursor-pointer"
                             aria-label="Next photo"
                         >
                             ›
                         </button>
 
-                        {/* Gallery Dots Indicator */}
-                        <div className="absolute top-4 left-4 z-20 flex items-center gap-1.5 bg-black/40 backdrop-blur-sm px-2.5 py-1 rounded-full border border-white/10">
-                            <span className="font-mono text-[9px] text-[#1EA86E] font-bold tracking-widest uppercase mr-1">
-                                PHOTO {galleryIdx + 1}/{item.gallery.length}
+                        {/* Gallery Indicator */}
+                        <div className="absolute top-3 left-3 z-30 flex items-center gap-2 bg-black/80 px-2.5 py-1 rounded-none border border-white/20">
+                            <span className="font-mono text-[9px] text-[#1EA86E] font-bold tracking-widest uppercase">
+                                PHOTO {galleryIdx + 1}/{activeItem.gallery.length}
                             </span>
-                            <div className="flex gap-1">
-                                {item.gallery.map((_, gIdx) => (
-                                    <button
-                                        key={gIdx}
-                                        type="button"
-                                        onClick={(e) => { e.stopPropagation(); setGalleryIdx(gIdx); }}
-                                        className={`w-1.5 h-1.5 rounded-full transition-all cursor-pointer ${
-                                            gIdx === galleryIdx ? "bg-[#1EA86E] scale-125" : "bg-white/30 hover:bg-white/60"
-                                        }`}
-                                        aria-label={`Go to photo ${gIdx + 1}`}
-                                    />
-                                ))}
-                            </div>
                         </div>
                     </>
                 )}
 
-                {/* caption — bottom-left, on the image */}
-                <div className="absolute bottom-0 left-0 p-4 z-10 flex flex-col gap-0.5 pointer-events-none">
-                    <span
-                        className="font-mono uppercase tracking-[0.16em]"
-                        style={{ fontSize: "0.6875rem", color: "#1EA86E" }}
-                    >
-                        {displayed.spec}
+                {/* Caption — Bottom Left */}
+                <div className="absolute bottom-0 left-0 p-4 z-20 flex flex-col gap-0.5 pointer-events-none">
+                    <span className="font-mono uppercase tracking-[0.16em] text-[11px] text-[#1EA86E] font-bold">
+                        {currentSpec}
                     </span>
-                    <span
-                        className="font-mono uppercase tracking-[0.16em]"
-                        style={{ fontSize: "0.625rem", color: "rgba(242,249,244,0.75)" }}
-                    >
-                        {displayed.caption}
+                    <span className="font-mono uppercase tracking-[0.16em] text-[10px] text-white/80">
+                        {currentCaption}
                     </span>
                 </div>
 
-                {/* index readout — top-right, on the image */}
-                <div className="absolute top-0 right-0 p-4 z-10 pointer-events-none">
-                    <span
-                        className="font-mono tracking-[0.16em]"
-                        style={{ fontSize: "0.6875rem", color: "rgba(255,255,255,0.4)" }}
-                    >
+                {/* Index Readout — Top Right */}
+                <div className="absolute top-0 right-0 p-3.5 z-20 pointer-events-none">
+                    <span className="font-mono tracking-[0.16em] text-[11px] text-white/70 font-bold bg-black/50 px-2 py-0.5 border border-white/10">
                         {indexLabel}
                     </span>
                 </div>
             </div>
 
-            {/* SPEC STRIP — below the image, outside it */}
-            {displayed.specStrip && displayed.specStrip.length > 0 && (
-                <div className="border-t border-white/15 pt-3 mt-0">
-                    <div
-                        style={{
-                            display: "grid",
-                            gridTemplateColumns: "1fr 1fr",
-                            gap: "0",
-                        }}
-                    >
-                        {displayed.specStrip.map((row, i) => (
+            {/* SPEC STRIP — Fixed at bottom of panel (flex-none) */}
+            {currentSpecStrip && currentSpecStrip.length > 0 && (
+                <div className="border-t border-white/20 pt-3 mt-3 flex-none">
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                        {currentSpecStrip.map((row, i) => (
                             <div
                                 key={i}
-                                className="flex flex-col gap-0.5 py-2 border-b border-white/10"
-                                style={{ paddingRight: i % 2 === 0 ? 16 : 0, paddingLeft: i % 2 === 1 ? 16 : 0, borderLeft: i % 2 === 1 ? "1px solid rgba(255,255,255,0.15)" : "none" }}
+                                className="flex flex-col gap-0.5 py-1.5 border-b border-white/10"
                             >
-                                <span
-                                    className="font-mono uppercase tracking-[0.14em]"
-                                    style={{ fontSize: "0.5625rem", color: "rgba(255,255,255,0.6)" }}
-                                >
+                                <span className="font-mono uppercase tracking-[0.14em] text-[9px] text-white/60">
                                     {row.label}
                                 </span>
-                                <span
-                                    className="font-mono uppercase tracking-[0.1em]"
-                                    style={{ fontSize: "0.6875rem", color: "#FFFFFF", fontVariantNumeric: "tabular-nums", fontWeight: 600 }}
-                                >
+                                <span className="font-mono uppercase tracking-[0.1em] text-xs text-white font-semibold tabular-nums">
                                     {row.value}
                                 </span>
                             </div>
@@ -746,163 +657,151 @@ function MediaPanel({
                     </div>
                 </div>
             )}
-        </motion.div>
+        </div>
     );
 }
 
-// ─── MOBILE SNAP TRACK ────────────────────────────────────────────────────────
-function MobileTrack({ family }: { family: Family }) {
-    const trackRef = useRef<HTMLDivElement>(null);
-    const [dot, setDot] = useState(0);
-    const [mobileSubState, setMobileSubState] = useState<Record<string, string>>({});
-    const [mobileGalState, setMobileGalState] = useState<Record<string, number>>({});
+// ─── MOBILE SERVICE ROW (INLINE IMAGE & SPECS ON MOBILE) ─────────────────────
+function MobileServiceRow({
+    item,
+    activeSubId,
+    onSelectSubSection,
+}: {
+    item: ServiceItem;
+    activeSubId?: string;
+    onSelectSubSection?: (subId: string) => void;
+}) {
+    const [isExpanded, setIsExpanded] = useState(false);
+    const [mobileGalIdx, setMobileGalIdx] = useState(0);
 
-    const handleScroll = useCallback(() => {
-        const el = trackRef.current;
-        if (!el) return;
-        const cardW = el.firstElementChild?.clientWidth ?? 1;
-        setDot(Math.round(el.scrollLeft / cardW));
-    }, []);
+    const activeSub = item.subSections?.find(s => s.id === (activeSubId || item.subSections?.[0]?.id));
+    const activeGal = item.gallery?.[mobileGalIdx];
 
-    useEffect(() => {
-        const el = trackRef.current;
-        if (!el) return;
-        el.addEventListener("scroll", handleScroll, { passive: true });
-        return () => el.removeEventListener("scroll", handleScroll);
-    }, [handleScroll]);
+    const activeImage = activeGal?.image || activeSub?.image || item.image;
+    const activeSpec = activeGal?.spec || activeSub?.spec || item.spec;
+    const activeCaption = activeGal?.caption || activeSub?.caption || item.caption;
+    const activeSpecStrip = activeGal?.specStrip || activeSub?.specStrip || item.specStrip;
 
     return (
-        <div className="w-full">
-            <div
-                ref={trackRef}
-                className="flex overflow-x-auto gap-3 pl-1 pr-1 pb-1"
-                style={{
-                    scrollSnapType: "x mandatory",
-                    WebkitOverflowScrolling: "touch",
-                    scrollbarWidth: "none",
-                    msOverflowStyle: "none",
-                }}
+        <div className="border-t border-white/15 py-3">
+            {/* Header Button */}
+            <button
+                type="button"
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="w-full flex items-center justify-between text-left py-1 focus:outline-none"
             >
-                {family.items.map(item => {
-                    const activeSubId = mobileSubState[item.id] || (item.subSections?.[0]?.id ?? "");
-                    const activeSub = item.subSections?.find(s => s.id === activeSubId) ?? item.subSections?.[0];
-
-                    const galIdx = mobileGalState[item.id] || 0;
-                    const galItem = item.gallery?.[galIdx];
-
-                    const activeImage = galItem ? galItem.image : activeSub ? activeSub.image : item.image;
-                    const activeSpec = galItem ? galItem.spec : activeSub ? activeSub.spec : item.spec;
-
-                    return (
-                        <div
-                            key={item.id}
-                            style={{ scrollSnapAlign: "start", flex: "0 0 82vw", maxWidth: 330 }}
-                            className="border border-white/20 bg-white/10 flex flex-col overflow-hidden rounded-md shadow-sm text-white"
-                        >
-                            <div className="relative w-full overflow-hidden" style={{ aspectRatio: "4/3" }}>
-                                <Image
-                                    src={activeImage}
-                                    alt={item.title}
-                                    fill
-                                    sizes="82vw"
-                                    className="object-cover transition-opacity duration-300"
-                                    unoptimized
-                                />
-
-                                {/* Mobile gallery arrows */}
-                                {item.gallery && item.gallery.length > 1 && (
-                                    <div className="absolute inset-x-2 top-1/2 -translate-y-1/2 flex justify-between z-10 pointer-events-none">
-                                        <button
-                                            type="button"
-                                            onClick={() => setMobileGalState(p => ({ ...p, [item.id]: ((p[item.id] || 0) - 1 + item.gallery!.length) % item.gallery!.length }))}
-                                            className="w-7 h-7 rounded-full bg-black/60 text-white flex items-center justify-center font-mono text-xs pointer-events-auto border border-white/20"
-                                        >
-                                            ‹
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => setMobileGalState(p => ({ ...p, [item.id]: ((p[item.id] || 0) + 1) % item.gallery!.length }))}
-                                            className="w-7 h-7 rounded-full bg-black/60 text-white flex items-center justify-center font-mono text-xs pointer-events-auto border border-white/20"
-                                        >
-                                            ›
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                            <div className="flex flex-col gap-1.5 p-3.5">
-                                <span className="font-heading text-white font-black uppercase tracking-tight text-sm leading-tight">
-                                    {item.title}
-                                </span>
-                                <div className="flex items-center gap-3">
-                                    <span className="font-mono uppercase tracking-[0.14em] text-white/70" style={{ fontSize: "0.625rem", fontVariantNumeric: "tabular-nums" }}>
-                                        {activeSpec}
-                                    </span>
-                                    {item.moqNum && (
-                                        <span className="font-mono uppercase tracking-[0.14em] text-white/60" style={{ fontSize: "0.625rem" }}>
-                                            MOQ {item.moqNum}
-                                        </span>
-                                    )}
-                                </div>
-
-                                {/* Subsections selector on mobile */}
-                                {item.subSections && item.subSections.length > 0 && (
-                                    <div className="flex items-center gap-1.5 pt-1 flex-wrap">
-                                        {item.subSections.map(sub => (
-                                            <button
-                                                key={sub.id}
-                                                type="button"
-                                                onClick={() => setMobileSubState(prev => ({ ...prev, [item.id]: sub.id }))}
-                                                className={`font-mono text-[9px] tracking-wider uppercase px-2 py-0.5 rounded ${
-                                                    activeSubId === sub.id
-                                                        ? "bg-white text-[#105233] font-bold"
-                                                        : "bg-white/10 text-white border border-white/20"
-                                                }`}
-                                            >
-                                                {sub.label}
-                                            </button>
-                                        ))}
-                                    </div>
-                                )}
-
-                                {/* Gallery dots on mobile */}
-                                {item.gallery && item.gallery.length > 1 && (
-                                    <div className="flex items-center gap-1 pt-1">
-                                        {item.gallery.map((_, gi) => (
-                                            <button
-                                                key={gi}
-                                                type="button"
-                                                onClick={() => setMobileGalState(p => ({ ...p, [item.id]: gi }))}
-                                                className={`h-1 rounded-full transition-all ${
-                                                    gi === galIdx ? "w-4 bg-white" : "w-1.5 bg-white/30"
-                                                }`}
-                                            />
-                                        ))}
-                                    </div>
-                                )}
-
-                                <p className="font-sans leading-relaxed text-white/80 mt-0.5" style={{ fontSize: "0.75rem" }}>
-                                    {item.copy}
-                                </p>
-                            </div>
-                        </div>
-                    );
-                })}
-            </div>
-
-            {family.items.length > 1 && (
-                <div className="flex gap-2 px-1 mt-2.5">
-                    {family.items.map((_, i) => (
-                        <div
-                            key={i}
-                            className="h-px transition-all duration-300"
-                            style={{
-                                width: i === dot ? 24 : 8,
-                                background: i === dot ? "#FFFFFF" : "rgba(255,255,255,0.3)",
-                            }}
-                        />
-                    ))}
+                <div className="flex flex-col gap-0.5 pr-2">
+                    <span className="font-heading font-black uppercase text-lg text-white leading-tight">
+                        {item.title}
+                    </span>
+                    <span className="font-mono text-[10px] text-white/60 uppercase tracking-widest">
+                        {item.spec} {item.moqNum ? `· MOQ ${item.moqNum}` : ""}
+                    </span>
                 </div>
-            )}
+                <span className="font-mono text-xs text-white/70 border border-white/20 px-2 py-0.5 rounded-none shrink-0">
+                    {isExpanded ? "−" : "+"}
+                </span>
+            </button>
+
+            {/* Inline Expanded Content */}
+            <AnimatePresence>
+                {isExpanded && (
+                    <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: EASE }}
+                        className="overflow-hidden pt-3 flex flex-col gap-4"
+                    >
+                        {/* Description */}
+                        <p className="font-sans text-xs text-white/85 leading-relaxed">
+                            {item.copy}
+                        </p>
+
+                        {/* Cuts selector (if aprons) */}
+                        {item.subSections && item.subSections.length > 0 && (
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                                <span className="font-mono text-[9px] uppercase tracking-widest text-white/50 mr-1">
+                                    Cuts:
+                                </span>
+                                {item.subSections.map(sub => (
+                                    <button
+                                        key={sub.id}
+                                        type="button"
+                                        onClick={() => onSelectSubSection?.(sub.id)}
+                                        className={`font-mono text-[9px] tracking-wider uppercase px-2 py-0.5 rounded-none transition-all ${
+                                            (activeSubId || item.subSections![0].id) === sub.id
+                                                ? "bg-white text-[#105233] font-bold"
+                                                : "bg-white/10 text-white border border-white/20"
+                                        }`}
+                                    >
+                                        {sub.label}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* 4:5 Full Width Product Image */}
+                        <div className="relative w-full aspect-[4/5] overflow-hidden rounded-none border border-white/20 bg-black/40">
+                            <Image
+                                src={activeImage}
+                                alt={item.title}
+                                fill
+                                sizes="100vw"
+                                className="object-cover"
+                            />
+                            {/* Overlay Caption */}
+                            <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/85 to-transparent flex flex-col gap-0.5 pointer-events-none">
+                                <span className="font-mono text-[10px] text-[#1EA86E] uppercase tracking-widest font-bold">
+                                    {activeSpec}
+                                </span>
+                                <span className="font-mono text-[9px] text-white/80 uppercase tracking-widest">
+                                    {activeCaption}
+                                </span>
+                            </div>
+
+                            {/* Mobile Gallery Controls */}
+                            {item.gallery && item.gallery.length > 1 && (
+                                <div className="absolute top-2 right-2 flex items-center gap-1 bg-black/70 px-2 py-1 border border-white/20">
+                                    <button
+                                        type="button"
+                                        onClick={() => setMobileGalIdx(p => (p - 1 + item.gallery!.length) % item.gallery!.length)}
+                                        className="font-mono text-xs text-white px-1"
+                                    >
+                                        ‹
+                                    </button>
+                                    <span className="font-mono text-[9px] text-white/80">
+                                        {mobileGalIdx + 1}/{item.gallery.length}
+                                    </span>
+                                    <button
+                                        type="button"
+                                        onClick={() => setMobileGalIdx(p => (p + 1) % item.gallery!.length)}
+                                        className="font-mono text-xs text-white px-1"
+                                    >
+                                        ›
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Two-Column Specs Table */}
+                        {activeSpecStrip && activeSpecStrip.length > 0 && (
+                            <div className="border-t border-white/20 pt-2 grid grid-cols-2 gap-x-4 gap-y-2">
+                                {activeSpecStrip.map((row, i) => (
+                                    <div key={i} className="flex flex-col gap-0.5 border-b border-white/10 pb-1.5">
+                                        <span className="font-mono text-[9px] uppercase tracking-widest text-white/60">
+                                            {row.label}
+                                        </span>
+                                        <span className="font-mono text-xs uppercase tracking-wider text-white font-semibold">
+                                            {row.value}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }
@@ -965,11 +864,11 @@ function FamilyAccordionHeader({
     onToggle: () => void;
 }) {
     return (
-        <div className="sticky top-[64px] z-20 bg-[#105233]/95 backdrop-blur-md py-1">
+        <div className="bg-[#105233] py-1">
             <button
                 type="button"
                 onClick={onToggle}
-                className="w-full text-left focus:outline-none group cursor-pointer py-3.5 px-4 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 transition-all duration-300 flex items-center justify-between shadow-sm hover:shadow"
+                className="w-full text-left focus:outline-none group cursor-pointer py-3.5 px-4 rounded-none bg-white/10 hover:bg-white/20 border border-white/20 transition-all duration-300 flex items-center justify-between shadow-none"
             >
                 <div className="flex items-center gap-3.5 sm:gap-5">
                     <span className="font-mono text-xs sm:text-sm text-white font-bold tracking-wider">
@@ -978,33 +877,15 @@ function FamilyAccordionHeader({
                     <h3 className="font-heading font-black uppercase text-xl sm:text-2xl md:text-3xl tracking-tight text-white group-hover:text-white transition-colors">
                         {family.label}
                     </h3>
-                    <span className="font-mono text-[10px] sm:text-xs uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-white/15 text-white font-medium border border-white/25 group-hover:border-white transition-all">
+                    <span className="font-mono text-[10px] sm:text-xs uppercase tracking-widest px-2.5 py-0.5 rounded-none bg-white/15 text-white font-medium border border-white/25 group-hover:border-white transition-all">
                         {String(family.items.length).padStart(2, "0")} Items
                     </span>
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <span className="hidden sm:inline-block font-mono text-[10px] uppercase tracking-widest text-white/60 group-hover:text-white transition-colors">
-                        {isExpanded ? "Hide" : "Explore"}
+                    <span className="font-mono text-xs uppercase tracking-widest text-white/80 border border-white/20 px-2.5 py-1 rounded-none group-hover:bg-white/10 transition-colors">
+                        {isExpanded ? "HIDE ↗" : "EXPLORE ↘"}
                     </span>
-                    <div
-                        className={`w-7 h-7 rounded-full flex items-center justify-center border transition-all duration-300 ${
-                            isExpanded
-                                ? "bg-white text-[#105233] border-white shadow-md font-bold"
-                                : "bg-white/10 text-white border-white/20 group-hover:bg-white/20"
-                        }`}
-                    >
-                        <motion.svg
-                            width="12"
-                            height="12"
-                            viewBox="0 0 12 12"
-                            fill="none"
-                            animate={{ rotate: isExpanded ? 45 : 0 }}
-                            transition={{ duration: 0.3, ease: EASE }}
-                        >
-                            <path d="M6 1V11M1 6H11" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                        </motion.svg>
-                    </div>
                 </div>
             </button>
         </div>
@@ -1021,7 +902,7 @@ function BrandAccentCard() {
             transition={{ duration: 0.42, ease: EASE }}
             className="overflow-hidden mt-4"
         >
-            <div className="relative w-full rounded-xl border border-white/20 bg-[#0d4028] p-6 sm:p-8 flex flex-col justify-between overflow-hidden shadow-sm">
+            <div className="relative w-full rounded-none border border-white/20 bg-[#0d4028] p-6 sm:p-8 flex flex-col justify-between overflow-hidden shadow-none">
                 {/* Woven Cloth / Fabric Texture Background */}
                 <div
                     className="absolute inset-0 opacity-40 mix-blend-multiply bg-repeat pointer-events-none"
@@ -1072,7 +953,7 @@ function BrandAccentCard() {
     );
 }
 
-// ─── MAIN ─────────────────────────────────────────────────────────────────────
+// ─── MAIN COMPONENT ───────────────────────────────────────────────────────────
 export default function Services() {
     const sectionRef = useRef<HTMLDivElement>(null);
     const reduced = useReducedMotion() ?? false;
@@ -1083,15 +964,21 @@ export default function Services() {
     });
     const scrollLineScaleY = useTransform(scrollYProgress, [0.05, 0.95], [0, 1]);
 
-    const [activeId, setActiveId] = useState(FAMILIES[0].items[0].id);
+    const [scrollActiveId, setScrollActiveId] = useState<string>(FAMILIES[0].items[0].id);
+    const [hoveredId, setHoveredId] = useState<string | null>(null);
+
     const [expandedFamilies, setExpandedFamilies] = useState<Record<string, boolean>>({
         apparel: true,
         workwear: false,
         accessories: false,
     });
+
     const [subSectionState, setSubSectionState] = useState<Record<string, string>>({
         aprons: "full",
     });
+
+    // Hover > Scroll Position
+    const activeId = hoveredId || scrollActiveId;
 
     const activeItem = ALL_ITEMS.find(i => i.id === activeId) ?? ALL_ITEMS[0];
     const activeGlobalIndex = ALL_ITEMS.findIndex(i => i.id === activeId);
@@ -1101,6 +988,44 @@ export default function Services() {
 
     const anyCategoryOpen = Object.values(expandedFamilies).some(Boolean);
 
+    // Scroll Observer — Tracks row nearest to center line
+    useEffect(() => {
+        if (typeof window === "undefined") return;
+
+        const updateActiveFromScroll = (entries: IntersectionObserverEntry[]) => {
+            const viewportCentre = window.innerHeight / 2;
+            const candidates = entries
+                .filter((e) => e.isIntersecting)
+                .map((e) => {
+                    const r = e.target.getBoundingClientRect();
+                    return {
+                        id: (e.target as HTMLElement).dataset.productId,
+                        distance: Math.abs(r.top + r.height / 2 - viewportCentre),
+                    };
+                })
+                .filter((c): c is { id: string; distance: number } => Boolean(c.id));
+
+            if (candidates.length === 0) return;
+            candidates.sort((a, b) => a.distance - b.distance);
+            setScrollActiveId(candidates[0].id);
+        };
+
+        const observer = new IntersectionObserver(updateActiveFromScroll, {
+            rootMargin: "-45% 0px -45% 0px",
+            threshold: 0,
+        });
+
+        const timer = setTimeout(() => {
+            const rows = document.querySelectorAll(".js-product-row");
+            rows.forEach((row) => observer.observe(row));
+        }, 150);
+
+        return () => {
+            clearTimeout(timer);
+            observer.disconnect();
+        };
+    }, [expandedFamilies]);
+
     const toggleFamily = (familyId: string) => {
         setExpandedFamilies(prev => {
             const nextState = !prev[familyId];
@@ -1108,7 +1033,7 @@ export default function Services() {
             if (nextState) {
                 const fam = FAMILIES.find(f => f.id === familyId);
                 if (fam && fam.items.length > 0) {
-                    setActiveId(fam.items[0].id);
+                    setScrollActiveId(fam.items[0].id);
                 }
             }
             return updated;
@@ -1119,7 +1044,7 @@ export default function Services() {
         <section
             ref={sectionRef}
             id="services"
-            className="relative z-20 bg-[#105233] text-white py-14 md:py-20 border-b border-white/10 overflow-hidden"
+            className="relative z-20 bg-[#105233] text-white py-14 md:py-20 border-b border-white/10"
         >
             {/* Scroll progress side accent bar */}
             <motion.div
@@ -1149,22 +1074,18 @@ export default function Services() {
 
                 <SectionHeader reduced={reduced} />
 
-                {/* ── DESKTOP ── */}
+                {/* ── DESKTOP (lg+) ── */}
                 <div className="hidden lg:grid lg:grid-cols-12 lg:gap-10 items-start">
 
-                    {/* Left index (7 cols) */}
-                    <div className="lg:col-span-7">
+                    {/* Left Column (7 cols): Accordion List */}
+                    <div
+                        className="lg:col-span-7"
+                        onMouseLeave={() => setHoveredId(null)}
+                    >
                         {FAMILIES.map((family, fIdx) => {
                             const isExpanded = !!expandedFamilies[family.id];
                             return (
-                                <motion.div
-                                    key={family.id}
-                                    initial={reduced ? false : { opacity: 0, y: 16 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true, margin: "-5% 0px" }}
-                                    transition={{ duration: 0.4, delay: fIdx * 0.08, ease: EASE }}
-                                    className="mb-4"
-                                >
+                                <div key={family.id} className="mb-4">
                                     <FamilyAccordionHeader
                                         family={family}
                                         index={fIdx}
@@ -1182,61 +1103,48 @@ export default function Services() {
                                                 className="overflow-hidden"
                                             >
                                                 <div className="pt-1.5 pb-2">
-                                                    {family.items.map((item, idx) => (
-                                                        <motion.div
+                                                    {family.items.map((item) => (
+                                                        <ServiceRow
                                                             key={item.id}
-                                                            initial={{ opacity: 0, y: 10 }}
-                                                            animate={{ opacity: 1, y: 0 }}
-                                                            transition={{ duration: 0.28, delay: idx * 0.04, ease: EASE }}
-                                                        >
-                                                            <ServiceRow
-                                                                item={item}
-                                                                isActive={activeId === item.id}
-                                                                onActivate={() => setActiveId(item.id)}
-                                                                activeSubId={subSectionState[item.id] || item.subSections?.[0]?.id}
-                                                                onSelectSubSection={(subId) => setSubSectionState(prev => ({ ...prev, [item.id]: subId }))}
-                                                                reduced={reduced}
-                                                                entryDelay={0}
-                                                            />
-                                                        </motion.div>
+                                                            item={item}
+                                                            isActive={activeId === item.id}
+                                                            onActivate={() => setScrollActiveId(item.id)}
+                                                            onHover={() => setHoveredId(item.id)}
+                                                            activeSubId={subSectionState[item.id] || item.subSections?.[0]?.id}
+                                                            onSelectSubSection={(subId) => setSubSectionState(prev => ({ ...prev, [item.id]: subId }))}
+                                                            reduced={reduced}
+                                                        />
                                                     ))}
                                                 </div>
                                             </motion.div>
                                         )}
                                     </AnimatePresence>
-                                </motion.div>
+                                </div>
                             );
                         })}
 
-                        {/* 1327 Brand Accent Card — appears in empty space when all categories are closed */}
                         <AnimatePresence>
                             {!anyCategoryOpen && <BrandAccentCard />}
                         </AnimatePresence>
                     </div>
 
-                    {/* Right pinned panel (5 cols) */}
-                    <div className="lg:col-span-5 sticky top-[84px] self-start">
+                    {/* Right Column (5 cols): Sticky Media Panel */}
+                    <aside className="hidden lg:block lg:col-span-5 sticky top-24 self-start max-h-[calc(100vh-7rem)] flex flex-col">
                         <MediaPanel
-                            item={activeItem}
+                            activeItem={activeItem}
                             activeSubSection={activeSubSection}
                             globalIndex={activeGlobalIndex}
                             reduced={reduced}
                         />
-                    </div>
+                    </aside>
                 </div>
 
-                {/* ── MOBILE ── */}
+                {/* ── MOBILE / TABLET (< lg) ── */}
                 <div className="lg:hidden flex flex-col gap-4">
                     {FAMILIES.map((family, fIdx) => {
                         const isExpanded = !!expandedFamilies[family.id];
                         return (
-                            <motion.div
-                                key={family.id}
-                                initial={reduced ? false : { opacity: 0, y: 16 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "-5% 0px" }}
-                                transition={{ duration: 0.4, delay: fIdx * 0.08, ease: EASE }}
-                            >
+                            <div key={family.id}>
                                 <FamilyAccordionHeader
                                     family={family}
                                     index={fIdx}
@@ -1253,15 +1161,21 @@ export default function Services() {
                                             transition={{ duration: 0.42, ease: EASE }}
                                             className="overflow-hidden pt-2 pb-3"
                                         >
-                                            <MobileTrack family={family} />
+                                            {family.items.map((item) => (
+                                                <MobileServiceRow
+                                                    key={item.id}
+                                                    item={item}
+                                                    activeSubId={subSectionState[item.id] || item.subSections?.[0]?.id}
+                                                    onSelectSubSection={(subId) => setSubSectionState(prev => ({ ...prev, [item.id]: subId }))}
+                                                />
+                                            ))}
                                         </motion.div>
                                     )}
                                 </AnimatePresence>
-                            </motion.div>
+                            </div>
                         );
                     })}
 
-                    {/* 1327 Brand Accent Card for mobile */}
                     <AnimatePresence>
                         {!anyCategoryOpen && <BrandAccentCard />}
                     </AnimatePresence>
