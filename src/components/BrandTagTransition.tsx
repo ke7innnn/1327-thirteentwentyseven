@@ -193,25 +193,8 @@ export default function BrandTagTransition() {
 
             {/* Sticky Viewport */}
             <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center select-none bg-[#105233]">
-                {/* Brand Green Background with Luxury Apparel Woven Fabric Texture */}
-                <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-[#105233]">
-                    <div
-                        className="absolute inset-0 opacity-[0.25] mix-blend-multiply bg-repeat"
-                        style={{
-                            backgroundImage: "url('/bg/clothing_fabric_bg.png')",
-                            backgroundSize: "450px 450px",
-                        }}
-                    />
-                    <div
-                        className="absolute inset-0 pointer-events-none"
-                        style={{
-                            background: "radial-gradient(ellipse 85% 85% at 50% 50%, rgba(30,168,110,0.15) 0%, rgba(12,60,37,0.6) 100%)",
-                        }}
-                    />
-                </div>
-
-                {/* Clothing-Themed Animated Scrollable Accents */}
-                <ClothingAccentsBackground scrollProgress={sp} />
+                {/* Solid Plain Green Background */}
+                <div className="absolute inset-0 z-0 bg-[#105233]" />
 
                 {/* Perspective Stage */}
                 <div
