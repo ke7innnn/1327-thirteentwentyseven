@@ -7,132 +7,136 @@ import { WHATSAPP_URL, PHONE_NUMBER, CONTACT_EMAIL } from "@/config/constants";
 
 export default function Notes() {
     return (
-        <section id="notes" aria-label="Orders, MOQ and Brand Film" className="relative z-10 py-20 md:py-32 bg-[#105233] text-white overflow-hidden border-b border-white/10">
-            {/* 1327 Brand Green Apparel Craftsmanship Fabric Texture */}
-            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-[#105233]">
+        <section id="notes" aria-label="Orders, MOQ and Brand Film" className="relative z-10 py-20 md:py-28 bg-[#eae6df] text-[#0a0a0a] overflow-hidden border-b border-black/15 select-none rounded-none">
+            {/* 1327 Brand Apparel Craftsmanship Fabric Texture */}
+            <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.2] mix-blend-multiply bg-repeat">
                 <div
-                    className="absolute inset-0 opacity-[0.35] mix-blend-multiply bg-repeat"
+                    className="absolute inset-0 bg-repeat"
                     style={{
-                        backgroundImage: "url('/bg/notes_fabric_bg.png')",
+                        backgroundImage: "url('/bg/clothing_fabric_bg.png')",
                         backgroundSize: "450px 450px",
-                    }}
-                />
-                {/* Atelier Lighting Vignette */}
-                <div
-                    className="absolute inset-0 pointer-events-none"
-                    style={{
-                        background: "radial-gradient(ellipse 85% 85% at 50% 50%, rgba(30,168,110,0.22) 0%, rgba(12,60,37,0.65) 100%)",
                     }}
                 />
             </div>
 
-            <div className="container mx-auto px-5 sm:px-6 relative z-10">
-                <div className="flex flex-col md:flex-row items-center gap-10 md:gap-24">
+            <div className="container mx-auto px-5 sm:px-8 md:px-12 lg:px-16 relative z-10">
+                <div className="flex flex-col md:flex-row items-stretch gap-10 md:gap-14">
 
-                    {/* Text Column (Left) — Yellow Note Paper */}
+                    {/* Order Guidelines Card (Left) */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 40 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-10% 0px" }}
+                        transition={{ duration: 0.7, ease: EASING }}
+                        className="w-full md:w-1/2 relative z-20 flex flex-col justify-between"
+                    >
+                        <div className="bg-[#edebe3] text-[#0a0a0a] p-6 sm:p-8 md:p-10 rounded-none border border-black/15 relative overflow-hidden flex flex-col justify-between h-full">
+                            {/* Top Header Tag */}
+                            <div className="flex items-center justify-between border-b border-black/15 pb-4 mb-6">
+                                <div className="inline-flex items-center gap-2.5 px-3 py-1 bg-[#105233] text-white">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                                    <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em]">
+                                        &#123; 03 &#125; ORDER GUIDELINES
+                                    </span>
+                                </div>
+                                <span className="font-mono text-xs text-[#105233] font-bold tracking-widest uppercase">
+                                    ATELIER SPEC
+                                </span>
+                            </div>
+
+                            <motion.h2
+                                initial={{ opacity: 0, y: 15 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={viewportConfig}
+                                transition={{ duration: DURATION.normal, ease: EASING }}
+                                className="text-3xl sm:text-4xl md:text-5xl font-heading font-black tracking-tight text-[#0a0a0a] uppercase mb-6"
+                            >
+                                ORDER GUIDELINES
+                            </motion.h2>
+
+                            <motion.div
+                                variants={staggerContainer}
+                                initial="initial"
+                                whileInView="animate"
+                                viewport={viewportConfig}
+                                className="flex flex-col gap-5 text-left"
+                            >
+                                <motion.p
+                                    variants={staggerItem}
+                                    className="font-sans text-base sm:text-lg font-normal leading-relaxed text-[#0a0a0a]/85"
+                                >
+                                    We have a minimum order quantity of{" "}
+                                    <span className="inline-flex items-center px-2 py-0.5 bg-[#105233]/10 border border-[#105233]/25 font-mono text-sm font-bold text-[#105233] tabular-nums mx-1">
+                                        &#123; 50 PCS &#125;
+                                    </span>{" "}
+                                    for T-shirts and{" "}
+                                    <span className="inline-flex items-center px-2 py-0.5 bg-[#105233]/10 border border-[#105233]/25 font-mono text-sm font-bold text-[#105233] tabular-nums mx-1">
+                                        &#123; 30 PCS &#125;
+                                    </span>{" "}
+                                    for aprons &amp; caps. For a quote, send us your artwork and requirements.
+                                </motion.p>
+
+                                <motion.p
+                                    variants={staggerItem}
+                                    className="font-sans text-base sm:text-lg font-normal leading-relaxed text-[#0a0a0a]/85"
+                                >
+                                    We also do denims and trousers with an MOQ of{" "}
+                                    <span className="inline-flex items-center px-2 py-0.5 bg-[#105233]/10 border border-[#105233]/25 font-mono text-sm font-bold text-[#105233] tabular-nums mx-1">
+                                        &#123; 100 PCS &#125;
+                                    </span>.
+                                </motion.p>
+
+                                {/* Contact Callout */}
+                                <motion.div
+                                    variants={staggerItem}
+                                    className="pt-6 border-t border-black/15 flex flex-col gap-3"
+                                >
+                                    <div className="font-mono text-xs uppercase tracking-[0.2em] font-bold text-[#105233]">
+                                        &#123; PLACE AN ORDER &#125;
+                                    </div>
+                                    <p className="font-sans text-sm sm:text-base font-light text-[#0a0a0a]/80 leading-relaxed">
+                                        To place your order or for inquiries, feel free to{" "}
+                                        <a href={`tel:${PHONE_NUMBER}`} className="font-bold text-[#105233] underline hover:text-[#4FB47E] transition-colors">
+                                            Call
+                                        </a>{" "}
+                                        or{" "}
+                                        <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="font-bold text-[#105233] underline hover:text-[#4FB47E] transition-colors">
+                                            WhatsApp us
+                                        </a>{" "}
+                                        on{" "}
+                                        <span className="font-mono font-bold text-[#105233]">{PHONE_NUMBER}</span>{" "}
+                                        or email{" "}
+                                        <a href={`mailto:${CONTACT_EMAIL}`} className="font-mono font-bold text-[#105233] underline hover:text-[#4FB47E] transition-colors">
+                                            {CONTACT_EMAIL}
+                                        </a>.
+                                    </p>
+                                </motion.div>
+                            </motion.div>
+                        </div>
+                    </motion.div>
+
+                    {/* Brand Film Column (Right) */}
                     <motion.div
                         initial={{ opacity: 0, y: 50 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-10% 0px" }}
-                        transition={{ duration: 0.7, ease: EASING }}
-                        className="w-full md:w-1/2 relative z-20"
-                    >
-                        <div className="mb-4">
-                            <SectionMarker sectionKey="orders" className="!text-white" />
-                        </div>
-
-                        <div className="relative max-w-xl mx-auto group">
-                            {/* Luxury Dark Saddle Leather Plaque */}
-                            <div className="bg-[#1A0E08] text-[#F7F5F0] p-6 sm:p-8 md:p-12 rounded-none border border-[#C89B68]/30 relative overflow-hidden shadow-2xl">
-                                {/* Leather texture overlay */}
-                                <div
-                                    className="absolute inset-0 opacity-60 mix-blend-overlay bg-repeat pointer-events-none"
-                                    style={{
-                                        backgroundImage: "url('/bg/leather_card_bg.png')",
-                                        backgroundSize: "300px 300px",
-                                    }}
-                                />
-                                {/* Inner dashed saddle stitch frame */}
-                                <div className="absolute inset-3 border border-dashed border-[#C89B68]/25 pointer-events-none rounded-none" />
-
-                                <motion.h2
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={viewportConfig}
-                                    transition={{ duration: DURATION.normal, ease: EASING }}
-                                    className="text-4xl md:text-5xl font-black tracking-tight mb-8 font-heading text-center text-[#E6B87D] uppercase border-b border-[#C89B68]/25 pb-4 relative z-10"
-                                >
-                                    ORDER GUIDELINES
-                                </motion.h2>
-
-                                <motion.div
-                                    variants={staggerContainer}
-                                    initial="initial"
-                                    whileInView="animate"
-                                    viewport={viewportConfig}
-                                    className="prose prose-lg text-center mx-auto relative z-10 flex flex-col gap-6"
-                                >
-                                    <motion.p
-                                        variants={staggerItem}
-                                        className="text-base sm:text-lg md:text-xl font-heading uppercase font-bold leading-relaxed text-[#F7F5F0]"
-                                    >
-                                        We have a minimum order quantity of <span className="inline-block px-2.5 py-0.5 bg-[#C89B68]/20 border border-[#C89B68]/40 font-heading font-black text-[#E6B87D] text-2xl mx-1">50</span> pcs for T-shirts and <span className="inline-block px-2.5 py-0.5 bg-[#C89B68]/20 border border-[#C89B68]/40 font-heading font-black text-[#E6B87D] text-2xl mx-1">30</span> pcs for aprons &amp; caps.
-                                        For a quote, send us your artwork and requirements.
-                                    </motion.p>
-                                    <motion.p
-                                        variants={staggerItem}
-                                        className="text-base sm:text-lg md:text-xl font-heading uppercase font-bold leading-relaxed text-[#F7F5F0]"
-                                    >
-                                        We also do denims and trousers with an MOQ of <span className="inline-block px-2.5 py-0.5 bg-[#C89B68]/20 border border-[#C89B68]/40 font-heading font-black text-[#E6B87D] text-2xl mx-1">100</span> pcs.
-                                    </motion.p>
-
-                                    {/* Contact Copy in 1327 Luxury Display Font (Sugo font-heading) */}
-                                    <motion.p
-                                        variants={staggerItem}
-                                        className="text-lg sm:text-xl md:text-2xl font-heading font-black uppercase tracking-wider leading-snug text-[#F7F5F0] mt-4 border-t border-[#C89B68]/25 pt-6"
-                                    >
-                                        To place your order or for more inquiries you can <a href={`tel:${PHONE_NUMBER}`} className="text-[#E6B87D] hover:text-white underline decoration-[#E6B87D] transition-colors">Call</a> or <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="text-[#E6B87D] hover:text-white underline decoration-[#E6B87D] transition-colors">WhatsApp us</a> on <span className="whitespace-nowrap text-[#E6B87D]">{PHONE_NUMBER}</span> or email <a href={`mailto:${CONTACT_EMAIL}`} className="text-[#E6B87D] hover:text-white underline decoration-[#E6B87D] transition-colors">{CONTACT_EMAIL}</a>.
-                                    </motion.p>
-                                </motion.div>
-                            </div>
-                        </div>
-                    </motion.div>
-
-                    {/* Video Column (Right) — Continuous Floating & Levitation Card */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 80 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: "-10% 0px" }}
                         transition={{ duration: 0.8, ease: EASING, delay: 0.1 }}
-                        className="w-full md:w-1/2 relative mt-6 md:mt-0"
+                        className="w-full md:w-1/2 relative flex flex-col justify-between"
                     >
-                        <motion.div
-                            animate={{
-                                y: [-10, 10, -10],
-                                rotateZ: [-0.75, 0.75, -0.75],
-                            }}
-                            transition={{
-                                duration: 4.8,
-                                repeat: Infinity,
-                                ease: "easeInOut",
-                            }}
-                            whileHover={{
-                                scale: 1.03,
-                                y: -14,
-                                rotateZ: 0,
-                            }}
-                            className="w-full relative group transition-shadow duration-500"
-                        >
-                            {/* TAKE A LOOK Label */}
-                            <div id="film" className="flex items-center gap-3 mb-4">
-                                <span className="relative flex h-3 w-3">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#fdfbcf] opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-[#fdfbcf]"></span>
+                        <div className="bg-[#105233] text-white p-6 sm:p-8 md:p-10 rounded-none border border-black/15 flex flex-col justify-between h-full shadow-lg">
+                            <div className="flex items-center justify-between border-b border-white/20 pb-4 mb-6">
+                                <div className="inline-flex items-center gap-2.5">
+                                    <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                                    <span className="font-mono text-[10px] font-bold tracking-[0.2em] uppercase text-white">
+                                        ● &#123; BRAND FILM &#125;
+                                    </span>
+                                </div>
+                                <span className="font-mono text-xs font-bold tracking-widest uppercase text-white/70">
+                                    1327 ATELIER
                                 </span>
-                                <span className="text-sm font-bold tracking-[0.2em] text-[#fdfbcf] font-heading">TAKE A LOOK</span>
                             </div>
 
-                            <div className="relative aspect-video w-full overflow-hidden rounded-sm border border-white/10 shadow-2xl shadow-[#fdfbcf]/10 group-hover:shadow-[0_20px_40px_rgba(253,251,207,0.25)] transition-shadow duration-500">
+                            <div className="relative aspect-video w-full overflow-hidden border border-white/20 my-auto">
                                 <iframe
                                     width="100%"
                                     height="100%"
@@ -144,11 +148,13 @@ export default function Notes() {
                                     loading="lazy"
                                     className="absolute inset-0 w-full h-full"
                                 ></iframe>
-
-                                {/* Glossy Overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-tr from-[#105233]/40 to-transparent pointer-events-none mix-blend-overlay"></div>
                             </div>
-                        </motion.div>
+
+                            <div className="pt-4 border-t border-white/20 mt-6 flex justify-between items-center font-mono text-xs font-bold tracking-widest text-white/80 uppercase">
+                                <span>TAKE A LOOK</span>
+                                <span>&#123; 1327 &#125;</span>
+                            </div>
+                        </div>
                     </motion.div>
 
                 </div>
