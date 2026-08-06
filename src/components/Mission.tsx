@@ -255,14 +255,7 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
 
 
                     {/* Unified Left-Aligned Hero Typography Stack */}
-                    <div className="w-full max-w-5xl flex flex-col items-start text-left gap-3 sm:gap-5 my-auto pt-6 relative">
-                        {/* Anchor Slot 1: Hero */}
-                        <div className="anchor pointer-events-none opacity-0 select-none absolute right-0 sm:right-12 top-1/2 -translate-y-1/2 w-64 h-64 sm:w-80 sm:h-80" data-anchor="hero" aria-hidden="true">
-                            <div className="md:hidden relative w-full h-full opacity-100">
-                                <NextImage src="/tee-blank.png" alt="" fill className="object-contain -rotate-3" />
-                            </div>
-                        </div>
-
+                    <div className="w-full max-w-5xl flex flex-col items-start text-left gap-3 sm:gap-5 my-auto pt-6">
                         {/* Giant 1327 Header */}
                         <h1 className="font-heading font-black text-[18vw] sm:text-[14vw] md:text-[12vw] lg:text-[11rem] xl:text-[13rem] leading-[0.82] tracking-tighter text-[#F2F9F4] select-none -ml-1 sm:-ml-2">
                             1327
@@ -368,17 +361,6 @@ function ManifestoSection() {
                     1327
                 </span>
             </motion.div>
-
-            {/* Anchor Slot 3: Manifesto Background Placeholder (Where 1327 garment morphs and lands) */}
-            <div
-                className="anchor pointer-events-none select-none absolute right-6 sm:right-24 top-1/2 -translate-y-1/2 w-44 h-44 sm:w-56 sm:h-56 z-[1] border border-dashed border-[#105233]/25 rounded-md flex items-center justify-center opacity-0"
-                data-anchor="manifesto"
-                aria-hidden="true"
-            >
-                <div className="md:hidden relative w-full h-full opacity-100">
-                    <NextImage src="/tee-printed.png" alt="" fill className="object-contain" />
-                </div>
-            </div>
 
             <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24 flex flex-col justify-between min-h-0 md:min-h-[70vh] gap-10 md:gap-0 relative z-10">
                 {/* Top Bar */}

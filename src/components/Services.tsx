@@ -809,17 +809,7 @@ function MobileServiceRow({
 // ─── SECTION HEADER ───────────────────────────────────────────────────────────
 function SectionHeader({ reduced }: { reduced: boolean }) {
     return (
-        <div className="mb-8 md:mb-10 flex flex-col items-start gap-3 relative">
-            {/* Anchor Slot 2: Cards / Products */}
-            <div
-                className="anchor pointer-events-none opacity-0 select-none absolute right-4 sm:right-16 top-2 w-32 h-32 sm:w-44 sm:h-44"
-                data-anchor="cards"
-                aria-hidden="true"
-            >
-                <div className="md:hidden relative w-full h-full opacity-100">
-                    <Image src="/tee-printed.png" alt="" fill className="object-contain rotate-2 opacity-60" />
-                </div>
-            </div>
+        <div className="mb-8 md:mb-10 flex flex-col items-start gap-3">
             {/* Canonical Section Marker 02 */}
             <motion.div
                 initial={reduced ? false : { opacity: 0, x: -20 }}
