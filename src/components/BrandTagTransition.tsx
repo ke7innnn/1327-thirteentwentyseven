@@ -119,7 +119,7 @@ function MovingClothingTextBackground() {
             <div className="flex whitespace-nowrap overflow-hidden w-full">
                 <motion.div
                     animate={{ x: ["0%", "-50%"] }}
-                    transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
+                    transition={{ duration: 110, repeat: Infinity, ease: "linear" }}
                     className="flex whitespace-nowrap font-heading font-black text-6xl sm:text-8xl md:text-[10rem] uppercase tracking-tighter text-[#eae6df]"
                 >
                     <span>{textRow1 + textRow1}</span>
@@ -131,7 +131,7 @@ function MovingClothingTextBackground() {
             <div className="flex whitespace-nowrap overflow-hidden w-full">
                 <motion.div
                     animate={{ x: ["-50%", "0%"] }}
-                    transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+                    transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
                     className="flex whitespace-nowrap font-heading font-black text-6xl sm:text-8xl md:text-[10rem] uppercase tracking-tighter text-[#eae6df]"
                 >
                     <span>{textRow2 + textRow2}</span>

@@ -29,29 +29,29 @@ const VALUES_DATA = [
         num: "01",
         title: "COMMUNITY",
         slug: "community",
-        image: "/feed/feed-01.jpg",
-        alt: "1327 crew members wearing custom apparel",
+        image: "/clients/client-1.png",
+        alt: "Bisou Bisou crew wearing custom 1327 apparel",
     },
     {
         num: "02",
         title: "TRUST",
         slug: "trust",
-        image: "/feed/feed-02.jpg",
-        alt: "Atelier embroidery precision sample detail",
+        image: "/clients/client-2.png",
+        alt: "What's The Rush team in custom 1327 uniforms",
     },
     {
         num: "03",
         title: "RESPECT",
         slug: "respect",
-        image: "/feed/feed-04.jpg",
-        alt: "Workshop floor craftsman at stitching machine",
+        image: "/clients/client-3.jpeg",
+        alt: "Masa Bakery staff in custom 1327 embroidered apparel",
     },
     {
         num: "04",
         title: "LOYALTY",
         slug: "loyalty",
-        image: "/feed/feed-03.jpg",
-        alt: "1327 custom apparel product lineup",
+        image: "/clients/client-4.jpeg",
+        alt: "Croissant Café team in custom 1327 polo t-shirts",
     },
 ];
 
@@ -284,53 +284,8 @@ export default function AboutUs() {
                 {/* ─── MAIN 12-COLUMN GRID ───────────────────────────────────────────── */}
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center my-auto">
 
-                    {/* Left Column (~52% width = col-span-7): Uniform 9:10 Image Grid */}
-                    <div className="order-2 md:order-1 md:col-span-7 flex flex-col justify-center w-full max-w-[440px] xl:max-w-[480px] mx-auto md:mx-0">
-                        <div className="grid grid-cols-2 gap-4 sm:gap-6 items-center">
-                            
-                            {/* Column A (Left: Images 1 & 3) */}
-                            <motion.div style={{ y: yColA }} className="flex flex-col gap-4 sm:gap-6">
-                                {[VALUES_DATA[0], VALUES_DATA[2]].map((item) => {
-                                    const origIndex = item.num === "01" ? 0 : 2;
-                                    const isActive = activeIndex === origIndex;
-                                    return (
-                                        <InteractiveImageCard
-                                            key={item.num}
-                                            item={item}
-                                            origIndex={origIndex}
-                                            isActive={isActive}
-                                            onActivate={() => setActiveIndex(origIndex)}
-                                            isMobile={isMobile}
-                                            yParallax={itemParallaxes[origIndex]}
-                                        />
-                                    );
-                                })}
-                            </motion.div>
-
-                            {/* Column B (Right: Images 2 & 4) — Offset UP by 8% */}
-                            <motion.div style={{ y: yColB }} className="flex flex-col gap-4 sm:gap-6 -translate-y-0 md:-translate-y-[8%]">
-                                {[VALUES_DATA[1], VALUES_DATA[3]].map((item) => {
-                                    const origIndex = item.num === "02" ? 1 : 3;
-                                    const isActive = activeIndex === origIndex;
-                                    return (
-                                        <InteractiveImageCard
-                                            key={item.num}
-                                            item={item}
-                                            origIndex={origIndex}
-                                            isActive={isActive}
-                                            onActivate={() => setActiveIndex(origIndex)}
-                                            isMobile={isMobile}
-                                            yParallax={itemParallaxes[origIndex]}
-                                        />
-                                    );
-                                })}
-                            </motion.div>
-
-                        </div>
-                    </div>
-
-                    {/* Right Column (~38% width = col-span-5): Centred Value List & Monogram Block */}
-                    <div className="order-1 md:order-2 md:col-span-5 flex flex-col justify-center items-center text-center h-full gap-8 lg:gap-10">
+                    {/* Left Column (~38% width = col-span-5): Centred Value List & Monogram Block */}
+                    <div className="order-1 md:order-1 md:col-span-5 flex flex-col justify-center items-center text-center h-full gap-8 lg:gap-10">
                         
                         {/* 4 Centred Display Values (Shared Vertical Axis) */}
                         <ol aria-label="Atelier Values" className="value-list flex flex-col items-center text-center w-full">
@@ -366,7 +321,7 @@ export default function AboutUs() {
                             })}
                         </ol>
 
-                        {/* Bottom-Right Quadrant: Keith Shah Founder Signature & Atelier Creed */}
+                        {/* Bottom-Left Quadrant: Keith Shah Founder Signature & Atelier Creed */}
                         <div className="flex flex-col items-center text-center gap-2 pt-4 border-t border-[#EDEBE3]/15 w-full max-w-sm">
                             {/* Keith Shah Signature Vector in #4FB47E Green */}
                             <div className="w-44 sm:w-52 h-12 relative opacity-90">
@@ -383,6 +338,51 @@ export default function AboutUs() {
                             </p>
                         </div>
 
+                    </div>
+
+                    {/* Right Column (~52% width = col-span-7): Uniform 9:10 Image Grid with Client Photos */}
+                    <div className="order-2 md:order-2 md:col-span-7 flex flex-col justify-center w-full max-w-[440px] xl:max-w-[480px] mx-auto md:ml-auto md:mr-0">
+                        <div className="grid grid-cols-2 gap-4 sm:gap-6 items-center">
+                            
+                            {/* Column A (Left of Image Grid: Images 1 & 3) */}
+                            <motion.div style={{ y: yColA }} className="flex flex-col gap-4 sm:gap-6">
+                                {[VALUES_DATA[0], VALUES_DATA[2]].map((item) => {
+                                    const origIndex = item.num === "01" ? 0 : 2;
+                                    const isActive = activeIndex === origIndex;
+                                    return (
+                                        <InteractiveImageCard
+                                            key={item.num}
+                                            item={item}
+                                            origIndex={origIndex}
+                                            isActive={isActive}
+                                            onActivate={() => setActiveIndex(origIndex)}
+                                            isMobile={isMobile}
+                                            yParallax={itemParallaxes[origIndex]}
+                                        />
+                                    );
+                                })}
+                            </motion.div>
+
+                            {/* Column B (Right of Image Grid: Images 2 & 4) — Offset UP by 8% */}
+                            <motion.div style={{ y: yColB }} className="flex flex-col gap-4 sm:gap-6 -translate-y-0 md:-translate-y-[8%]">
+                                {[VALUES_DATA[1], VALUES_DATA[3]].map((item) => {
+                                    const origIndex = item.num === "02" ? 1 : 3;
+                                    const isActive = activeIndex === origIndex;
+                                    return (
+                                        <InteractiveImageCard
+                                            key={item.num}
+                                            item={item}
+                                            origIndex={origIndex}
+                                            isActive={isActive}
+                                            onActivate={() => setActiveIndex(origIndex)}
+                                            isMobile={isMobile}
+                                            yParallax={itemParallaxes[origIndex]}
+                                        />
+                                    );
+                                })}
+                            </motion.div>
+
+                        </div>
                     </div>
 
                 </div>

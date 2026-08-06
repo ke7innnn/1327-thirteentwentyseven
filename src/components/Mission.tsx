@@ -437,7 +437,7 @@ function ManifestoSection() {
         <section
             ref={sectionRef}
             id="manifesto"
-            className="relative z-20 bg-[#eae6df] text-[#0a0a0a] py-16 md:py-24 border-b border-black/10 w-full overflow-hidden select-none rounded-none"
+            className="relative z-20 bg-[#eae6df] text-[#0a0a0a] py-20 md:py-32 border-b border-black/10 w-full overflow-hidden select-none rounded-none"
         >
             {/* Woven Linen Apparel Fabric Texture Overlay */}
             <div
@@ -456,7 +456,7 @@ function ManifestoSection() {
                 }}
             />
 
-            {/* Giant 1327 Brand Watermark with Lando Scroll Parallax */}
+            {/* Giant 1327 Brand Watermark */}
             <motion.div
                 style={{ x: watermarkX, opacity: watermarkOpacity }}
                 className="absolute right-2 lg:right-12 top-1/2 -translate-y-1/2 pointer-events-none select-none z-0"
@@ -466,7 +466,7 @@ function ManifestoSection() {
                 </span>
             </motion.div>
 
-            <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24 flex flex-col justify-between gap-8 md:gap-10 relative z-10">
+            <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24 flex flex-col gap-12 md:gap-16 relative z-10">
                 {/* Top Bar */}
                 <div className="flex flex-col gap-3">
                     <motion.div
@@ -474,121 +474,120 @@ function ManifestoSection() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true, margin: "-5% 0px" }}
                         transition={{ duration: 0.5, ease: "easeOut" }}
-                        className="inline-flex items-center gap-2.5 px-3 py-1 bg-[#105233] text-white shadow-sm self-start"
+                        className="inline-flex items-center gap-2.5 px-3.5 py-1.5 bg-[#105233] text-white shadow-sm self-start"
                     >
                         <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-                        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-white">
+                        <span className="font-mono text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] text-white">
                             &#123; 1327 BRAND MANIFESTO &#125;
                         </span>
                     </motion.div>
 
-                    <div className="flex justify-between items-center border-b border-black/15 pb-3 w-full font-mono text-xs font-bold uppercase tracking-[0.2em]">
+                    <div className="flex justify-between items-center border-b border-black/15 pb-4 w-full font-mono text-xs font-bold uppercase tracking-[0.2em]">
                         <span className="text-[#105233]">&#123; 01 &#125; OUR MISSION</span>
                         <span className="text-[#105233]">&#123; STITCHES: 1327 &#125;</span>
                     </div>
                 </div>
 
-                {/* Main Content Layout: Left 2 Large Images + Right Display Type */}
-                <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center my-auto py-4">
-                    {/* Left Column: 2 Large Product Images */}
-                    <div className="lg:col-span-5 flex flex-col gap-5">
-                        <div className="relative w-full aspect-[4/3] border border-black/15 bg-black/5 p-1 flex flex-col justify-between overflow-hidden shadow-sm">
-                            <div className="relative w-full h-full overflow-hidden">
-                                <NextImage
-                                    src="/manifesto/custom-leather-2.jpg"
-                                    alt="Custom 1327 Circular Leather Placemat"
-                                    fill
-                                    className="object-cover grayscale contrast-125"
-                                    loading="lazy"
-                                />
-                                <div className="absolute inset-0 bg-[#105233]/15 mix-blend-multiply pointer-events-none" />
-                            </div>
-                        </div>
-                        <div className="relative w-full aspect-[4/3] border border-black/15 bg-black/5 p-1 flex flex-col justify-between overflow-hidden shadow-sm">
-                            <div className="relative w-full h-full overflow-hidden">
-                                <NextImage
-                                    src="/manifesto/custom-leather-3.jpg"
-                                    alt="Custom 1327 Leather Coasters Collection"
-                                    fill
-                                    className="object-cover grayscale contrast-125"
-                                    loading="lazy"
-                                />
-                                <div className="absolute inset-0 bg-[#105233]/15 mix-blend-multiply pointer-events-none" />
-                            </div>
-                        </div>
-                    </div>
+                {/* Main Headline Display (Full Width Typographic Statement) */}
+                <div className="w-full">
+                    <h2 className="font-heading font-black text-4xl sm:text-6xl md:text-7xl lg:text-[6.5rem] xl:text-[7.5rem] uppercase tracking-tight leading-[0.88] text-left text-[#0a0a0a] max-w-6xl flex flex-col items-start gap-1">
+                        <motion.span
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-5% 0px" }}
+                            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                            className="block"
+                        >
+                            WE DON&apos;T MAKE MERCH.
+                        </motion.span>
 
-                    {/* Right Column: Display Type */}
-                    <div className="lg:col-span-7 flex justify-start items-center">
-                        <h2 className="font-heading font-black text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] uppercase tracking-tight leading-[0.88] text-left text-[#0a0a0a] max-w-5xl flex flex-col items-start gap-1">
-                            <motion.span
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "-5% 0px" }}
-                                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                                className="block"
-                            >
-                                WE DON&apos;T MAKE
-                            </motion.span>
+                        <motion.span
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-5% 0px" }}
+                            transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                            className="block text-[#105233]"
+                        >
+                            WE BUILD IDENTITY.
+                        </motion.span>
 
-                            <motion.span
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "-5% 0px" }}
-                                transition={{ duration: 0.6, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-                                className="block"
-                            >
-                                MERCH.
-                            </motion.span>
-
-                            <motion.span
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "-5% 0px" }}
-                                transition={{ duration: 0.6, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
-                                className="block relative"
-                            >
-                                WE BUILD{" "}
-                                <span className="text-[#105233] font-black uppercase">
-                                    IDENTITY.
-                                </span>
-                            </motion.span>
-
-                            <motion.span
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "-5% 0px" }}
-                                transition={{ duration: 0.6, delay: 0.24, ease: [0.16, 1, 0.3, 1] }}
-                                className="block text-[#105233] font-black uppercase"
-                            >
-                                STITCH BY
-                            </motion.span>
-
-                            <motion.span
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "-5% 0px" }}
-                                transition={{ duration: 0.6, delay: 0.32, ease: [0.16, 1, 0.3, 1] }}
-                                className="block text-[#105233] font-black uppercase"
-                            >
-                                STITCH.
-                            </motion.span>
-                        </h2>
-                    </div>
+                        <motion.span
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-5% 0px" }}
+                            transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                            className="block text-[#105233]"
+                        >
+                            STITCH BY STITCH.
+                        </motion.span>
+                    </h2>
                 </div>
 
-                {/* Bottom Row: Manifesto Paragraph */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-5% 0px" }}
-                    transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                    className="w-full flex justify-start items-center pt-4 border-t border-black/15"
-                >
-                    <div className="font-sans text-base sm:text-lg md:text-xl font-light text-[#0a0a0a]/85 leading-relaxed text-left max-w-2xl">
-                        Every crew deserves a uniform worth belonging to. We cut premium fabric, obsess over embroidery and skip every shortcut — so your people feel like a team, and your brand becomes impossible to miss.
+                {/* Content Grid: Left Lead Paragraph + Right 3 Spec Pillars */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 pt-8 border-t border-black/15 items-start">
+                    {/* Left Column: Lead Paragraph */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-5% 0px" }}
+                        transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                        className="lg:col-span-5 flex flex-col gap-6"
+                    >
+                        <p className="font-sans text-lg sm:text-xl md:text-2xl font-light text-[#0a0a0a]/90 leading-relaxed">
+                            Every crew deserves a uniform worth belonging to. We cut premium fabric, obsess over embroidery and skip every shortcut — so your people feel like a team, and your brand becomes impossible to miss.
+                        </p>
+
+                        <div className="flex items-center gap-3 font-mono text-xs font-bold tracking-[0.2em] text-[#105233] uppercase pt-2">
+                            <span className="w-8 h-px bg-[#105233]" />
+                            <span>CRAFTED IN MUMBAI</span>
+                        </div>
+                    </motion.div>
+
+                    {/* Right Column: 3 Editorial Spec Pillars */}
+                    <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-6 pt-2 lg:pt-0">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-5% 0px" }}
+                            transition={{ duration: 0.5, delay: 0.35, ease: "easeOut" }}
+                            className="p-5 border border-black/15 bg-black/[0.02] flex flex-col gap-2"
+                        >
+                            <span className="font-mono text-xs font-bold text-[#105233] tracking-[0.15em]">01 / FABRIC</span>
+                            <h4 className="font-heading font-black text-lg uppercase text-[#0a0a0a]">320+ GSM</h4>
+                            <p className="font-sans text-xs text-[#0a0a0a]/70 leading-normal">
+                                Heavyweight combed cottons engineered to retain shape and feel after endless washes.
+                            </p>
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-5% 0px" }}
+                            transition={{ duration: 0.5, delay: 0.42, ease: "easeOut" }}
+                            className="p-5 border border-black/15 bg-black/[0.02] flex flex-col gap-2"
+                        >
+                            <span className="font-mono text-xs font-bold text-[#105233] tracking-[0.15em]">02 / STITCH</span>
+                            <h4 className="font-heading font-black text-lg uppercase text-[#0a0a0a]">14 DENSITY</h4>
+                            <p className="font-sans text-xs text-[#0a0a0a]/70 leading-normal">
+                                High-density embroidery &amp; reinforced seams with zero fraying or loose threads.
+                            </p>
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-5% 0px" }}
+                            transition={{ duration: 0.5, delay: 0.49, ease: "easeOut" }}
+                            className="p-5 border border-black/15 bg-black/[0.02] flex flex-col gap-2"
+                        >
+                            <span className="font-mono text-xs font-bold text-[#105233] tracking-[0.15em]">03 / PROOF</span>
+                            <h4 className="font-heading font-black text-lg uppercase text-[#0a0a0a]">ZERO SHORTCUTS</h4>
+                            <p className="font-sans text-xs text-[#0a0a0a]/70 leading-normal">
+                                Physical sample approvals before production. What you approve is what ships.
+                            </p>
+                        </motion.div>
                     </div>
-                </motion.div>
+                </div>
             </div>
         </section>
     );
