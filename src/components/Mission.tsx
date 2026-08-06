@@ -305,6 +305,39 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
     );
 }
 
+function VideoWordIdentity({ reduced }: { reduced?: boolean }) {
+    const [frameIndex, setFrameIndex] = useState(30);
+
+    useEffect(() => {
+        if (reduced) return;
+        if (typeof window !== "undefined" && window.innerWidth < 900) return;
+
+        const interval = setInterval(() => {
+            setFrameIndex((prev) => (prev >= 90 ? 30 : prev + 1));
+        }, 50); // 20 FPS video fill inside text
+
+        return () => clearInterval(interval);
+    }, [reduced]);
+
+    const frameNum = String(frameIndex).padStart(3, "0");
+    const framePath = `/sequence/ezgif-frame-${frameNum}.jpg`;
+
+    return (
+        <span
+            className="inline-block relative text-transparent font-black uppercase bg-cover bg-center transition-all duration-75 select-none"
+            style={{
+                backgroundImage: `url('${framePath}')`,
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                color: "transparent",
+                filter: "contrast(1.35) brightness(0.95) sepia(1) hue-rotate(90deg) saturate(2.2)",
+            }}
+        >
+            IDENTITY.
+        </span>
+    );
+}
+
 function StitchLineText({ reduced }: { reduced?: boolean }) {
     return (
         <div className="relative inline-block">
@@ -393,11 +426,16 @@ function ManifestoSection() {
     // Subtly drifting watermark positioned top-right so it NEVER overlaps the outlined line
     const watermarkX = useTransform(scrollYProgress, [0, 1], [-40, 60]);
 
+    // Parallax rates for Process Plates A & B and Full-Bleed Macro Band
+    const yPlateA = useTransform(scrollYProgress, [0, 1], [30, -30]);
+    const yPlateB = useTransform(scrollYProgress, [0, 1], [50, -50]);
+    const yMacro = useTransform(scrollYProgress, [0, 1], [15, -25]);
+
     return (
         <section
             ref={sectionRef}
             id="manifesto"
-            className="relative z-20 bg-[#eae6df] text-[#0a0a0a] py-20 md:py-32 border-b border-black/10 w-full overflow-hidden select-none rounded-none"
+            className="relative z-20 bg-[#eae6df] text-[#0a0a0a] py-20 md:py-28 border-b border-black/10 w-full overflow-hidden select-none rounded-none"
         >
             {/* Woven Linen Apparel Fabric Texture Overlay */}
             <div
@@ -426,7 +464,7 @@ function ManifestoSection() {
                 </span>
             </motion.div>
 
-            <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24 flex flex-col justify-between min-h-0 md:min-h-[70vh] gap-10 md:gap-0 relative z-10">
+            <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24 flex flex-col justify-between gap-10 md:gap-14 relative z-10">
                 {/* Header Block */}
                 <div className="flex flex-col gap-4">
                     {/* Top Pill with dot and single curly brace delimiter */}
@@ -450,65 +488,151 @@ function ManifestoSection() {
                     </div>
                 </div>
 
-                {/* Display Block: 4 Lines with Masked Staggered Reveal */}
-                <div className="w-full flex justify-start items-center my-auto py-6 md:py-10">
-                    <h2 className="font-heading font-black text-4xl sm:text-6xl md:text-7xl lg:text-[5.75rem] uppercase text-left text-[#0a0a0a] max-w-5xl flex flex-col items-start gap-1 sm:gap-2 leading-[0.95] md:leading-[0.88]">
-                        {/* Line 1: WE DON'T MAKE (indent 0) */}
-                        <div className="overflow-hidden w-full">
-                            <motion.span
-                                initial={reduced ? { y: 0 } : { y: "100%" }}
-                                whileInView={{ y: 0 }}
-                                viewport={{ once: true, margin: "-15% 0px" }}
-                                transition={{ duration: 0.9, delay: 0, ease: [0.215, 0.61, 0.355, 1] }}
-                                className="block ml-0 md:ml-0 tracking-tight md:tracking-[-0.02em]"
-                            >
-                                WE DON&apos;T MAKE
-                            </motion.span>
-                        </div>
+                {/* Display Block & Process Plates Layout Grid */}
+                <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-8 items-center py-4">
+                    {/* 4 Lines Display Block */}
+                    <div className="md:col-span-8 lg:col-span-9 flex justify-start items-center">
+                        <h2 className="font-heading font-black text-4xl sm:text-6xl md:text-7xl lg:text-[5.75rem] uppercase text-left text-[#0a0a0a] w-full flex flex-col items-start gap-1 sm:gap-2 leading-[0.95] md:leading-[0.88]">
+                            {/* Line 1: WE DON'T MAKE (indent 0) */}
+                            <div className="overflow-hidden w-full">
+                                <motion.span
+                                    initial={reduced ? { y: 0 } : { y: "100%" }}
+                                    whileInView={{ y: 0 }}
+                                    viewport={{ once: true, margin: "-15% 0px" }}
+                                    transition={{ duration: 0.9, delay: 0, ease: [0.215, 0.61, 0.355, 1] }}
+                                    className="block ml-0 md:ml-0 tracking-tight md:tracking-[-0.02em]"
+                                >
+                                    WE DON&apos;T MAKE
+                                </motion.span>
+                            </div>
 
-                        {/* Line 2: MERCH. (indent 7% on desktop) */}
-                        <div className="overflow-hidden w-full">
-                            <motion.span
-                                initial={reduced ? { y: 0 } : { y: "100%" }}
-                                whileInView={{ y: 0 }}
-                                viewport={{ once: true, margin: "-15% 0px" }}
-                                transition={{ duration: 0.9, delay: 0.09, ease: [0.215, 0.61, 0.355, 1] }}
-                                className="block ml-0 md:ml-[7%] tracking-tight md:tracking-[-0.02em]"
-                            >
-                                MERCH.
-                            </motion.span>
-                        </div>
+                            {/* Line 2: MERCH. (indent 7% on desktop) */}
+                            <div className="overflow-hidden w-full">
+                                <motion.span
+                                    initial={reduced ? { y: 0 } : { y: "100%" }}
+                                    whileInView={{ y: 0 }}
+                                    viewport={{ once: true, margin: "-15% 0px" }}
+                                    transition={{ duration: 0.9, delay: 0.09, ease: [0.215, 0.61, 0.355, 1] }}
+                                    className="block ml-0 md:ml-[7%] tracking-tight md:tracking-[-0.02em]"
+                                >
+                                    MERCH.
+                                </motion.span>
+                            </div>
 
-                        {/* Line 3: WE BUILD IDENTITY. (indent 0) */}
-                        <div className="overflow-hidden w-full">
-                            <motion.span
-                                initial={reduced ? { y: 0 } : { y: "100%" }}
-                                whileInView={{ y: 0 }}
-                                viewport={{ once: true, margin: "-15% 0px" }}
-                                transition={{ duration: 0.9, delay: 0.18, ease: [0.215, 0.61, 0.355, 1] }}
-                                className="block ml-0 md:ml-0 tracking-tight md:tracking-[-0.02em]"
-                            >
-                                WE BUILD{" "}
-                                <span className="text-[#105233] font-black uppercase">
-                                    IDENTITY.
-                                </span>
-                            </motion.span>
-                        </div>
+                            {/* Line 3: WE BUILD IDENTITY. (indent 0, IDENTITY filled with footage) */}
+                            <div className="overflow-hidden w-full">
+                                <motion.span
+                                    initial={reduced ? { y: 0 } : { y: "100%" }}
+                                    whileInView={{ y: 0 }}
+                                    viewport={{ once: true, margin: "-15% 0px" }}
+                                    transition={{ duration: 0.9, delay: 0.18, ease: [0.215, 0.61, 0.355, 1] }}
+                                    className="block ml-0 md:ml-0 tracking-tight md:tracking-[-0.02em]"
+                                >
+                                    WE BUILD{" "}
+                                    <VideoWordIdentity reduced={reduced} />
+                                </motion.span>
+                            </div>
 
-                        {/* Line 4: STITCH BY STITCH. (indent 7% on desktop) */}
-                        <div className="overflow-hidden w-full">
-                            <motion.div
-                                initial={reduced ? { y: 0 } : { y: "100%" }}
-                                whileInView={{ y: 0 }}
-                                viewport={{ once: true, margin: "-15% 0px" }}
-                                transition={{ duration: 0.9, delay: 0.27, ease: [0.215, 0.61, 0.355, 1] }}
-                                className="ml-0 md:ml-[7%]"
-                            >
-                                <StitchLineText reduced={reduced} />
-                            </motion.div>
-                        </div>
-                    </h2>
+                            {/* Line 4: STITCH BY STITCH. (indent 7% on desktop) */}
+                            <div className="overflow-hidden w-full">
+                                <motion.div
+                                    initial={reduced ? { y: 0 } : { y: "100%" }}
+                                    whileInView={{ y: 0 }}
+                                    viewport={{ once: true, margin: "-15% 0px" }}
+                                    transition={{ duration: 0.9, delay: 0.27, ease: [0.215, 0.61, 0.355, 1] }}
+                                    className="ml-0 md:ml-[7%]"
+                                >
+                                    <StitchLineText reduced={reduced} />
+                                </motion.div>
+                            </div>
+                        </h2>
+                    </div>
+
+                    {/* Process Plates A & B (Right Margin) */}
+                    <div className="md:col-span-4 lg:col-span-3 flex flex-col gap-6 relative">
+                        {/* Process Plate A (~180x230, upper right beside lines 1-2) */}
+                        <motion.div
+                            style={reduced ? {} : { y: yPlateA }}
+                            initial={reduced ? { opacity: 1 } : { opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true, margin: "-10% 0px" }}
+                            transition={{ duration: 0.7, delay: 0.2 }}
+                            className="relative w-full md:w-[190px] h-52 md:h-[240px] border border-black/15 bg-[#0a0a0a]/05 p-1 flex flex-col justify-between overflow-hidden group shadow-sm self-start md:self-auto"
+                        >
+                            <div className="relative w-full h-full overflow-hidden">
+                                <NextImage
+                                    src="/sequence/ezgif-frame-060.jpg"
+                                    alt="1327 Atelier Heavy Fabric Spec"
+                                    fill
+                                    className="object-cover grayscale contrast-125 group-hover:scale-105 transition-transform duration-500"
+                                    loading="lazy"
+                                />
+                                <div className="absolute inset-0 bg-[#105233]/20 mix-blend-multiply pointer-events-none" />
+                            </div>
+                            {/* Spec Caption Chip A */}
+                            <div className="bg-[#eae6df]/95 backdrop-blur-sm border-t border-black/15 p-2 font-mono text-[9px] text-[#105233] font-bold tracking-wider leading-tight">
+                                <div>FABRIC: 320 GSM COTTON</div>
+                                <div className="text-black/50">STITCH COUNT: 14/INCH</div>
+                            </div>
+                        </motion.div>
+
+                        {/* Process Plate B (~140x140, lower right beside line 3, hidden on mobile < 900px) */}
+                        <motion.div
+                            style={reduced ? {} : { y: yPlateB }}
+                            initial={reduced ? { opacity: 1 } : { opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true, margin: "-10% 0px" }}
+                            transition={{ duration: 0.7, delay: 0.35 }}
+                            className="hidden md:flex relative w-[145px] h-[145px] border border-black/15 bg-[#0a0a0a]/05 p-1 flex-col justify-between overflow-hidden group shadow-sm self-end translate-x-4 lg:translate-x-8"
+                        >
+                            <div className="relative w-full h-full overflow-hidden">
+                                <NextImage
+                                    src="/sequence/ezgif-frame-120.jpg"
+                                    alt="1327 Emerald Thread Spec"
+                                    fill
+                                    className="object-cover grayscale contrast-125 group-hover:scale-105 transition-transform duration-500"
+                                    loading="lazy"
+                                />
+                                <div className="absolute inset-0 bg-[#105233]/20 mix-blend-multiply pointer-events-none" />
+                            </div>
+                            {/* Spec Caption Chip B */}
+                            <div className="bg-[#eae6df]/95 backdrop-blur-sm border-t border-black/15 p-1.5 font-mono text-[8.5px] text-[#105233] font-bold tracking-wider leading-tight">
+                                <div>THREAD: EMERALD 40/2</div>
+                                <div className="text-black/50">ATELIER NO: #1327-A</div>
+                            </div>
+                        </motion.div>
+                    </div>
                 </div>
+
+                {/* Full-Bleed Macro Band (200-260px tall horizontal strip) */}
+                <motion.div
+                    initial={reduced ? { opacity: 1 } : { opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-10% 0px" }}
+                    transition={{ duration: 0.8, delay: 0.2 }}
+                    className="relative w-full h-52 sm:h-60 md:h-64 border-y border-black/15 overflow-hidden my-2 group"
+                >
+                    {/* Parallax Macro Background */}
+                    <motion.div
+                        style={reduced ? {} : { y: yMacro }}
+                        className="absolute inset-0 w-full h-[120%] -top-[10%]"
+                    >
+                        <NextImage
+                            src="/manifesto/fabric-macro.jpg"
+                            alt="1327 Seam Under Tension Macro Spec"
+                            fill
+                            className="object-cover grayscale contrast-125 brightness-90 group-hover:scale-105 transition-transform duration-700"
+                            loading="lazy"
+                        />
+                        <div className="absolute inset-0 bg-[#105233]/30 mix-blend-multiply pointer-events-none" />
+                    </motion.div>
+
+                    {/* Macro Band Spec Caption Chip */}
+                    <div className="absolute bottom-4 left-4 sm:left-8 z-10 inline-flex items-center gap-2 px-3 py-1.5 bg-[#eae6df]/90 backdrop-blur-md border border-black/20 font-mono text-[10px] sm:text-xs text-[#105233] font-bold tracking-widest uppercase">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#105233]" />
+                        <span>● &#123; MACRO SPEC: HIGH-DENSITY SEAM TENSION // 320 GSM &#125;</span>
+                    </div>
+                </motion.div>
 
                 {/* Bottom Row */}
                 <motion.div
@@ -516,7 +640,7 @@ function ManifestoSection() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-10% 0px" }}
                     transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                    className="w-full grid grid-cols-1 md:grid-cols-12 gap-6 items-end mt-4 pt-6 border-t border-black/15"
+                    className="w-full grid grid-cols-1 md:grid-cols-12 gap-6 items-end pt-2 border-t border-black/15"
                 >
                     <div className="md:col-span-4 font-mono text-xs tracking-[0.2em] uppercase text-[#105233] font-bold text-left flex flex-wrap items-center gap-3">
                         <span>&#123; WHY WE EXIST &#125;</span>
