@@ -423,6 +423,74 @@ const PROCESS_SHOT_LIST = [
     { src: "/manifesto/custom-leather-3.jpg", alt: "Custom 1327 Leather Coasters Collection" },
 ];
 
+function FabricReveal({
+    src,
+    alt,
+    markText = "1327",
+}: {
+    src: string;
+    alt: string;
+    markText?: string;
+}) {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [mousePos, setMousePos] = useState({ x: 50, y: 50, r: 0 });
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!containerRef.current) return;
+        const rect = containerRef.current.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        setMousePos({ x, y, r: 160 });
+    };
+
+    const handleMouseLeave = () => {
+        setMousePos((prev) => ({ ...prev, r: 0 }));
+    };
+
+    return (
+        <div className="fabric-frame w-full h-full">
+            <div
+                ref={containerRef}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+                className="fabric w-full h-full"
+            >
+                {/* Base Unlit Image */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                    src={src}
+                    alt={alt}
+                    className="fabric__img grayscale contrast-125 brightness-90"
+                />
+
+                {/* Lit Reveal Mask Layer */}
+                <div
+                    className="fabric__reveal pointer-events-none"
+                    style={
+                        {
+                            "--mx": `${mousePos.x}%`,
+                            "--my": `${mousePos.y}%`,
+                            "--r": `${mousePos.r}px`,
+                        } as React.CSSProperties
+                    }
+                >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                        src={src}
+                        alt=""
+                        className="fabric__img fabric__img--lit grayscale contrast-125"
+                    />
+                </div>
+
+                {/* Soft-light Knitted Mark Overlay */}
+                <div className="fabric__mark font-heading select-none">
+                    {markText}
+                </div>
+            </div>
+        </div>
+    );
+}
+
 function ManifestoSection() {
     const reduced = useReducedMotion() ?? false;
     const sectionRef = useRef<HTMLDivElement>(null);
@@ -601,21 +669,16 @@ function ManifestoSection() {
                             </h2>
                         </motion.div>
 
-                        {/* ACT 3: SINGLE FLOATING CENTERED IMAGE (Progress 0.72 to 1.00) */}
+                        {/* ACT 3: FABRIC REVEAL INTERACTIVE FLOATING MACRO CONTAINER */}
                         <motion.div
                             style={{ opacity: act3Opacity, scale: act3Scale }}
-                            className="absolute inset-0 m-auto w-[65%] max-w-3xl aspect-[16/9] z-30 pointer-events-none flex flex-col justify-between p-1.5 border border-white/20 bg-black/10 shadow-2xl overflow-hidden"
+                            className="absolute inset-0 m-auto w-[65%] max-w-3xl aspect-[16/10] z-30 pointer-events-auto shadow-2xl overflow-hidden"
                         >
-                            <div className="relative w-full h-full overflow-hidden">
-                                <NextImage
-                                    src="/manifesto/fabric-macro.jpg"
-                                    alt="1327 Seam Under Tension Macro Spec"
-                                    fill
-                                    className="object-cover grayscale contrast-125 brightness-95"
-                                    loading="lazy"
-                                />
-                                <div className="absolute inset-0 bg-[#105233]/20 mix-blend-multiply pointer-events-none" />
-                            </div>
+                            <FabricReveal
+                                src="/manifesto/fabric-macro.jpg"
+                                alt="1327 Seam Under Tension Macro Spec"
+                                markText="1327"
+                            />
                         </motion.div>
 
                     </div>
@@ -685,10 +748,12 @@ function ManifestoSection() {
                 </div>
 
                 {/* Mobile Act 3 Floating Single Image (8% margins) */}
-                <div className="w-[92%] mx-auto aspect-[16/9] border border-black/15 p-1 bg-black/5 flex flex-col justify-between my-2">
-                    <div className="relative w-full h-full overflow-hidden">
-                        <NextImage src="/manifesto/fabric-macro.jpg" alt="Macro spec" fill className="object-cover grayscale contrast-125" loading="lazy" />
-                    </div>
+                <div className="w-[92%] mx-auto aspect-[16/10] my-2 shadow-lg overflow-hidden">
+                    <FabricReveal
+                        src="/manifesto/fabric-macro.jpg"
+                        alt="1327 Seam Under Tension Macro Spec"
+                        markText="1327"
+                    />
                 </div>
 
                 {/* Mobile Manifesto Paragraph */}
