@@ -1,6 +1,6 @@
 "use client";
 
-import { useScroll, useTransform, useMotionValueEvent, motion, MotionValue } from "framer-motion";
+import { useScroll, useTransform, useMotionValueEvent, motion, MotionValue, useReducedMotion } from "framer-motion";
 import { useRef, useEffect, useState, useCallback } from "react";
 import NextImage from "next/image";
 import ContactModal from "./ContactModal";
@@ -43,7 +43,7 @@ export default function Mission() {
                     {/* Scroll-driven frame animation background */}
                     <FrameCanvas scrollProgress={scrollYProgress} />
                     {/* Dark overlay for text readability */}
-                    <div className="absolute inset-0 bg-black/40 z-[1]" />
+                    <div className="absolute inset-0 bg-black/40 z-[2]" />
 
                     {/* Bottom gradient mask — blends green video frame background to 100% pitch black */}
                     <div className="absolute bottom-0 left-0 right-0 h-48 sm:h-64 bg-gradient-to-t from-[#105233] via-[#105233]/95 to-transparent z-[5] pointer-events-none" />
@@ -261,53 +261,40 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
                             1327
                         </h1>
 
+                        {/* Subheading / MOQ Callout */}
+                        <p className="font-mono text-xs sm:text-sm md:text-base text-[#4FB47E] tracking-widest uppercase font-semibold">
+                            {HERO_MOQ_LINE}
+                        </p>
 
-
-                        {/* F1 Racing Pill & Liquid Fill Buttons */}
-                        <div className="flex flex-wrap items-center gap-4 pt-4">
-                            {/* REACH OUT Pill Button */}
-                            <motion.button
+                        {/* Primary & Secondary Hero CTAs */}
+                        <div className="flex flex-wrap items-center gap-4 sm:gap-6 mt-4 sm:mt-6">
+                            {/* Primary CTA: REACH OUT */}
+                            <button
                                 onClick={() => setIsContactOpen(true)}
-                                whileHover={{ scale: 1.05, y: -3 }}
-                                whileTap={{ scale: 0.95 }}
-                                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                                className="group relative overflow-hidden rounded-full bg-white text-[#0D1712] font-heading font-black text-xs sm:text-sm md:text-base uppercase tracking-[0.2em] px-7 sm:px-9 py-3.5 sm:py-4 flex items-center gap-3.5 cursor-pointer shadow-[0_10px_30px_rgba(0,0,0,0.3)] transition-all duration-300 border border-white"
+                                className="group relative inline-flex items-center gap-3 px-7 sm:px-8 py-3.5 sm:py-4 rounded-full bg-[#4FB47E] text-[#0D1712] font-heading font-bold text-sm sm:text-base tracking-wider uppercase overflow-hidden shadow-lg hover:shadow-[0_0_25px_rgba(79,180,126,0.5)] transition-all duration-300 transform active:scale-95"
                             >
-                                {/* Animated Liquid Background Layer */}
-                                <span className="absolute inset-0 rounded-full bg-[#4FB47E] scale-0 group-hover:scale-100 transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] origin-center z-0" />
-
-                                {/* Text Label */}
-                                <span className="relative z-10 transition-colors duration-300 group-hover:text-[#0D1712]">
-                                    REACH OUT
+                                <span className="relative z-10 flex items-center gap-3">
+                                    <span>REACH OUT</span>
+                                    <span className="flex items-center justify-center w-7 h-7 rounded-full bg-[#0D1712] text-[#4FB47E] group-hover:rotate-45 transition-transform duration-300">
+                                        <ArrowUpRight className="w-4 h-4" />
+                                    </span>
                                 </span>
+                                <span className="absolute inset-0 bg-white scale-0 group-hover:scale-100 transition-transform duration-300 origin-center rounded-full" />
+                            </button>
 
-                                {/* Animated Circular Badge Icon */}
-                                <span className="relative z-10 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#0D1712] text-white group-hover:bg-white group-hover:text-[#0D1712] flex items-center justify-center transition-all duration-300 shrink-0">
-                                    <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                                </span>
-                            </motion.button>
-
-                            {/* SEE THE WORK Pill Button */}
-                            <motion.button
+                            {/* Secondary CTA: SEE THE WORK */}
+                            <button
                                 onClick={handleScrollToNext}
-                                whileHover={{ scale: 1.05, y: -3 }}
-                                whileTap={{ scale: 0.95 }}
-                                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                                className="group relative overflow-hidden rounded-full bg-white/10 backdrop-blur-md text-white border border-white/40 font-heading font-black text-xs sm:text-sm md:text-base uppercase tracking-[0.2em] px-7 sm:px-9 py-3.5 sm:py-4 flex items-center gap-3.5 cursor-pointer transition-all duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.2)]"
+                                className="group relative inline-flex items-center gap-3 px-7 sm:px-8 py-3.5 sm:py-4 rounded-full border-2 border-[#4FB47E]/60 bg-black/40 backdrop-blur-md text-[#F2F9F4] font-heading font-bold text-sm sm:text-base tracking-wider uppercase overflow-hidden hover:border-[#4FB47E] transition-all duration-300 transform active:scale-95"
                             >
-                                {/* Animated Liquid Background Layer */}
-                                <span className="absolute inset-0 rounded-full bg-white scale-0 group-hover:scale-100 transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] origin-center z-0" />
-
-                                {/* Text Label */}
-                                <span className="relative z-10 transition-colors duration-300 group-hover:text-[#0D1712]">
-                                    SEE THE WORK
+                                <span className="relative z-10 flex items-center gap-3 group-hover:text-[#0D1712] transition-colors duration-300">
+                                    <span>SEE THE WORK</span>
+                                    <span className="flex items-center justify-center w-7 h-7 rounded-full bg-[#4FB47E]/20 text-[#4FB47E] group-hover:bg-[#0D1712] group-hover:text-[#4FB47E] transition-colors duration-300">
+                                        <ArrowDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform duration-300" />
+                                    </span>
                                 </span>
-
-                                {/* Animated Circular Badge Icon */}
-                                <span className="relative z-10 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/20 text-white group-hover:bg-[#0D1712] group-hover:text-white flex items-center justify-center transition-all duration-300 shrink-0">
-                                    <ArrowDown className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:translate-y-1" />
-                                </span>
-                            </motion.button>
+                                <span className="absolute inset-0 bg-[#4FB47E] scale-0 group-hover:scale-100 transition-transform duration-300 origin-center rounded-full" />
+                            </button>
                         </div>
                     </div>
                 </motion.div>
@@ -318,16 +305,93 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
     );
 }
 
+function StitchLineText({ reduced }: { reduced?: boolean }) {
+    return (
+        <div className="relative inline-block">
+            {/* Outlined Base Text: transparent fill, 1.5px deep green stroke */}
+            <span
+                className="block text-transparent tracking-normal select-none"
+                style={{
+                    WebkitTextStroke: "1.5px #105233",
+                }}
+            >
+                STITCH BY STITCH.
+            </span>
+
+            {!reduced && (
+                <>
+                    {/* Left-to-Right Green Fill Wipe */}
+                    <motion.div
+                        initial={{ clipPath: "inset(0 100% 0 0)" }}
+                        whileInView={{ clipPath: "inset(0 0% 0 0)" }}
+                        viewport={{ once: true, margin: "-15% 0px" }}
+                        transition={{
+                            duration: 1.4,
+                            delay: 0.36,
+                            ease: [0.65, 0, 0.35, 1],
+                        }}
+                        className="absolute inset-0 pointer-events-none"
+                    >
+                        <span
+                            className="block text-[#105233] tracking-normal font-black"
+                            style={{
+                                WebkitTextStroke: "1.5px #105233",
+                            }}
+                        >
+                            STITCH BY STITCH.
+                        </span>
+                    </motion.div>
+
+                    {/* 2px Green Needle Tick riding the wipe edge */}
+                    <motion.span
+                        initial={{ left: "0%", opacity: 1 }}
+                        whileInView={{ left: "100%", opacity: [1, 1, 0] }}
+                        viewport={{ once: true, margin: "-15% 0px" }}
+                        transition={{
+                            left: {
+                                duration: 1.4,
+                                delay: 0.36,
+                                ease: [0.65, 0, 0.35, 1],
+                            },
+                            opacity: {
+                                duration: 1.4,
+                                delay: 0.36,
+                                times: [0, 0.9, 1],
+                                ease: "linear",
+                            },
+                        }}
+                        className="absolute top-0 bottom-0 w-[2px] bg-[#105233] pointer-events-none"
+                    />
+                </>
+            )}
+        </div>
+    );
+}
+
+function StitchCounter({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
+    const [count, setCount] = useState(1327);
+
+    useMotionValueEvent(scrollProgress, "change", (latest) => {
+        setCount(Math.round(1327 + latest * 850));
+    });
+
+    return (
+        <span className="font-mono text-xs tracking-[0.2em] font-bold text-[#105233] tabular-nums">
+            &#123; STITCHES: {String(count).padStart(4, "0")} &#125;
+        </span>
+    );
+}
+
 function ManifestoSection() {
+    const reduced = useReducedMotion() ?? false;
     const sectionRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
         target: sectionRef,
         offset: ["start end", "end start"],
     });
 
-    // Parallax transforms for Lando Norris inspired scroll depth
-    const watermarkX = useTransform(scrollYProgress, [0, 1], [-80, 120]);
-    const watermarkOpacity = useTransform(scrollYProgress, [0.2, 0.5, 0.8], [0.03, 0.08, 0.03]);
+    // Subtly drifting watermark positioned top-right so it NEVER overlaps the outlined line
+    const watermarkX = useTransform(scrollYProgress, [0, 1], [-40, 60]);
 
     return (
         <section
@@ -352,116 +416,123 @@ function ManifestoSection() {
                 }}
             />
 
-            {/* Giant 1327 Brand Watermark with Lando Scroll Parallax */}
+            {/* Giant 1327 Brand Watermark: Ends above outlined line cap height at opacity 0.04 */}
             <motion.div
-                style={{ x: watermarkX, opacity: watermarkOpacity }}
-                className="absolute right-2 lg:right-12 top-1/2 -translate-y-1/2 pointer-events-none select-none z-0"
+                style={{ x: watermarkX, opacity: 0.04 }}
+                className="absolute right-2 lg:right-12 top-8 md:top-12 pointer-events-none select-none z-0"
             >
-                <span className="font-heading font-black text-9xl sm:text-[16rem] md:text-[24rem] tracking-tighter text-[#105233]">
+                <span className="font-heading font-black text-8xl sm:text-[14rem] md:text-[20rem] tracking-tighter text-[#105233]">
                     1327
                 </span>
             </motion.div>
 
             <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24 flex flex-col justify-between min-h-0 md:min-h-[70vh] gap-10 md:gap-0 relative z-10">
-                {/* Top Bar */}
+                {/* Header Block */}
                 <div className="flex flex-col gap-4">
+                    {/* Top Pill with dot and single curly brace delimiter */}
                     <motion.div
-                        initial={{ opacity: 0, x: -20 }}
+                        initial={reduced ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
                         whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true, margin: "-5% 0px" }}
+                        viewport={{ once: true, margin: "-10% 0px" }}
                         transition={{ duration: 0.5, ease: "easeOut" }}
                         className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-none bg-[#105233] text-white shadow-sm self-start"
                     >
                         <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
                         <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-white">
-                            1327 — BRAND MANIFESTO
+                            ● &#123; 1327 BRAND MANIFESTO &#125;
                         </span>
                     </motion.div>
 
-                    <div className="flex justify-between items-center border-b border-black/15 pb-4 w-full">
-                        <SectionMarker sectionKey="mission" />
-                        <span className="text-right font-mono text-xs font-bold uppercase tracking-[0.2em] text-black/50">
-                            THE MANIFESTO
-                        </span>
+                    {/* Single Delimiter System Header Bar */}
+                    <div className="flex justify-between items-center border-b border-black/15 pb-4 w-full font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#105233]">
+                        <span>&#123; 01 &#125; OUR MISSION</span>
+                        <StitchCounter scrollProgress={scrollYProgress} />
                     </div>
                 </div>
 
-                {/* Central Title with Lando Norris Styling & Motion */}
-                <div className="w-full flex justify-start items-center my-auto py-6">
-                    <h2 className="font-heading font-black text-4xl sm:text-6xl md:text-7xl lg:text-[5.75rem] uppercase tracking-tight leading-[0.88] text-left text-[#0a0a0a] max-w-5xl flex flex-col items-start gap-1">
-                        <motion.span
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-5% 0px" }}
-                            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                            className="block"
-                        >
-                            WE DON&apos;T MAKE
-                        </motion.span>
+                {/* Display Block: 4 Lines with Masked Staggered Reveal */}
+                <div className="w-full flex justify-start items-center my-auto py-6 md:py-10">
+                    <h2 className="font-heading font-black text-4xl sm:text-6xl md:text-7xl lg:text-[5.75rem] uppercase text-left text-[#0a0a0a] max-w-5xl flex flex-col items-start gap-1 sm:gap-2 leading-[0.95] md:leading-[0.88]">
+                        {/* Line 1: WE DON'T MAKE (indent 0) */}
+                        <div className="overflow-hidden w-full">
+                            <motion.span
+                                initial={reduced ? { y: 0 } : { y: "100%" }}
+                                whileInView={{ y: 0 }}
+                                viewport={{ once: true, margin: "-15% 0px" }}
+                                transition={{ duration: 0.9, delay: 0, ease: [0.215, 0.61, 0.355, 1] }}
+                                className="block ml-0 md:ml-0 tracking-tight md:tracking-[-0.02em]"
+                            >
+                                WE DON&apos;T MAKE
+                            </motion.span>
+                        </div>
 
-                        <motion.span
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-5% 0px" }}
-                            transition={{ duration: 0.6, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-                            className="block"
-                        >
-                            MERCH.
-                        </motion.span>
+                        {/* Line 2: MERCH. (indent 7% on desktop) */}
+                        <div className="overflow-hidden w-full">
+                            <motion.span
+                                initial={reduced ? { y: 0 } : { y: "100%" }}
+                                whileInView={{ y: 0 }}
+                                viewport={{ once: true, margin: "-15% 0px" }}
+                                transition={{ duration: 0.9, delay: 0.09, ease: [0.215, 0.61, 0.355, 1] }}
+                                className="block ml-0 md:ml-[7%] tracking-tight md:tracking-[-0.02em]"
+                            >
+                                MERCH.
+                            </motion.span>
+                        </div>
 
-                        <motion.span
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-5% 0px" }}
-                            transition={{ duration: 0.6, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
-                            className="block relative"
-                        >
-                            WE BUILD{" "}
-                            <span className="text-[#105233] font-black uppercase">
-                                IDENTITY.
-                            </span>
-                            
-                            {/* Running-Stitch Needle Line in #105233 */}
-                            <svg className="w-full h-4 overflow-visible pointer-events-none mt-2" viewBox="0 0 400 12" fill="none">
-                                <motion.path
-                                    d="M 0,6 Q 100,2 200,6 T 400,6"
-                                    stroke="#105233"
-                                    strokeWidth="3.5"
-                                    fill="none"
-                                    strokeDasharray="12 8"
-                                    strokeLinecap="round"
-                                    initial={{ pathLength: 0, opacity: 0 }}
-                                    whileInView={{ pathLength: 1, opacity: 1 }}
-                                    viewport={{ once: true, margin: "-5% 0px" }}
-                                    transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-                                />
-                            </svg>
-                        </motion.span>
+                        {/* Line 3: WE BUILD IDENTITY. (indent 0) */}
+                        <div className="overflow-hidden w-full">
+                            <motion.span
+                                initial={reduced ? { y: 0 } : { y: "100%" }}
+                                whileInView={{ y: 0 }}
+                                viewport={{ once: true, margin: "-15% 0px" }}
+                                transition={{ duration: 0.9, delay: 0.18, ease: [0.215, 0.61, 0.355, 1] }}
+                                className="block ml-0 md:ml-0 tracking-tight md:tracking-[-0.02em]"
+                            >
+                                WE BUILD{" "}
+                                <span className="text-[#105233] font-black uppercase">
+                                    IDENTITY.
+                                </span>
+                            </motion.span>
+                        </div>
 
-                        <motion.span
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-5% 0px" }}
-                            transition={{ duration: 0.6, delay: 0.24, ease: [0.16, 1, 0.3, 1] }}
-                            className="block mt-4 text-transparent"
-                            style={{ WebkitTextStroke: "2px #105233" }}
-                        >
-                            STITCH BY STITCH.
-                        </motion.span>
+                        {/* Line 4: STITCH BY STITCH. (indent 7% on desktop) */}
+                        <div className="overflow-hidden w-full">
+                            <motion.div
+                                initial={reduced ? { y: 0 } : { y: "100%" }}
+                                whileInView={{ y: 0 }}
+                                viewport={{ once: true, margin: "-15% 0px" }}
+                                transition={{ duration: 0.9, delay: 0.27, ease: [0.215, 0.61, 0.355, 1] }}
+                                className="ml-0 md:ml-[7%]"
+                            >
+                                <StitchLineText reduced={reduced} />
+                            </motion.div>
+                        </div>
                     </h2>
                 </div>
 
                 {/* Bottom Row */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-5% 0px" }}
+                    viewport={{ once: true, margin: "-10% 0px" }}
                     transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
                     className="w-full grid grid-cols-1 md:grid-cols-12 gap-6 items-end mt-4 pt-6 border-t border-black/15"
                 >
-                    <div className="md:col-span-4 text-xs font-mono tracking-[0.2em] uppercase text-[#105233] font-bold text-left flex items-center gap-2">
-                        <span>/ WHY WE EXIST</span>
-                        <span className="text-black/30 font-normal">| 1327</span>
+                    <div className="md:col-span-4 font-mono text-xs tracking-[0.2em] uppercase text-[#105233] font-bold text-left flex flex-wrap items-center gap-3">
+                        <span>&#123; WHY WE EXIST &#125;</span>
+                        <span className="text-black/40 font-normal">&#123; 1327 &#125;</span>
+                        
+                        {/* Integrated Hang Tag Badge */}
+                        <motion.div
+                            initial={reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 15, scale: 0.92 }}
+                            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                            viewport={{ once: true, margin: "-10% 0px" }}
+                            transition={{ duration: 0.6, delay: 0.47, ease: [0.215, 0.61, 0.355, 1] }}
+                            className="inline-flex items-center gap-2 px-2.5 py-1 border border-[#105233]/25 bg-[#105233]/05 rounded-none font-mono text-[10px] text-[#105233] font-bold tracking-wider"
+                        >
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#105233]" />
+                            <span>1327-TAG #01</span>
+                        </motion.div>
                     </div>
 
                     <div className="md:col-span-8 font-sans text-base sm:text-lg md:text-xl font-light text-[#0a0a0a]/85 leading-relaxed text-left max-w-2xl">
