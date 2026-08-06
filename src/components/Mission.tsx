@@ -298,15 +298,15 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
                 }}
                 className="absolute inset-0 z-20 pointer-events-none m-auto flex flex-col items-center justify-center p-6 select-none"
             >
-                <div className="bg-[#105233] text-white p-8 sm:p-12 md:p-14 border border-white/20 shadow-[0_25px_60px_rgba(0,0,0,0.6)] flex flex-col items-center justify-center gap-3.5 max-w-sm sm:max-w-md w-full text-center">
-                    {/* 1327 Header Text */}
-                    <span className="font-heading font-black text-6xl sm:text-7xl md:text-8xl tracking-tight text-white leading-none">
-                        1327
-                    </span>
-                    <div className="w-full h-1 bg-white my-1" />
-                    <span className="font-mono text-xs sm:text-sm font-bold tracking-[0.25em] uppercase text-white">
-                        THIRTEEN TWENTYSEVEN
-                    </span>
+                <div className="relative w-[280px] sm:w-[360px] md:w-[420px] aspect-square shadow-[0_25px_60px_rgba(0,0,0,0.7)] border border-white/20 overflow-hidden rounded-sm bg-[#105233]">
+                    <NextImage
+                        src="/logo/1327_green_brand_card.png"
+                        alt="1327 Thirteen Twentyseven Brand Logo"
+                        fill
+                        className="object-cover"
+                        priority
+                        unoptimized
+                    />
                 </div>
             </motion.div>
 
