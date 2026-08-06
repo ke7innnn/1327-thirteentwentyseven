@@ -261,11 +261,6 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
                             1327
                         </h1>
 
-                        {/* Subheading / MOQ Callout */}
-                        <p className="font-mono text-xs sm:text-sm md:text-base text-[#4FB47E] tracking-widest uppercase font-semibold">
-                            {HERO_MOQ_LINE}
-                        </p>
-
                         {/* Primary & Secondary Hero CTAs */}
                         <div className="flex flex-wrap items-center gap-4 sm:gap-6 mt-4 sm:mt-6">
                             {/* Primary CTA: REACH OUT */}
