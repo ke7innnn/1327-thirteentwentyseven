@@ -27,8 +27,8 @@ export default function Mission() {
 
     return (
         <div id="mission" className="relative w-full z-10">
-            {/* Smooth Hero sequence container with 300vh sticky scroll pin length */}
-            <div ref={heroRef} className="relative w-full h-[300vh]">
+            {/* Smooth Hero sequence container with 250vh sticky scroll pin length */}
+            <div ref={heroRef} className="relative w-full h-[250vh]">
                 <section className="sticky top-0 w-full h-screen overflow-hidden">
                     {/* Instant fallback frame 1 for 0ms initial render before JS canvas hydratation */}
                     <NextImage
@@ -232,15 +232,11 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }
 function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
     const [isContactOpen, setIsContactOpen] = useState(false);
 
-    // Hero CTA buttons fade out earlier as user scrolls to make room for logo pop-up
-    const opacityHero = useTransform(scrollProgress, [0, 0.35, 0.45], [1, 1, 0]);
-    const yHero = useTransform(scrollProgress, [0, 0.35, 0.45], [0, 0, -30]);
-    const pointerEventsHero = useTransform(scrollProgress, (latest: number) => latest > 0.40 ? "none" : "auto");
-
-    // 1327 Logo Card pops up in center (0.42 to 0.88)
-    const logoOpacity = useTransform(scrollProgress, [0.38, 0.50, 0.82, 0.95], [0, 1, 1, 0]);
-    const logoScale   = useTransform(scrollProgress, [0.38, 0.50, 0.82, 0.95], [0.65, 1, 1, 1.06]);
-    const logoY       = useTransform(scrollProgress, [0.38, 0.50, 0.82, 0.95], [50, 0, 0, -30]);
+    // Hero Section Overlay (1327 DESIGNED FOR THE BOLD): Stays 100% visible on screen
+    // while locked, and unpins smoothly as user scrolls down into Manifesto
+    const opacityHero = useTransform(scrollProgress, [0, 0.7, 1.0], [1, 1, 0]);
+    const yHero = useTransform(scrollProgress, [0, 0.7, 1.0], [0, 0, -40]);
+    const pointerEventsHero = useTransform(scrollProgress, (latest: number) => latest > 0.8 ? "none" : "auto");
 
     const handleScrollToNext = () => {
         const nextSec = document.getElementById("manifesto");
@@ -251,64 +247,53 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
 
     return (
         <>
-            {/* Primary & Secondary Hero CTAs in Bottom Left Corner */}
-            <div className="absolute inset-0 z-10 w-full h-full flex items-end justify-start">
+            <div className="absolute inset-0 z-10 w-full h-full flex items-center justify-center">
                 <motion.div
                     style={{ opacity: opacityHero, y: yHero, pointerEvents: pointerEventsHero }}
-                    className="absolute inset-0 w-full h-full flex flex-col justify-end items-start px-6 sm:px-12 md:px-16 lg:px-24 pb-8 sm:pb-12 md:pb-16 animate-[fadeIn_0.5s_ease-out]"
+                    className="absolute inset-0 w-full h-full flex flex-col justify-between px-6 sm:px-12 md:px-16 lg:px-24 pt-20 pb-8 sm:py-24 animate-[fadeIn_0.5s_ease-out]"
                 >
-                    <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-                        {/* Primary CTA: REACH OUT */}
-                        <button
-                            onClick={() => setIsContactOpen(true)}
-                            className="group relative inline-flex items-center gap-2.5 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[#4FB47E] text-[#0D1712] font-heading font-bold text-xs sm:text-sm tracking-wider uppercase overflow-hidden shadow-md hover:shadow-[0_0_20px_rgba(79,180,126,0.5)] transition-all duration-300 transform active:scale-95"
-                        >
-                            <span className="relative z-10 flex items-center gap-2.5">
-                                <span>REACH OUT</span>
-                                <span className="flex items-center justify-center w-5.5 h-5.5 sm:w-6 sm:h-6 rounded-full bg-[#0D1712] text-[#4FB47E] group-hover:rotate-45 transition-transform duration-300">
-                                    <ArrowUpRight className="w-3.5 h-3.5" />
-                                </span>
-                            </span>
-                            <span className="absolute inset-0 bg-white scale-0 group-hover:scale-100 transition-transform duration-300 origin-center rounded-full" />
-                        </button>
 
-                        {/* Secondary CTA: SEE THE WORK */}
-                        <button
-                            onClick={handleScrollToNext}
-                            className="group relative inline-flex items-center gap-2.5 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full border-2 border-[#4FB47E]/60 bg-black/40 backdrop-blur-md text-[#F2F9F4] font-heading font-bold text-xs sm:text-sm tracking-wider uppercase overflow-hidden hover:border-[#4FB47E] transition-all duration-300 transform active:scale-95"
-                        >
-                            <span className="relative z-10 flex items-center gap-2.5 group-hover:text-[#0D1712] transition-colors duration-300">
-                                <span>SEE THE WORK</span>
-                                <span className="flex items-center justify-center w-5.5 h-5.5 sm:w-6 sm:h-6 rounded-full bg-[#4FB47E]/20 text-[#4FB47E] group-hover:bg-[#0D1712] group-hover:text-[#4FB47E] transition-colors duration-300">
-                                    <ArrowDown className="w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform duration-300" />
+
+                    {/* Unified Left-Aligned Hero Typography Stack */}
+                    <div className="w-full max-w-5xl flex flex-col items-start text-left gap-3 sm:gap-5 my-auto pt-6">
+                        {/* Giant 1327 Header */}
+                        <h1 className="font-heading font-black text-[18vw] sm:text-[14vw] md:text-[12vw] lg:text-[11rem] xl:text-[13rem] leading-[0.82] tracking-tighter text-[#F2F9F4] select-none -ml-1 sm:-ml-2">
+                            1327
+                        </h1>
+
+                        {/* Primary & Secondary Hero CTAs */}
+                        <div className="flex flex-wrap items-center gap-4 sm:gap-6 mt-4 sm:mt-6">
+                            {/* Primary CTA: REACH OUT */}
+                            <button
+                                onClick={() => setIsContactOpen(true)}
+                                className="group relative inline-flex items-center gap-3 px-7 sm:px-8 py-3.5 sm:py-4 rounded-full bg-[#4FB47E] text-[#0D1712] font-heading font-bold text-sm sm:text-base tracking-wider uppercase overflow-hidden shadow-lg hover:shadow-[0_0_25px_rgba(79,180,126,0.5)] transition-all duration-300 transform active:scale-95"
+                            >
+                                <span className="relative z-10 flex items-center gap-3">
+                                    <span>REACH OUT</span>
+                                    <span className="flex items-center justify-center w-7 h-7 rounded-full bg-[#0D1712] text-[#4FB47E] group-hover:rotate-45 transition-transform duration-300">
+                                        <ArrowUpRight className="w-4 h-4" />
+                                    </span>
                                 </span>
-                            </span>
-                            <span className="absolute inset-0 bg-[#4FB47E] scale-0 group-hover:scale-100 transition-transform duration-300 origin-center rounded-full" />
-                        </button>
+                                <span className="absolute inset-0 bg-white scale-0 group-hover:scale-100 transition-transform duration-300 origin-center rounded-full" />
+                            </button>
+
+                            {/* Secondary CTA: SEE THE WORK */}
+                            <button
+                                onClick={handleScrollToNext}
+                                className="group relative inline-flex items-center gap-3 px-7 sm:px-8 py-3.5 sm:py-4 rounded-full border-2 border-[#4FB47E]/60 bg-black/40 backdrop-blur-md text-[#F2F9F4] font-heading font-bold text-sm sm:text-base tracking-wider uppercase overflow-hidden hover:border-[#4FB47E] transition-all duration-300 transform active:scale-95"
+                            >
+                                <span className="relative z-10 flex items-center gap-3 group-hover:text-[#0D1712] transition-colors duration-300">
+                                    <span>SEE THE WORK</span>
+                                    <span className="flex items-center justify-center w-7 h-7 rounded-full bg-[#4FB47E]/20 text-[#4FB47E] group-hover:bg-[#0D1712] group-hover:text-[#4FB47E] transition-colors duration-300">
+                                        <ArrowDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform duration-300" />
+                                    </span>
+                                </span>
+                                <span className="absolute inset-0 bg-[#4FB47E] scale-0 group-hover:scale-100 transition-transform duration-300 origin-center rounded-full" />
+                            </button>
+                        </div>
                     </div>
                 </motion.div>
             </div>
-
-            {/* 1327 Brand Logo Pop-Up Card in Center on Scroll */}
-            <motion.div
-                style={{
-                    opacity: logoOpacity,
-                    scale: logoScale,
-                    y: logoY,
-                }}
-                className="absolute inset-0 z-20 pointer-events-none m-auto flex flex-col items-center justify-center p-6 select-none"
-            >
-                <div className="relative w-[280px] sm:w-[360px] md:w-[420px] aspect-square shadow-[0_25px_60px_rgba(0,0,0,0.7)] border border-white/20 overflow-hidden rounded-sm bg-[#105233]">
-                    <NextImage
-                        src="/logo/1327_green_brand_card.png"
-                        alt="1327 Thirteen Twentyseven Brand Logo"
-                        fill
-                        className="object-cover"
-                        priority
-                        unoptimized
-                    />
-                </div>
-            </motion.div>
 
             <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
         </>
@@ -438,345 +423,172 @@ const PROCESS_SHOT_LIST = [
     { src: "/manifesto/custom-leather-3.jpg", alt: "Custom 1327 Leather Coasters Collection" },
 ];
 
-function FabricReveal({
-    src,
-    alt,
-    markText = "1327",
-}: {
-    src: string;
-    alt: string;
-    markText?: string;
-}) {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const [mousePos, setMousePos] = useState({ x: 50, y: 50, r: 160 });
-
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!containerRef.current) return;
-        const rect = containerRef.current.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 100;
-        const y = ((e.clientY - rect.top) / rect.height) * 100;
-        setMousePos({ x, y, r: 220 });
-    };
-
-    const handleMouseLeave = () => {
-        setMousePos({ x: 50, y: 50, r: 160 });
-    };
-
-    return (
-        <div className="fabric-frame w-full h-full">
-            <div
-                ref={containerRef}
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-                className="fabric w-full h-full"
-            >
-                {/* Base Unlit Image */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                    src={src}
-                    alt={alt}
-                    className="fabric__img grayscale contrast-125 brightness-80"
-                />
-
-                {/* Lit Reveal Mask Layer */}
-                <div
-                    className="fabric__reveal pointer-events-none"
-                    style={
-                        {
-                            "--mx": `${mousePos.x}%`,
-                            "--my": `${mousePos.y}%`,
-                            "--r": `${mousePos.r}px`,
-                        } as React.CSSProperties
-                    }
-                >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                        src={src}
-                        alt=""
-                        className="fabric__img fabric__img--lit grayscale contrast-125"
-                    />
-                </div>
-
-                {/* Knitted Watermark Overlay */}
-                <div className="fabric__mark font-heading select-none">
-                    {markText}
-                </div>
-            </div>
-        </div>
-    );
-}
-
 function ManifestoSection() {
-    const reduced = useReducedMotion() ?? false;
     const sectionRef = useRef<HTMLDivElement>(null);
-
     const { scrollYProgress } = useScroll({
         target: sectionRef,
-        offset: ["start start", "end end"],
+        offset: ["start end", "end start"],
     });
 
-    // ─── THREE-ACT COLOR ARCHITECTURE ───────────────────────────────────────
-    // Act 1 (0.00-0.45): Cream ground (#eae6df), near-black ink (#0a0a0a), deep green accent (#105233)
-    // Act 2 (0.45-0.72): Lerp ground -> deep green (#105233), ink -> cream (#eae6df), accent -> cream (#eae6df)
-    // Act 3 (0.72-1.00): Deep green ground (#105233), cream ink & accent (#eae6df)
-    const groundColor = useTransform(scrollYProgress, [0, 0.45, 0.72, 1], ["#eae6df", "#eae6df", "#105233", "#105233"]);
-    const inkColor = useTransform(scrollYProgress, [0, 0.45, 0.72, 1], ["#0a0a0a", "#0a0a0a", "#eae6df", "#eae6df"]);
-    const accentColor = useTransform(scrollYProgress, [0, 0.45, 0.72, 1], ["#105233", "#105233", "#eae6df", "#eae6df"]);
-    const ruleColor = useTransform(scrollYProgress, [0, 0.45, 0.72, 1], ["rgba(10,10,10,0.15)", "rgba(10,10,10,0.15)", "rgba(234,230,223,0.25)", "rgba(234,230,223,0.25)"]);
-
-    // Watermark position & opacity
-    const watermarkX = useTransform(scrollYProgress, [0, 1], [-40, 60]);
-
-    // Act 1 & 2 Left Image Column Motion
-    const columnY = useTransform(scrollYProgress, [0, 0.45], ["0%", "-40%"]);
-    const columnX = useTransform(scrollYProgress, [0.45, 0.70], ["0%", "-120%"]);
-    const columnOpacity = useTransform(scrollYProgress, [0.45, 0.68], [1, 0]);
-
-    // Act 3 Display Block Fade Out
-    const displayOpacity = useTransform(scrollYProgress, [0.65, 0.78], [1, 0]);
-    const displayY = useTransform(scrollYProgress, [0.65, 0.78], [0, -30]);
-
-    // Act 3 Floating Single Image Motion
-    const act3Opacity = useTransform(scrollYProgress, [0.70, 0.80], [0, 1]);
-    const act3Scale = useTransform(scrollYProgress, [0.70, 0.80], [0.92, 1]);
+    const watermarkX = useTransform(scrollYProgress, [0, 1], [-80, 120]);
+    const watermarkOpacity = useTransform(scrollYProgress, [0.2, 0.5, 0.8], [0.03, 0.08, 0.03]);
 
     return (
         <section
             ref={sectionRef}
             id="manifesto"
-            className="relative z-20 w-full select-none rounded-none min-h-screen border-b border-black/10 md:h-[280vh]"
+            className="relative z-20 bg-[#eae6df] text-[#0a0a0a] py-16 md:py-24 border-b border-black/10 w-full overflow-hidden select-none rounded-none"
         >
-            {/* DESKTOP PINNED THREE-ACT LAYOUT (>= 900px / md) */}
-            <div className="hidden md:block sticky top-0 h-screen w-full overflow-hidden">
-                <motion.div
-                    style={{ backgroundColor: groundColor, color: inkColor }}
-                    className="relative w-full h-full flex flex-col justify-between py-8 lg:py-12 px-8 sm:px-12 lg:px-20 transition-colors duration-200"
-                >
-                    {/* Woven Linen Apparel Fabric Texture Overlay */}
-                    <div
-                        className="absolute inset-0 pointer-events-none opacity-[0.2] mix-blend-multiply bg-repeat z-0"
-                        style={{
-                            backgroundImage: "url('/bg/clothing_fabric_bg.png')",
-                            backgroundSize: "450px 450px",
-                        }}
-                    />
+            {/* Woven Linen Apparel Fabric Texture Overlay */}
+            <div
+                className="absolute inset-0 pointer-events-none opacity-[0.22] mix-blend-multiply bg-repeat z-0"
+                style={{
+                    backgroundImage: "url('/bg/clothing_fabric_bg.png')",
+                    backgroundSize: "450px 450px",
+                }}
+            />
 
-                    {/* Giant 1327 Brand Watermark: Ends above outlined line cap height at opacity 0.04 */}
-                    <motion.div
-                        style={{ x: watermarkX, opacity: 0.04 }}
-                        className="absolute right-2 lg:right-12 top-8 md:top-12 pointer-events-none select-none z-0"
-                    >
-                        <motion.span
-                            style={{ color: accentColor }}
-                            className="font-heading font-black text-8xl sm:text-[14rem] md:text-[20rem] tracking-tighter"
-                        >
-                            1327
-                        </motion.span>
-                    </motion.div>
+            {/* Studio Spotlight Vignette */}
+            <div
+                className="absolute inset-0 pointer-events-none z-0"
+                style={{
+                    background: "radial-gradient(ellipse 80% 70% at 50% 25%, rgba(255,255,255,0.65) 0%, transparent 85%)",
+                }}
+            />
 
-                    {/* Header Block */}
-                    <div className="relative z-20 flex flex-col gap-3">
-                        <motion.div
-                            initial={reduced ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5 }}
-                            style={{ backgroundColor: accentColor, color: groundColor }}
-                            className="inline-flex items-center gap-2.5 px-3 py-1 self-start shadow-sm"
-                        >
-                            <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-                            <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em]">
-                                &#123; 1327 BRAND MANIFESTO &#125;
-                            </span>
-                        </motion.div>
+            {/* Giant 1327 Brand Watermark with Lando Scroll Parallax */}
+            <motion.div
+                style={{ x: watermarkX, opacity: watermarkOpacity }}
+                className="absolute right-2 lg:right-12 top-1/2 -translate-y-1/2 pointer-events-none select-none z-0"
+            >
+                <span className="font-heading font-black text-9xl sm:text-[16rem] md:text-[24rem] tracking-tighter text-[#105233]">
+                    1327
+                </span>
+            </motion.div>
 
-                        <motion.div
-                            style={{ borderColor: ruleColor }}
-                            className="flex justify-between items-center border-b pb-3 w-full font-mono text-xs font-bold uppercase tracking-[0.2em]"
-                        >
-                            <motion.span style={{ color: accentColor }}>&#123; 01 &#125; OUR MISSION</motion.span>
-                            <StitchCounter scrollProgress={scrollYProgress} accentColor={accentColor} />
-                        </motion.div>
-                    </div>
-
-                    {/* Central Area: Split View (Act 1 & 2) vs Centered Image (Act 3) */}
-                    <div className="relative z-20 w-full my-auto py-2 flex items-center justify-between min-h-[420px]">
-                        
-                        {/* ACT 1 & 2: LEFT 40% IMAGE COLUMN */}
-                        <motion.div
-                            style={{
-                                x: columnX,
-                                y: columnY,
-                                opacity: columnOpacity,
-                            }}
-                            className="w-[42%] max-w-[460px] flex flex-col gap-4 pointer-events-none pr-4"
-                        >
-                            {PROCESS_SHOT_LIST.map((item, idx) => (
-                                <div key={idx} className="relative w-full border border-black/15 bg-black/5 p-1 flex flex-col justify-between overflow-hidden shadow-sm">
-                                    <div className="relative w-full h-52 lg:h-64 overflow-hidden">
-                                        <NextImage
-                                            src={item.src}
-                                            alt={item.alt}
-                                            fill
-                                            className="object-cover grayscale contrast-125"
-                                            loading="lazy"
-                                        />
-                                        <div className="absolute inset-0 bg-[#105233]/15 mix-blend-multiply" />
-                                    </div>
-                                </div>
-                            ))}
-                        </motion.div>
-
-                        {/* ACT 1 & 2: RIGHT 60% DISPLAY TYPE BLOCK */}
-                        <motion.div
-                            style={{ opacity: displayOpacity, y: displayY }}
-                            className="w-[60%] flex justify-start items-center"
-                        >
-                            <h2 className="font-heading font-black text-5xl md:text-6xl lg:text-[5.5rem] uppercase text-left w-full flex flex-col items-start gap-1 leading-[0.88]">
-                                <div className="overflow-hidden w-full">
-                                    <motion.span
-                                        initial={reduced ? { y: 0 } : { y: "100%" }}
-                                        whileInView={{ y: 0 }}
-                                        viewport={{ once: true }}
-                                        transition={{ duration: 0.9, delay: 0, ease: [0.215, 0.61, 0.355, 1] }}
-                                        className="block ml-0 tracking-[-0.02em]"
-                                    >
-                                        WE DON&apos;T MAKE
-                                    </motion.span>
-                                </div>
-
-                                <div className="overflow-hidden w-full">
-                                    <motion.span
-                                        initial={reduced ? { y: 0 } : { y: "100%" }}
-                                        whileInView={{ y: 0 }}
-                                        viewport={{ once: true }}
-                                        transition={{ duration: 0.9, delay: 0.09, ease: [0.215, 0.61, 0.355, 1] }}
-                                        className="block ml-[7%] tracking-[-0.02em]"
-                                    >
-                                        MERCH.
-                                    </motion.span>
-                                </div>
-
-                                <div className="overflow-hidden w-full">
-                                    <motion.span
-                                        initial={reduced ? { y: 0 } : { y: "100%" }}
-                                        whileInView={{ y: 0 }}
-                                        viewport={{ once: true }}
-                                        transition={{ duration: 0.9, delay: 0.18, ease: [0.215, 0.61, 0.355, 1] }}
-                                        className="block ml-0 tracking-[-0.02em]"
-                                    >
-                                        WE BUILD{" "}
-                                        <VideoWordIdentity reduced={reduced} />
-                                    </motion.span>
-                                </div>
-
-                                <div className="overflow-hidden w-full">
-                                    <motion.div
-                                        initial={reduced ? { y: 0 } : { y: "100%" }}
-                                        whileInView={{ y: 0 }}
-                                        viewport={{ once: true }}
-                                        transition={{ duration: 0.9, delay: 0.27, ease: [0.215, 0.61, 0.355, 1] }}
-                                        className="ml-[7%]"
-                                    >
-                                        <StitchLineText reduced={reduced} strokeColor={accentColor} />
-                                    </motion.div>
-                                </div>
-                            </h2>
-                        </motion.div>
-
-                        {/* ACT 3: FABRIC REVEAL INTERACTIVE FLOATING MACRO CONTAINER */}
-                        <motion.div
-                            style={{ opacity: act3Opacity, scale: act3Scale }}
-                            className="absolute inset-0 m-auto w-[65%] max-w-3xl aspect-[16/10] z-30 pointer-events-auto shadow-2xl overflow-hidden"
-                        >
-                            <FabricReveal
-                                src="/manifesto/fabric-macro.jpg"
-                                alt="1327 Seam Under Tension Macro Spec"
-                                markText="1327"
-                            />
-                        </motion.div>
-
-                    </div>
-
-                    {/* Bottom Row: Manifesto Paragraph */}
-                    <motion.div
-                        style={{ borderColor: ruleColor }}
-                        className="relative z-20 w-full pt-3 border-t flex justify-start"
-                    >
-                        <div className="font-sans text-base lg:text-lg font-light leading-relaxed text-left max-w-2xl">
-                            Every crew deserves a uniform worth belonging to. We cut premium fabric, obsess over embroidery and skip every shortcut — so your people feel like a team, and your brand becomes impossible to miss.
-                        </div>
-                    </motion.div>
-                </motion.div>
-            </div>
-
-            {/* MOBILE LAYOUT (< 900px / md) — UNPINNED DOCUMENT FLOW */}
-            <div className="md:hidden relative w-full bg-[#eae6df] text-[#0a0a0a] py-16 px-5 flex flex-col gap-10">
-                {/* Mobile Header */}
+            <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24 flex flex-col justify-between gap-8 md:gap-10 relative z-10">
+                {/* Top Bar */}
                 <div className="flex flex-col gap-3">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#105233] text-white self-start">
+                    <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true, margin: "-5% 0px" }}
+                        transition={{ duration: 0.5, ease: "easeOut" }}
+                        className="inline-flex items-center gap-2.5 px-3 py-1 bg-[#105233] text-white shadow-sm self-start"
+                    >
                         <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-                        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em]">
+                        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-white">
                             &#123; 1327 BRAND MANIFESTO &#125;
                         </span>
-                    </div>
+                    </motion.div>
 
-                    <div className="flex justify-between items-center border-b border-black/15 pb-3 w-full font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#105233]">
-                        <span>&#123; 01 &#125; OUR MISSION</span>
-                        <span>&#123; STITCHES: 1327 &#125;</span>
+                    <div className="flex justify-between items-center border-b border-black/15 pb-3 w-full font-mono text-xs font-bold uppercase tracking-[0.2em]">
+                        <span className="text-[#105233]">&#123; 01 &#125; OUR MISSION</span>
+                        <span className="text-[#105233]">&#123; STITCHES: 1327 &#125;</span>
                     </div>
                 </div>
 
-                {/* Mobile Display Block: Flush-left, collapse indents to 0, leading 0.95 */}
-                <h2 className="font-heading font-black text-4xl sm:text-5xl uppercase text-left leading-[0.95] flex flex-col gap-1">
-                    <div className="overflow-hidden w-full">
-                        <motion.span initial={{ y: "100%" }} whileInView={{ y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="block">
-                            WE DON&apos;T MAKE
-                        </motion.span>
-                    </div>
-                    <div className="overflow-hidden w-full">
-                        <motion.span initial={{ y: "100%" }} whileInView={{ y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.08 }} className="block">
-                            MERCH.
-                        </motion.span>
-                    </div>
-                    <div className="overflow-hidden w-full">
-                        <motion.span initial={{ y: "100%" }} whileInView={{ y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.16 }} className="block">
-                            WE BUILD <VideoWordIdentity reduced={reduced} />
-                        </motion.span>
-                    </div>
-                    <div className="overflow-hidden w-full">
-                        <motion.div initial={{ y: "100%" }} whileInView={{ y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.24 }}>
-                            <StitchLineText reduced={reduced} />
-                        </motion.div>
-                    </div>
-                </h2>
-
-                {/* Mobile Image Sequence (Act 1 stacked) */}
-                <div className="flex flex-col gap-4 my-2">
-                    {PROCESS_SHOT_LIST.map((item, idx) => (
-                        <div key={idx} className="relative w-full border border-black/15 bg-black/5 p-1 flex flex-col justify-between overflow-hidden">
-                            <div className="relative w-full h-56 overflow-hidden">
-                                <NextImage src={item.src} alt={item.alt} fill className="object-cover grayscale contrast-125" loading="lazy" />
+                {/* Main Content Layout: Left 2 Large Images + Right Display Type */}
+                <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center my-auto py-4">
+                    {/* Left Column: 2 Large Product Images */}
+                    <div className="lg:col-span-5 flex flex-col gap-5">
+                        <div className="relative w-full aspect-[4/3] border border-black/15 bg-black/5 p-1 flex flex-col justify-between overflow-hidden shadow-sm">
+                            <div className="relative w-full h-full overflow-hidden">
+                                <NextImage
+                                    src="/manifesto/custom-leather-2.jpg"
+                                    alt="Custom 1327 Circular Leather Placemat"
+                                    fill
+                                    className="object-cover grayscale contrast-125"
+                                    loading="lazy"
+                                />
+                                <div className="absolute inset-0 bg-[#105233]/15 mix-blend-multiply pointer-events-none" />
                             </div>
                         </div>
-                    ))}
+                        <div className="relative w-full aspect-[4/3] border border-black/15 bg-black/5 p-1 flex flex-col justify-between overflow-hidden shadow-sm">
+                            <div className="relative w-full h-full overflow-hidden">
+                                <NextImage
+                                    src="/manifesto/custom-leather-3.jpg"
+                                    alt="Custom 1327 Leather Coasters Collection"
+                                    fill
+                                    className="object-cover grayscale contrast-125"
+                                    loading="lazy"
+                                />
+                                <div className="absolute inset-0 bg-[#105233]/15 mix-blend-multiply pointer-events-none" />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Right Column: Display Type */}
+                    <div className="lg:col-span-7 flex justify-start items-center">
+                        <h2 className="font-heading font-black text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] uppercase tracking-tight leading-[0.88] text-left text-[#0a0a0a] max-w-5xl flex flex-col items-start gap-1">
+                            <motion.span
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, margin: "-5% 0px" }}
+                                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                                className="block"
+                            >
+                                WE DON&apos;T MAKE
+                            </motion.span>
+
+                            <motion.span
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, margin: "-5% 0px" }}
+                                transition={{ duration: 0.6, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+                                className="block"
+                            >
+                                MERCH.
+                            </motion.span>
+
+                            <motion.span
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, margin: "-5% 0px" }}
+                                transition={{ duration: 0.6, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
+                                className="block relative"
+                            >
+                                WE BUILD{" "}
+                                <span className="text-[#105233] font-black uppercase">
+                                    IDENTITY.
+                                </span>
+                            </motion.span>
+
+                            <motion.span
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, margin: "-5% 0px" }}
+                                transition={{ duration: 0.6, delay: 0.24, ease: [0.16, 1, 0.3, 1] }}
+                                className="block text-[#105233] font-black uppercase"
+                            >
+                                STITCH BY
+                            </motion.span>
+
+                            <motion.span
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, margin: "-5% 0px" }}
+                                transition={{ duration: 0.6, delay: 0.32, ease: [0.16, 1, 0.3, 1] }}
+                                className="block text-[#105233] font-black uppercase"
+                            >
+                                STITCH.
+                            </motion.span>
+                        </h2>
+                    </div>
                 </div>
 
-                {/* Mobile Act 3 Floating Single Image (8% margins) */}
-                <div className="w-[92%] mx-auto aspect-[16/10] my-2 shadow-lg overflow-hidden">
-                    <FabricReveal
-                        src="/manifesto/fabric-macro.jpg"
-                        alt="1327 Seam Under Tension Macro Spec"
-                        markText="1327"
-                    />
-                </div>
-
-                {/* Mobile Manifesto Paragraph */}
-                <div className="flex flex-col gap-4 pt-4 border-t border-black/15">
-                    <p className="font-sans text-base text-[#0a0a0a]/85 leading-relaxed font-light">
+                {/* Bottom Row: Manifesto Paragraph */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-5% 0px" }}
+                    transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                    className="w-full flex justify-start items-center pt-4 border-t border-black/15"
+                >
+                    <div className="font-sans text-base sm:text-lg md:text-xl font-light text-[#0a0a0a]/85 leading-relaxed text-left max-w-2xl">
                         Every crew deserves a uniform worth belonging to. We cut premium fabric, obsess over embroidery and skip every shortcut — so your people feel like a team, and your brand becomes impossible to miss.
-                    </p>
-                </div>
+                    </div>
+                </motion.div>
             </div>
         </section>
     );
