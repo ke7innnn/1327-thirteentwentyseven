@@ -424,11 +424,8 @@ function StitchCounter({ scrollProgress, accentColor }: { scrollProgress: Motion
 }
 
 const PROCESS_SHOT_LIST = [
-    { src: "/manifesto/custom-leather-1.jpg", alt: "Custom 1327 Leather Cutlery Sleeves" },
     { src: "/manifesto/custom-leather-2.jpg", alt: "Custom 1327 Circular Leather Placemat" },
     { src: "/manifesto/custom-leather-3.jpg", alt: "Custom 1327 Leather Coasters Collection" },
-    { src: "/sequence/ezgif-frame-015.jpg", alt: "Needle mid-pierce macro" },
-    { src: "/sequence/ezgif-frame-160.jpg", alt: "Hands at machine" },
 ];
 
 function ManifestoSection() {
@@ -534,11 +531,11 @@ function ManifestoSection() {
                                 y: columnY,
                                 opacity: columnOpacity,
                             }}
-                            className="w-[38%] max-w-[420px] flex flex-col gap-3 pointer-events-none pr-4"
+                            className="w-[42%] max-w-[460px] flex flex-col gap-4 pointer-events-none pr-4"
                         >
                             {PROCESS_SHOT_LIST.map((item, idx) => (
                                 <div key={idx} className="relative w-full border border-black/15 bg-black/5 p-1 flex flex-col justify-between overflow-hidden shadow-sm">
-                                    <div className="relative w-full h-36 lg:h-44 overflow-hidden">
+                                    <div className="relative w-full h-52 lg:h-64 overflow-hidden">
                                         <NextImage
                                             src={item.src}
                                             alt={item.alt}
@@ -701,9 +698,9 @@ function ManifestoSection() {
 
                 {/* Mobile Image Sequence (Act 1 stacked) */}
                 <div className="flex flex-col gap-4 my-2">
-                    {PROCESS_SHOT_LIST.slice(0, 3).map((item, idx) => (
+                    {PROCESS_SHOT_LIST.map((item, idx) => (
                         <div key={idx} className="relative w-full border border-black/15 bg-black/5 p-1 flex flex-col justify-between overflow-hidden">
-                            <div className="relative w-full h-44 overflow-hidden">
+                            <div className="relative w-full h-56 overflow-hidden">
                                 <NextImage src={item.src} alt={item.alt} fill className="object-cover grayscale contrast-125" loading="lazy" />
                             </div>
                         </div>
