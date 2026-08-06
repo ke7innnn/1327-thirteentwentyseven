@@ -433,18 +433,18 @@ function FabricReveal({
     markText?: string;
 }) {
     const containerRef = useRef<HTMLDivElement>(null);
-    const [mousePos, setMousePos] = useState({ x: 50, y: 50, r: 0 });
+    const [mousePos, setMousePos] = useState({ x: 50, y: 50, r: 160 });
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
         if (!containerRef.current) return;
         const rect = containerRef.current.getBoundingClientRect();
         const x = ((e.clientX - rect.left) / rect.width) * 100;
         const y = ((e.clientY - rect.top) / rect.height) * 100;
-        setMousePos({ x, y, r: 160 });
+        setMousePos({ x, y, r: 220 });
     };
 
     const handleMouseLeave = () => {
-        setMousePos((prev) => ({ ...prev, r: 0 }));
+        setMousePos({ x: 50, y: 50, r: 160 });
     };
 
     return (
@@ -460,7 +460,7 @@ function FabricReveal({
                 <img
                     src={src}
                     alt={alt}
-                    className="fabric__img grayscale contrast-125 brightness-90"
+                    className="fabric__img grayscale contrast-125 brightness-80"
                 />
 
                 {/* Lit Reveal Mask Layer */}
@@ -482,7 +482,7 @@ function FabricReveal({
                     />
                 </div>
 
-                {/* Soft-light Knitted Mark Overlay */}
+                {/* Knitted Watermark Overlay */}
                 <div className="fabric__mark font-heading select-none">
                     {markText}
                 </div>
