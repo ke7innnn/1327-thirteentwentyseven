@@ -247,50 +247,40 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
 
     return (
         <>
-            <div className="absolute inset-0 z-10 w-full h-full flex items-center justify-center">
+            <div className="absolute inset-0 z-10 w-full h-full flex items-end justify-start">
                 <motion.div
                     style={{ opacity: opacityHero, y: yHero, pointerEvents: pointerEventsHero }}
-                    className="absolute inset-0 w-full h-full flex flex-col justify-between px-6 sm:px-12 md:px-16 lg:px-24 pt-20 pb-8 sm:py-24 animate-[fadeIn_0.5s_ease-out]"
+                    className="absolute inset-0 w-full h-full flex flex-col justify-end items-start px-6 sm:px-12 md:px-16 lg:px-24 pb-8 sm:pb-12 md:pb-16 animate-[fadeIn_0.5s_ease-out]"
                 >
-
-
-                    {/* Unified Left-Aligned Hero Typography Stack */}
-                    <div className="w-full max-w-5xl flex flex-col items-start text-left gap-3 sm:gap-5 my-auto pt-6">
-                        {/* Giant 1327 Header */}
-                        <h1 className="font-heading font-black text-[18vw] sm:text-[14vw] md:text-[12vw] lg:text-[11rem] xl:text-[13rem] leading-[0.82] tracking-tighter text-[#F2F9F4] select-none -ml-1 sm:-ml-2">
-                            1327
-                        </h1>
-
-                        {/* Primary & Secondary Hero CTAs */}
-                        <div className="flex flex-wrap items-center gap-3 sm:gap-4 mt-3 sm:mt-5">
-                            {/* Primary CTA: REACH OUT */}
-                            <button
-                                onClick={() => setIsContactOpen(true)}
-                                className="group relative inline-flex items-center gap-2.5 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[#4FB47E] text-[#0D1712] font-heading font-bold text-xs sm:text-sm tracking-wider uppercase overflow-hidden shadow-md hover:shadow-[0_0_20px_rgba(79,180,126,0.5)] transition-all duration-300 transform active:scale-95"
-                            >
-                                <span className="relative z-10 flex items-center gap-2.5">
-                                    <span>REACH OUT</span>
-                                    <span className="flex items-center justify-center w-5.5 h-5.5 sm:w-6 sm:h-6 rounded-full bg-[#0D1712] text-[#4FB47E] group-hover:rotate-45 transition-transform duration-300">
-                                        <ArrowUpRight className="w-3.5 h-3.5" />
-                                    </span>
+                    {/* Primary & Secondary Hero CTAs in Bottom Left Corner */}
+                    <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+                        {/* Primary CTA: REACH OUT */}
+                        <button
+                            onClick={() => setIsContactOpen(true)}
+                            className="group relative inline-flex items-center gap-2.5 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[#4FB47E] text-[#0D1712] font-heading font-bold text-xs sm:text-sm tracking-wider uppercase overflow-hidden shadow-md hover:shadow-[0_0_20px_rgba(79,180,126,0.5)] transition-all duration-300 transform active:scale-95"
+                        >
+                            <span className="relative z-10 flex items-center gap-2.5">
+                                <span>REACH OUT</span>
+                                <span className="flex items-center justify-center w-5.5 h-5.5 sm:w-6 sm:h-6 rounded-full bg-[#0D1712] text-[#4FB47E] group-hover:rotate-45 transition-transform duration-300">
+                                    <ArrowUpRight className="w-3.5 h-3.5" />
                                 </span>
-                                <span className="absolute inset-0 bg-white scale-0 group-hover:scale-100 transition-transform duration-300 origin-center rounded-full" />
-                            </button>
+                            </span>
+                            <span className="absolute inset-0 bg-white scale-0 group-hover:scale-100 transition-transform duration-300 origin-center rounded-full" />
+                        </button>
 
-                            {/* Secondary CTA: SEE THE WORK */}
-                            <button
-                                onClick={handleScrollToNext}
-                                className="group relative inline-flex items-center gap-2.5 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full border-2 border-[#4FB47E]/60 bg-black/40 backdrop-blur-md text-[#F2F9F4] font-heading font-bold text-xs sm:text-sm tracking-wider uppercase overflow-hidden hover:border-[#4FB47E] transition-all duration-300 transform active:scale-95"
-                            >
-                                <span className="relative z-10 flex items-center gap-2.5 group-hover:text-[#0D1712] transition-colors duration-300">
-                                    <span>SEE THE WORK</span>
-                                    <span className="flex items-center justify-center w-5.5 h-5.5 sm:w-6 sm:h-6 rounded-full bg-[#4FB47E]/20 text-[#4FB47E] group-hover:bg-[#0D1712] group-hover:text-[#4FB47E] transition-colors duration-300">
-                                        <ArrowDown className="w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform duration-300" />
-                                    </span>
+                        {/* Secondary CTA: SEE THE WORK */}
+                        <button
+                            onClick={handleScrollToNext}
+                            className="group relative inline-flex items-center gap-2.5 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full border-2 border-[#4FB47E]/60 bg-black/40 backdrop-blur-md text-[#F2F9F4] font-heading font-bold text-xs sm:text-sm tracking-wider uppercase overflow-hidden hover:border-[#4FB47E] transition-all duration-300 transform active:scale-95"
+                        >
+                            <span className="relative z-10 flex items-center gap-2.5 group-hover:text-[#0D1712] transition-colors duration-300">
+                                <span>SEE THE WORK</span>
+                                <span className="flex items-center justify-center w-5.5 h-5.5 sm:w-6 sm:h-6 rounded-full bg-[#4FB47E]/20 text-[#4FB47E] group-hover:bg-[#0D1712] group-hover:text-[#4FB47E] transition-colors duration-300">
+                                    <ArrowDown className="w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform duration-300" />
                                 </span>
-                                <span className="absolute inset-0 bg-[#4FB47E] scale-0 group-hover:scale-100 transition-transform duration-300 origin-center rounded-full" />
-                            </button>
-                        </div>
+                            </span>
+                            <span className="absolute inset-0 bg-[#4FB47E] scale-0 group-hover:scale-100 transition-transform duration-300 origin-center rounded-full" />
+                        </button>
                     </div>
                 </motion.div>
             </div>
