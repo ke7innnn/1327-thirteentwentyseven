@@ -326,11 +326,12 @@ function VideoWordIdentity({ reduced }: { reduced?: boolean }) {
         <span
             className="inline-block relative text-transparent font-black uppercase bg-cover bg-center transition-all duration-75 select-none"
             style={{
-                backgroundImage: `url('${framePath}')`,
+                backgroundImage: `linear-gradient(rgba(16, 82, 51, 0.85), rgba(16, 82, 51, 0.85)), url('${framePath}')`,
+                backgroundBlendMode: "multiply",
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
                 color: "transparent",
-                filter: "contrast(1.35) brightness(0.95) sepia(1) hue-rotate(90deg) saturate(2.2)",
+                filter: "contrast(1.5) brightness(0.95)",
             }}
         >
             IDENTITY.
