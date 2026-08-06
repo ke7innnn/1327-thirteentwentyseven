@@ -424,11 +424,11 @@ function StitchCounter({ scrollProgress, accentColor }: { scrollProgress: Motion
 }
 
 const PROCESS_SHOT_LIST = [
-    { src: "/sequence/ezgif-frame-015.jpg", alt: "Needle mid-pierce macro", label: "NEEDLE SPEC / MACRO STITCH" },
-    { src: "/sequence/ezgif-frame-050.jpg", alt: "Emerald thread spool", label: "THREAD / EMERALD 40/2" },
-    { src: "/sequence/ezgif-frame-080.jpg", alt: "Embroidery hoop 1327", label: "HOOP NO / #1327-EMB" },
-    { src: "/sequence/ezgif-frame-120.jpg", alt: "Folded cotton blanks", label: "FABRIC / 320 GSM HEAVY COTTON" },
-    { src: "/sequence/ezgif-frame-160.jpg", alt: "Hands at machine", label: "CRAFT / HAND GUIDED ATELIER" },
+    { src: "/manifesto/custom-leather-1.jpg", alt: "Custom 1327 Leather Cutlery Sleeves" },
+    { src: "/manifesto/custom-leather-2.jpg", alt: "Custom 1327 Circular Leather Placemat" },
+    { src: "/manifesto/custom-leather-3.jpg", alt: "Custom 1327 Leather Coasters Collection" },
+    { src: "/sequence/ezgif-frame-015.jpg", alt: "Needle mid-pierce macro" },
+    { src: "/sequence/ezgif-frame-160.jpg", alt: "Hands at machine" },
 ];
 
 function ManifestoSection() {
