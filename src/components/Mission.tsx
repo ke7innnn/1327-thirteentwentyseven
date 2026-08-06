@@ -511,7 +511,7 @@ function ManifestoSection() {
                         >
                             <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
                             <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em]">
-                                ● &#123; 1327 BRAND MANIFESTO &#125;
+                                &#123; 1327 BRAND MANIFESTO &#125;
                             </span>
                         </motion.div>
 
@@ -547,9 +547,6 @@ function ManifestoSection() {
                                             loading="lazy"
                                         />
                                         <div className="absolute inset-0 bg-[#105233]/15 mix-blend-multiply" />
-                                    </div>
-                                    <div className="bg-[#eae6df]/90 text-[#105233] p-1.5 font-mono text-[9px] font-bold tracking-wider uppercase border-t border-black/15">
-                                        {item.label}
                                     </div>
                                 </div>
                             ))}
@@ -627,10 +624,6 @@ function ManifestoSection() {
                                 />
                                 <div className="absolute inset-0 bg-[#105233]/20 mix-blend-multiply pointer-events-none" />
                             </div>
-                            <div className="bg-[#105233]/90 text-white p-2 font-mono text-[10px] font-bold tracking-widest uppercase border-t border-white/20 flex items-center gap-2">
-                                <span className="w-1.5 h-1.5 rounded-full bg-white" />
-                                <span>● &#123; MACRO SPEC: HIGH-DENSITY SEAM TENSION // 320 GSM &#125;</span>
-                            </div>
                         </motion.div>
 
                     </div>
@@ -672,7 +665,7 @@ function ManifestoSection() {
                     <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#105233] text-white self-start">
                         <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
                         <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em]">
-                            ● &#123; 1327 BRAND MANIFESTO &#125;
+                            &#123; 1327 BRAND MANIFESTO &#125;
                         </span>
                     </div>
 
@@ -713,9 +706,6 @@ function ManifestoSection() {
                             <div className="relative w-full h-44 overflow-hidden">
                                 <NextImage src={item.src} alt={item.alt} fill className="object-cover grayscale contrast-125" loading="lazy" />
                             </div>
-                            <div className="bg-[#eae6df] text-[#105233] p-1.5 font-mono text-[9px] font-bold tracking-wider uppercase border-t border-black/15">
-                                {item.label}
-                            </div>
                         </div>
                     ))}
                 </div>
@@ -724,9 +714,6 @@ function ManifestoSection() {
                 <div className="w-[92%] mx-auto aspect-[16/9] border border-black/15 p-1 bg-black/5 flex flex-col justify-between my-2">
                     <div className="relative w-full h-full overflow-hidden">
                         <NextImage src="/manifesto/fabric-macro.jpg" alt="Macro spec" fill className="object-cover grayscale contrast-125" loading="lazy" />
-                    </div>
-                    <div className="bg-[#105233] text-white p-1.5 font-mono text-[9px] font-bold tracking-wider uppercase">
-                        ● &#123; MACRO SPEC: SEAM TENSION // 320 GSM &#125;
                     </div>
                 </div>
 
