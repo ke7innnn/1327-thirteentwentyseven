@@ -623,27 +623,9 @@ function ManifestoSection() {
                     {/* Bottom Row: Manifesto Paragraph */}
                     <motion.div
                         style={{ borderColor: ruleColor }}
-                        className="relative z-20 w-full grid grid-cols-12 gap-6 items-end pt-3 border-t"
+                        className="relative z-20 w-full pt-3 border-t flex justify-start"
                     >
-                        <div className="col-span-4 font-mono text-xs tracking-[0.2em] uppercase font-bold text-left flex flex-wrap items-center gap-3">
-                            <motion.span style={{ color: accentColor }}>&#123; WHY WE EXIST &#125;</motion.span>
-                            <span className="opacity-40 font-normal">&#123; 1327 &#125;</span>
-                            
-                            {/* Integrated Hang Tag Badge */}
-                            <motion.div
-                                initial={reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 15, scale: 0.92 }}
-                                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.6, delay: 0.47 }}
-                                style={{ borderColor: ruleColor }}
-                                className="inline-flex items-center gap-2 px-2.5 py-1 border bg-black/05 font-mono text-[10px] font-bold tracking-wider"
-                            >
-                                <motion.span style={{ backgroundColor: accentColor }} className="w-1.5 h-1.5 rounded-full" />
-                                <span>1327-TAG #01</span>
-                            </motion.div>
-                        </div>
-
-                        <div className="col-span-8 font-sans text-base lg:text-lg font-light leading-relaxed text-left max-w-2xl">
+                        <div className="font-sans text-base lg:text-lg font-light leading-relaxed text-left max-w-2xl">
                             Every crew deserves a uniform worth belonging to. We cut premium fabric, obsess over embroidery and skip every shortcut — so your people feel like a team, and your brand becomes impossible to miss.
                         </div>
                     </motion.div>
@@ -710,11 +692,7 @@ function ManifestoSection() {
                 </div>
 
                 {/* Mobile Manifesto Paragraph */}
-                <div className="flex flex-col gap-4 pt-4 border-t border-black/15 font-mono text-xs text-[#105233]">
-                    <div className="flex items-center gap-3 flex-wrap">
-                        <span>&#123; WHY WE EXIST &#125;</span>
-                        <span className="opacity-40">&#123; 1327 &#125;</span>
-                    </div>
+                <div className="flex flex-col gap-4 pt-4 border-t border-black/15">
                     <p className="font-sans text-base text-[#0a0a0a]/85 leading-relaxed font-light">
                         Every crew deserves a uniform worth belonging to. We cut premium fabric, obsess over embroidery and skip every shortcut — so your people feel like a team, and your brand becomes impossible to miss.
                     </p>
