@@ -338,22 +338,22 @@ function VideoWordIdentity({ reduced }: { reduced?: boolean }) {
     );
 }
 
-function StitchLineText({ reduced }: { reduced?: boolean }) {
+function StitchLineText({ reduced, strokeColor }: { reduced?: boolean; strokeColor?: MotionValue<string> | string }) {
     return (
         <div className="relative inline-block">
-            {/* Outlined Base Text: transparent fill, 1.5px deep green stroke */}
-            <span
+            {/* Outlined Base Text: transparent fill */}
+            <motion.span
                 className="block text-transparent tracking-normal select-none"
                 style={{
-                    WebkitTextStroke: "1.5px #105233",
+                    WebkitTextStroke: "1.5px currentColor",
                 }}
             >
                 STITCH BY STITCH.
-            </span>
+            </motion.span>
 
             {!reduced && (
                 <>
-                    {/* Left-to-Right Green Fill Wipe */}
+                    {/* Left-to-Right Fill Wipe */}
                     <motion.div
                         initial={{ clipPath: "inset(0 100% 0 0)" }}
                         whileInView={{ clipPath: "inset(0 0% 0 0)" }}
@@ -365,17 +365,18 @@ function StitchLineText({ reduced }: { reduced?: boolean }) {
                         }}
                         className="absolute inset-0 pointer-events-none"
                     >
-                        <span
-                            className="block text-[#105233] tracking-normal font-black"
+                        <motion.span
+                            className="block tracking-normal font-black"
                             style={{
-                                WebkitTextStroke: "1.5px #105233",
+                                color: strokeColor || "currentColor",
+                                WebkitTextStroke: "1.5px currentColor",
                             }}
                         >
                             STITCH BY STITCH.
-                        </span>
+                        </motion.span>
                     </motion.div>
 
-                    {/* 2px Green Needle Tick riding the wipe edge */}
+                    {/* 2px Needle Tick riding the wipe edge */}
                     <motion.span
                         initial={{ left: "0%", opacity: 1 }}
                         whileInView={{ left: "100%", opacity: [1, 1, 0] }}
@@ -393,7 +394,10 @@ function StitchLineText({ reduced }: { reduced?: boolean }) {
                                 ease: "linear",
                             },
                         }}
-                        className="absolute top-0 bottom-0 w-[2px] bg-[#105233] pointer-events-none"
+                        style={{
+                            backgroundColor: strokeColor || "currentColor",
+                        }}
+                        className="absolute top-0 bottom-0 w-[2px] pointer-events-none"
                     />
                 </>
             )}
@@ -401,7 +405,7 @@ function StitchLineText({ reduced }: { reduced?: boolean }) {
     );
 }
 
-function StitchCounter({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
+function StitchCounter({ scrollProgress, accentColor }: { scrollProgress: MotionValue<number>; accentColor: MotionValue<string> }) {
     const [count, setCount] = useState(1327);
 
     useMotionValueEvent(scrollProgress, "change", (latest) => {
@@ -409,260 +413,332 @@ function StitchCounter({ scrollProgress }: { scrollProgress: MotionValue<number>
     });
 
     return (
-        <span className="font-mono text-xs tracking-[0.2em] font-bold text-[#105233] tabular-nums">
+        <motion.span
+            style={{ color: accentColor }}
+            className="font-mono text-xs tracking-[0.2em] font-bold tabular-nums"
+        >
             &#123; STITCHES: {String(count).padStart(4, "0")} &#125;
-        </span>
+        </motion.span>
     );
 }
+
+const PROCESS_SHOT_LIST = [
+    { src: "/sequence/ezgif-frame-015.jpg", alt: "Needle mid-pierce macro", label: "NEEDLE SPEC / MACRO STITCH" },
+    { src: "/sequence/ezgif-frame-050.jpg", alt: "Emerald thread spool", label: "THREAD / EMERALD 40/2" },
+    { src: "/sequence/ezgif-frame-080.jpg", alt: "Embroidery hoop 1327", label: "HOOP NO / #1327-EMB" },
+    { src: "/sequence/ezgif-frame-120.jpg", alt: "Folded cotton blanks", label: "FABRIC / 320 GSM HEAVY COTTON" },
+    { src: "/sequence/ezgif-frame-160.jpg", alt: "Hands at machine", label: "CRAFT / HAND GUIDED ATELIER" },
+];
 
 function ManifestoSection() {
     const reduced = useReducedMotion() ?? false;
     const sectionRef = useRef<HTMLDivElement>(null);
+
     const { scrollYProgress } = useScroll({
         target: sectionRef,
-        offset: ["start end", "end start"],
+        offset: ["start start", "end end"],
     });
 
-    // Subtly drifting watermark positioned top-right so it NEVER overlaps the outlined line
+    // ─── THREE-ACT COLOR ARCHITECTURE ───────────────────────────────────────
+    // Act 1 (0.00-0.45): Cream ground (#eae6df), near-black ink (#0a0a0a), deep green accent (#105233)
+    // Act 2 (0.45-0.72): Lerp ground -> deep green (#105233), ink -> cream (#eae6df), accent -> cream (#eae6df)
+    // Act 3 (0.72-1.00): Deep green ground (#105233), cream ink & accent (#eae6df)
+    const groundColor = useTransform(scrollYProgress, [0, 0.45, 0.72, 1], ["#eae6df", "#eae6df", "#105233", "#105233"]);
+    const inkColor = useTransform(scrollYProgress, [0, 0.45, 0.72, 1], ["#0a0a0a", "#0a0a0a", "#eae6df", "#eae6df"]);
+    const accentColor = useTransform(scrollYProgress, [0, 0.45, 0.72, 1], ["#105233", "#105233", "#eae6df", "#eae6df"]);
+    const ruleColor = useTransform(scrollYProgress, [0, 0.45, 0.72, 1], ["rgba(10,10,10,0.15)", "rgba(10,10,10,0.15)", "rgba(234,230,223,0.25)", "rgba(234,230,223,0.25)"]);
+
+    // Watermark position & opacity
     const watermarkX = useTransform(scrollYProgress, [0, 1], [-40, 60]);
 
-    // Parallax rates for Process Plates A & B and Full-Bleed Macro Band
-    const yPlateA = useTransform(scrollYProgress, [0, 1], [30, -30]);
-    const yPlateB = useTransform(scrollYProgress, [0, 1], [50, -50]);
-    const yMacro = useTransform(scrollYProgress, [0, 1], [15, -25]);
+    // Act 1 & 2 Left Image Column Motion
+    const columnY = useTransform(scrollYProgress, [0, 0.45], ["0%", "-40%"]);
+    const columnX = useTransform(scrollYProgress, [0.45, 0.70], ["0%", "-120%"]);
+    const columnOpacity = useTransform(scrollYProgress, [0.45, 0.68], [1, 0]);
+
+    // Act 3 Display Block Fade Out
+    const displayOpacity = useTransform(scrollYProgress, [0.65, 0.78], [1, 0]);
+    const displayY = useTransform(scrollYProgress, [0.65, 0.78], [0, -30]);
+
+    // Act 3 Floating Single Image Motion
+    const act3Opacity = useTransform(scrollYProgress, [0.70, 0.80], [0, 1]);
+    const act3Scale = useTransform(scrollYProgress, [0.70, 0.80], [0.92, 1]);
 
     return (
         <section
             ref={sectionRef}
             id="manifesto"
-            className="relative z-20 bg-[#eae6df] text-[#0a0a0a] py-20 md:py-28 border-b border-black/10 w-full overflow-hidden select-none rounded-none"
+            className="relative z-20 w-full select-none rounded-none min-h-screen border-b border-black/10 md:h-[280vh]"
         >
-            {/* Woven Linen Apparel Fabric Texture Overlay */}
-            <div
-                className="absolute inset-0 pointer-events-none opacity-[0.22] mix-blend-multiply bg-repeat z-0"
-                style={{
-                    backgroundImage: "url('/bg/clothing_fabric_bg.png')",
-                    backgroundSize: "450px 450px",
-                }}
-            />
+            {/* DESKTOP PINNED THREE-ACT LAYOUT (>= 900px / md) */}
+            <div className="hidden md:block sticky top-0 h-screen w-full overflow-hidden">
+                <motion.div
+                    style={{ backgroundColor: groundColor, color: inkColor }}
+                    className="relative w-full h-full flex flex-col justify-between py-8 lg:py-12 px-8 sm:px-12 lg:px-20 transition-colors duration-200"
+                >
+                    {/* Woven Linen Apparel Fabric Texture Overlay */}
+                    <div
+                        className="absolute inset-0 pointer-events-none opacity-[0.2] mix-blend-multiply bg-repeat z-0"
+                        style={{
+                            backgroundImage: "url('/bg/clothing_fabric_bg.png')",
+                            backgroundSize: "450px 450px",
+                        }}
+                    />
 
-            {/* Studio Spotlight Vignette */}
-            <div
-                className="absolute inset-0 pointer-events-none z-0"
-                style={{
-                    background: "radial-gradient(ellipse 80% 70% at 50% 25%, rgba(255,255,255,0.65) 0%, transparent 85%)",
-                }}
-            />
-
-            {/* Giant 1327 Brand Watermark: Ends above outlined line cap height at opacity 0.04 */}
-            <motion.div
-                style={{ x: watermarkX, opacity: 0.04 }}
-                className="absolute right-2 lg:right-12 top-8 md:top-12 pointer-events-none select-none z-0"
-            >
-                <span className="font-heading font-black text-8xl sm:text-[14rem] md:text-[20rem] tracking-tighter text-[#105233]">
-                    1327
-                </span>
-            </motion.div>
-
-            <div className="container mx-auto px-5 sm:px-8 md:px-16 lg:px-24 flex flex-col justify-between gap-10 md:gap-14 relative z-10">
-                {/* Header Block */}
-                <div className="flex flex-col gap-4">
-                    {/* Top Pill with dot and single curly brace delimiter */}
+                    {/* Giant 1327 Brand Watermark: Ends above outlined line cap height at opacity 0.04 */}
                     <motion.div
-                        initial={reduced ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true, margin: "-10% 0px" }}
-                        transition={{ duration: 0.5, ease: "easeOut" }}
-                        className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-none bg-[#105233] text-white shadow-sm self-start"
+                        style={{ x: watermarkX, opacity: 0.04 }}
+                        className="absolute right-2 lg:right-12 top-8 md:top-12 pointer-events-none select-none z-0"
                     >
+                        <motion.span
+                            style={{ color: accentColor }}
+                            className="font-heading font-black text-8xl sm:text-[14rem] md:text-[20rem] tracking-tighter"
+                        >
+                            1327
+                        </motion.span>
+                    </motion.div>
+
+                    {/* Header Block */}
+                    <div className="relative z-20 flex flex-col gap-3">
+                        <motion.div
+                            initial={reduced ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5 }}
+                            style={{ backgroundColor: accentColor, color: groundColor }}
+                            className="inline-flex items-center gap-2.5 px-3 py-1 self-start shadow-sm"
+                        >
+                            <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                            <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em]">
+                                ● &#123; 1327 BRAND MANIFESTO &#125;
+                            </span>
+                        </motion.div>
+
+                        <motion.div
+                            style={{ borderColor: ruleColor }}
+                            className="flex justify-between items-center border-b pb-3 w-full font-mono text-xs font-bold uppercase tracking-[0.2em]"
+                        >
+                            <motion.span style={{ color: accentColor }}>&#123; 01 &#125; OUR MISSION</motion.span>
+                            <StitchCounter scrollProgress={scrollYProgress} accentColor={accentColor} />
+                        </motion.div>
+                    </div>
+
+                    {/* Central Area: Split View (Act 1 & 2) vs Centered Image (Act 3) */}
+                    <div className="relative z-20 w-full my-auto py-2 flex items-center justify-between min-h-[420px]">
+                        
+                        {/* ACT 1 & 2: LEFT 40% IMAGE COLUMN */}
+                        <motion.div
+                            style={{
+                                x: columnX,
+                                y: columnY,
+                                opacity: columnOpacity,
+                            }}
+                            className="w-[38%] max-w-[420px] flex flex-col gap-3 pointer-events-none pr-4"
+                        >
+                            {PROCESS_SHOT_LIST.map((item, idx) => (
+                                <div key={idx} className="relative w-full border border-black/15 bg-black/5 p-1 flex flex-col justify-between overflow-hidden shadow-sm">
+                                    <div className="relative w-full h-36 lg:h-44 overflow-hidden">
+                                        <NextImage
+                                            src={item.src}
+                                            alt={item.alt}
+                                            fill
+                                            className="object-cover grayscale contrast-125"
+                                            loading="lazy"
+                                        />
+                                        <div className="absolute inset-0 bg-[#105233]/15 mix-blend-multiply" />
+                                    </div>
+                                    <div className="bg-[#eae6df]/90 text-[#105233] p-1.5 font-mono text-[9px] font-bold tracking-wider uppercase border-t border-black/15">
+                                        {item.label}
+                                    </div>
+                                </div>
+                            ))}
+                        </motion.div>
+
+                        {/* ACT 1 & 2: RIGHT 60% DISPLAY TYPE BLOCK */}
+                        <motion.div
+                            style={{ opacity: displayOpacity, y: displayY }}
+                            className="w-[60%] flex justify-start items-center"
+                        >
+                            <h2 className="font-heading font-black text-5xl md:text-6xl lg:text-[5.5rem] uppercase text-left w-full flex flex-col items-start gap-1 leading-[0.88]">
+                                <div className="overflow-hidden w-full">
+                                    <motion.span
+                                        initial={reduced ? { y: 0 } : { y: "100%" }}
+                                        whileInView={{ y: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ duration: 0.9, delay: 0, ease: [0.215, 0.61, 0.355, 1] }}
+                                        className="block ml-0 tracking-[-0.02em]"
+                                    >
+                                        WE DON&apos;T MAKE
+                                    </motion.span>
+                                </div>
+
+                                <div className="overflow-hidden w-full">
+                                    <motion.span
+                                        initial={reduced ? { y: 0 } : { y: "100%" }}
+                                        whileInView={{ y: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ duration: 0.9, delay: 0.09, ease: [0.215, 0.61, 0.355, 1] }}
+                                        className="block ml-[7%] tracking-[-0.02em]"
+                                    >
+                                        MERCH.
+                                    </motion.span>
+                                </div>
+
+                                <div className="overflow-hidden w-full">
+                                    <motion.span
+                                        initial={reduced ? { y: 0 } : { y: "100%" }}
+                                        whileInView={{ y: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ duration: 0.9, delay: 0.18, ease: [0.215, 0.61, 0.355, 1] }}
+                                        className="block ml-0 tracking-[-0.02em]"
+                                    >
+                                        WE BUILD{" "}
+                                        <VideoWordIdentity reduced={reduced} />
+                                    </motion.span>
+                                </div>
+
+                                <div className="overflow-hidden w-full">
+                                    <motion.div
+                                        initial={reduced ? { y: 0 } : { y: "100%" }}
+                                        whileInView={{ y: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ duration: 0.9, delay: 0.27, ease: [0.215, 0.61, 0.355, 1] }}
+                                        className="ml-[7%]"
+                                    >
+                                        <StitchLineText reduced={reduced} strokeColor={accentColor} />
+                                    </motion.div>
+                                </div>
+                            </h2>
+                        </motion.div>
+
+                        {/* ACT 3: SINGLE FLOATING CENTERED IMAGE (Progress 0.72 to 1.00) */}
+                        <motion.div
+                            style={{ opacity: act3Opacity, scale: act3Scale }}
+                            className="absolute inset-0 m-auto w-[65%] max-w-3xl aspect-[16/9] z-30 pointer-events-none flex flex-col justify-between p-1.5 border border-white/20 bg-black/10 shadow-2xl overflow-hidden"
+                        >
+                            <div className="relative w-full h-full overflow-hidden">
+                                <NextImage
+                                    src="/manifesto/fabric-macro.jpg"
+                                    alt="1327 Seam Under Tension Macro Spec"
+                                    fill
+                                    className="object-cover grayscale contrast-125 brightness-95"
+                                    loading="lazy"
+                                />
+                                <div className="absolute inset-0 bg-[#105233]/20 mix-blend-multiply pointer-events-none" />
+                            </div>
+                            <div className="bg-[#105233]/90 text-white p-2 font-mono text-[10px] font-bold tracking-widest uppercase border-t border-white/20 flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-white" />
+                                <span>● &#123; MACRO SPEC: HIGH-DENSITY SEAM TENSION // 320 GSM &#125;</span>
+                            </div>
+                        </motion.div>
+
+                    </div>
+
+                    {/* Bottom Row: Manifesto Paragraph */}
+                    <motion.div
+                        style={{ borderColor: ruleColor }}
+                        className="relative z-20 w-full grid grid-cols-12 gap-6 items-end pt-3 border-t"
+                    >
+                        <div className="col-span-4 font-mono text-xs tracking-[0.2em] uppercase font-bold text-left flex flex-wrap items-center gap-3">
+                            <motion.span style={{ color: accentColor }}>&#123; WHY WE EXIST &#125;</motion.span>
+                            <span className="opacity-40 font-normal">&#123; 1327 &#125;</span>
+                            
+                            {/* Integrated Hang Tag Badge */}
+                            <motion.div
+                                initial={reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 15, scale: 0.92 }}
+                                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.6, delay: 0.47 }}
+                                style={{ borderColor: ruleColor }}
+                                className="inline-flex items-center gap-2 px-2.5 py-1 border bg-black/05 font-mono text-[10px] font-bold tracking-wider"
+                            >
+                                <motion.span style={{ backgroundColor: accentColor }} className="w-1.5 h-1.5 rounded-full" />
+                                <span>1327-TAG #01</span>
+                            </motion.div>
+                        </div>
+
+                        <div className="col-span-8 font-sans text-base lg:text-lg font-light leading-relaxed text-left max-w-2xl">
+                            Every crew deserves a uniform worth belonging to. We cut premium fabric, obsess over embroidery and skip every shortcut — so your people feel like a team, and your brand becomes impossible to miss.
+                        </div>
+                    </motion.div>
+                </motion.div>
+            </div>
+
+            {/* MOBILE LAYOUT (< 900px / md) — UNPINNED DOCUMENT FLOW */}
+            <div className="md:hidden relative w-full bg-[#eae6df] text-[#0a0a0a] py-16 px-5 flex flex-col gap-10">
+                {/* Mobile Header */}
+                <div className="flex flex-col gap-3">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#105233] text-white self-start">
                         <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-                        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-white">
+                        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em]">
                             ● &#123; 1327 BRAND MANIFESTO &#125;
                         </span>
-                    </motion.div>
+                    </div>
 
-                    {/* Single Delimiter System Header Bar */}
-                    <div className="flex justify-between items-center border-b border-black/15 pb-4 w-full font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#105233]">
+                    <div className="flex justify-between items-center border-b border-black/15 pb-3 w-full font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#105233]">
                         <span>&#123; 01 &#125; OUR MISSION</span>
-                        <StitchCounter scrollProgress={scrollYProgress} />
+                        <span>&#123; STITCHES: 1327 &#125;</span>
                     </div>
                 </div>
 
-                {/* Display Block & Process Plates Layout Grid */}
-                <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-8 items-center py-4">
-                    {/* 4 Lines Display Block */}
-                    <div className="md:col-span-8 lg:col-span-9 flex justify-start items-center">
-                        <h2 className="font-heading font-black text-4xl sm:text-6xl md:text-7xl lg:text-[5.75rem] uppercase text-left text-[#0a0a0a] w-full flex flex-col items-start gap-1 sm:gap-2 leading-[0.95] md:leading-[0.88]">
-                            {/* Line 1: WE DON'T MAKE (indent 0) */}
-                            <div className="overflow-hidden w-full">
-                                <motion.span
-                                    initial={reduced ? { y: 0 } : { y: "100%" }}
-                                    whileInView={{ y: 0 }}
-                                    viewport={{ once: true, margin: "-15% 0px" }}
-                                    transition={{ duration: 0.9, delay: 0, ease: [0.215, 0.61, 0.355, 1] }}
-                                    className="block ml-0 md:ml-0 tracking-tight md:tracking-[-0.02em]"
-                                >
-                                    WE DON&apos;T MAKE
-                                </motion.span>
-                            </div>
-
-                            {/* Line 2: MERCH. (indent 7% on desktop) */}
-                            <div className="overflow-hidden w-full">
-                                <motion.span
-                                    initial={reduced ? { y: 0 } : { y: "100%" }}
-                                    whileInView={{ y: 0 }}
-                                    viewport={{ once: true, margin: "-15% 0px" }}
-                                    transition={{ duration: 0.9, delay: 0.09, ease: [0.215, 0.61, 0.355, 1] }}
-                                    className="block ml-0 md:ml-[7%] tracking-tight md:tracking-[-0.02em]"
-                                >
-                                    MERCH.
-                                </motion.span>
-                            </div>
-
-                            {/* Line 3: WE BUILD IDENTITY. (indent 0, IDENTITY filled with footage) */}
-                            <div className="overflow-hidden w-full">
-                                <motion.span
-                                    initial={reduced ? { y: 0 } : { y: "100%" }}
-                                    whileInView={{ y: 0 }}
-                                    viewport={{ once: true, margin: "-15% 0px" }}
-                                    transition={{ duration: 0.9, delay: 0.18, ease: [0.215, 0.61, 0.355, 1] }}
-                                    className="block ml-0 md:ml-0 tracking-tight md:tracking-[-0.02em]"
-                                >
-                                    WE BUILD{" "}
-                                    <VideoWordIdentity reduced={reduced} />
-                                </motion.span>
-                            </div>
-
-                            {/* Line 4: STITCH BY STITCH. (indent 7% on desktop) */}
-                            <div className="overflow-hidden w-full">
-                                <motion.div
-                                    initial={reduced ? { y: 0 } : { y: "100%" }}
-                                    whileInView={{ y: 0 }}
-                                    viewport={{ once: true, margin: "-15% 0px" }}
-                                    transition={{ duration: 0.9, delay: 0.27, ease: [0.215, 0.61, 0.355, 1] }}
-                                    className="ml-0 md:ml-[7%]"
-                                >
-                                    <StitchLineText reduced={reduced} />
-                                </motion.div>
-                            </div>
-                        </h2>
+                {/* Mobile Display Block: Flush-left, collapse indents to 0, leading 0.95 */}
+                <h2 className="font-heading font-black text-4xl sm:text-5xl uppercase text-left leading-[0.95] flex flex-col gap-1">
+                    <div className="overflow-hidden w-full">
+                        <motion.span initial={{ y: "100%" }} whileInView={{ y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="block">
+                            WE DON&apos;T MAKE
+                        </motion.span>
                     </div>
-
-                    {/* Process Plates A & B (Right Margin) */}
-                    <div className="md:col-span-4 lg:col-span-3 flex flex-col gap-6 relative">
-                        {/* Process Plate A (~180x230, upper right beside lines 1-2) */}
-                        <motion.div
-                            style={reduced ? {} : { y: yPlateA }}
-                            initial={reduced ? { opacity: 1 } : { opacity: 0, scale: 0.95 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true, margin: "-10% 0px" }}
-                            transition={{ duration: 0.7, delay: 0.2 }}
-                            className="relative w-full md:w-[190px] h-52 md:h-[240px] border border-black/15 bg-[#0a0a0a]/05 p-1 flex flex-col justify-between overflow-hidden group shadow-sm self-start md:self-auto"
-                        >
-                            <div className="relative w-full h-full overflow-hidden">
-                                <NextImage
-                                    src="/sequence/ezgif-frame-060.jpg"
-                                    alt="1327 Atelier Heavy Fabric Spec"
-                                    fill
-                                    className="object-cover grayscale contrast-125 group-hover:scale-105 transition-transform duration-500"
-                                    loading="lazy"
-                                />
-                                <div className="absolute inset-0 bg-[#105233]/20 mix-blend-multiply pointer-events-none" />
-                            </div>
-                            {/* Spec Caption Chip A */}
-                            <div className="bg-[#eae6df]/95 backdrop-blur-sm border-t border-black/15 p-2 font-mono text-[9px] text-[#105233] font-bold tracking-wider leading-tight">
-                                <div>FABRIC: 320 GSM COTTON</div>
-                                <div className="text-black/50">STITCH COUNT: 14/INCH</div>
-                            </div>
+                    <div className="overflow-hidden w-full">
+                        <motion.span initial={{ y: "100%" }} whileInView={{ y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.08 }} className="block">
+                            MERCH.
+                        </motion.span>
+                    </div>
+                    <div className="overflow-hidden w-full">
+                        <motion.span initial={{ y: "100%" }} whileInView={{ y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.16 }} className="block">
+                            WE BUILD <VideoWordIdentity reduced={reduced} />
+                        </motion.span>
+                    </div>
+                    <div className="overflow-hidden w-full">
+                        <motion.div initial={{ y: "100%" }} whileInView={{ y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.24 }}>
+                            <StitchLineText reduced={reduced} />
                         </motion.div>
+                    </div>
+                </h2>
 
-                        {/* Process Plate B (~140x140, lower right beside line 3, hidden on mobile < 900px) */}
-                        <motion.div
-                            style={reduced ? {} : { y: yPlateB }}
-                            initial={reduced ? { opacity: 1 } : { opacity: 0, scale: 0.95 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true, margin: "-10% 0px" }}
-                            transition={{ duration: 0.7, delay: 0.35 }}
-                            className="hidden md:flex relative w-[145px] h-[145px] border border-black/15 bg-[#0a0a0a]/05 p-1 flex-col justify-between overflow-hidden group shadow-sm self-end translate-x-4 lg:translate-x-8"
-                        >
-                            <div className="relative w-full h-full overflow-hidden">
-                                <NextImage
-                                    src="/sequence/ezgif-frame-120.jpg"
-                                    alt="1327 Emerald Thread Spec"
-                                    fill
-                                    className="object-cover grayscale contrast-125 group-hover:scale-105 transition-transform duration-500"
-                                    loading="lazy"
-                                />
-                                <div className="absolute inset-0 bg-[#105233]/20 mix-blend-multiply pointer-events-none" />
+                {/* Mobile Image Sequence (Act 1 stacked) */}
+                <div className="flex flex-col gap-4 my-2">
+                    {PROCESS_SHOT_LIST.slice(0, 3).map((item, idx) => (
+                        <div key={idx} className="relative w-full border border-black/15 bg-black/5 p-1 flex flex-col justify-between overflow-hidden">
+                            <div className="relative w-full h-44 overflow-hidden">
+                                <NextImage src={item.src} alt={item.alt} fill className="object-cover grayscale contrast-125" loading="lazy" />
                             </div>
-                            {/* Spec Caption Chip B */}
-                            <div className="bg-[#eae6df]/95 backdrop-blur-sm border-t border-black/15 p-1.5 font-mono text-[8.5px] text-[#105233] font-bold tracking-wider leading-tight">
-                                <div>THREAD: EMERALD 40/2</div>
-                                <div className="text-black/50">ATELIER NO: #1327-A</div>
+                            <div className="bg-[#eae6df] text-[#105233] p-1.5 font-mono text-[9px] font-bold tracking-wider uppercase border-t border-black/15">
+                                {item.label}
                             </div>
-                        </motion.div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Mobile Act 3 Floating Single Image (8% margins) */}
+                <div className="w-[92%] mx-auto aspect-[16/9] border border-black/15 p-1 bg-black/5 flex flex-col justify-between my-2">
+                    <div className="relative w-full h-full overflow-hidden">
+                        <NextImage src="/manifesto/fabric-macro.jpg" alt="Macro spec" fill className="object-cover grayscale contrast-125" loading="lazy" />
+                    </div>
+                    <div className="bg-[#105233] text-white p-1.5 font-mono text-[9px] font-bold tracking-wider uppercase">
+                        ● &#123; MACRO SPEC: SEAM TENSION // 320 GSM &#125;
                     </div>
                 </div>
 
-                {/* Full-Bleed Macro Band (200-260px tall horizontal strip) */}
-                <motion.div
-                    initial={reduced ? { opacity: 1 } : { opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-10% 0px" }}
-                    transition={{ duration: 0.8, delay: 0.2 }}
-                    className="relative w-full h-52 sm:h-60 md:h-64 border-y border-black/15 overflow-hidden my-2 group"
-                >
-                    {/* Parallax Macro Background */}
-                    <motion.div
-                        style={reduced ? {} : { y: yMacro }}
-                        className="absolute inset-0 w-full h-[120%] -top-[10%]"
-                    >
-                        <NextImage
-                            src="/manifesto/fabric-macro.jpg"
-                            alt="1327 Seam Under Tension Macro Spec"
-                            fill
-                            className="object-cover grayscale contrast-125 brightness-90 group-hover:scale-105 transition-transform duration-700"
-                            loading="lazy"
-                        />
-                        <div className="absolute inset-0 bg-[#105233]/30 mix-blend-multiply pointer-events-none" />
-                    </motion.div>
-
-                    {/* Macro Band Spec Caption Chip */}
-                    <div className="absolute bottom-4 left-4 sm:left-8 z-10 inline-flex items-center gap-2 px-3 py-1.5 bg-[#eae6df]/90 backdrop-blur-md border border-black/20 font-mono text-[10px] sm:text-xs text-[#105233] font-bold tracking-widest uppercase">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#105233]" />
-                        <span>● &#123; MACRO SPEC: HIGH-DENSITY SEAM TENSION // 320 GSM &#125;</span>
-                    </div>
-                </motion.div>
-
-                {/* Bottom Row */}
-                <motion.div
-                    initial={reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-10% 0px" }}
-                    transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                    className="w-full grid grid-cols-1 md:grid-cols-12 gap-6 items-end pt-2 border-t border-black/15"
-                >
-                    <div className="md:col-span-4 font-mono text-xs tracking-[0.2em] uppercase text-[#105233] font-bold text-left flex flex-wrap items-center gap-3">
+                {/* Mobile Manifesto Paragraph */}
+                <div className="flex flex-col gap-4 pt-4 border-t border-black/15 font-mono text-xs text-[#105233]">
+                    <div className="flex items-center gap-3 flex-wrap">
                         <span>&#123; WHY WE EXIST &#125;</span>
-                        <span className="text-black/40 font-normal">&#123; 1327 &#125;</span>
-                        
-                        {/* Integrated Hang Tag Badge */}
-                        <motion.div
-                            initial={reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 15, scale: 0.92 }}
-                            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                            viewport={{ once: true, margin: "-10% 0px" }}
-                            transition={{ duration: 0.6, delay: 0.47, ease: [0.215, 0.61, 0.355, 1] }}
-                            className="inline-flex items-center gap-2 px-2.5 py-1 border border-[#105233]/25 bg-[#105233]/05 rounded-none font-mono text-[10px] text-[#105233] font-bold tracking-wider"
-                        >
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#105233]" />
-                            <span>1327-TAG #01</span>
-                        </motion.div>
+                        <span className="opacity-40">&#123; 1327 &#125;</span>
                     </div>
-
-                    <div className="md:col-span-8 font-sans text-base sm:text-lg md:text-xl font-light text-[#0a0a0a]/85 leading-relaxed text-left max-w-2xl">
+                    <p className="font-sans text-base text-[#0a0a0a]/85 leading-relaxed font-light">
                         Every crew deserves a uniform worth belonging to. We cut premium fabric, obsess over embroidery and skip every shortcut — so your people feel like a team, and your brand becomes impossible to miss.
-                    </div>
-                </motion.div>
+                    </p>
+                </div>
             </div>
         </section>
     );
