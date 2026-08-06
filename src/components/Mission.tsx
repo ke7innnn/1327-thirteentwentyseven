@@ -27,8 +27,8 @@ export default function Mission() {
 
     return (
         <div id="mission" className="relative w-full z-10">
-            {/* Smooth Hero sequence container with 250vh sticky scroll pin length */}
-            <div ref={heroRef} className="relative w-full h-[250vh]">
+            {/* Smooth Hero sequence container with 300vh sticky scroll pin length */}
+            <div ref={heroRef} className="relative w-full h-[300vh]">
                 <section className="sticky top-0 w-full h-screen overflow-hidden">
                     {/* Instant fallback frame 1 for 0ms initial render before JS canvas hydratation */}
                     <NextImage
@@ -232,11 +232,15 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }
 function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
     const [isContactOpen, setIsContactOpen] = useState(false);
 
-    // Hero Section Overlay (1327 DESIGNED FOR THE BOLD): Stays 100% visible on screen
-    // while locked, and unpins smoothly as user scrolls down into Manifesto
-    const opacityHero = useTransform(scrollProgress, [0, 0.7, 1.0], [1, 1, 0]);
-    const yHero = useTransform(scrollProgress, [0, 0.7, 1.0], [0, 0, -40]);
-    const pointerEventsHero = useTransform(scrollProgress, (latest: number) => latest > 0.8 ? "none" : "auto");
+    // Hero CTA buttons fade out earlier as user scrolls to make room for logo pop-up
+    const opacityHero = useTransform(scrollProgress, [0, 0.35, 0.45], [1, 1, 0]);
+    const yHero = useTransform(scrollProgress, [0, 0.35, 0.45], [0, 0, -30]);
+    const pointerEventsHero = useTransform(scrollProgress, (latest: number) => latest > 0.40 ? "none" : "auto");
+
+    // 1327 Logo Card pops up in center (0.42 to 0.88)
+    const logoOpacity = useTransform(scrollProgress, [0.38, 0.50, 0.82, 0.95], [0, 1, 1, 0]);
+    const logoScale   = useTransform(scrollProgress, [0.38, 0.50, 0.82, 0.95], [0.65, 1, 1, 1.06]);
+    const logoY       = useTransform(scrollProgress, [0.38, 0.50, 0.82, 0.95], [50, 0, 0, -30]);
 
     const handleScrollToNext = () => {
         const nextSec = document.getElementById("manifesto");
@@ -247,12 +251,12 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
 
     return (
         <>
+            {/* Primary & Secondary Hero CTAs in Bottom Left Corner */}
             <div className="absolute inset-0 z-10 w-full h-full flex items-end justify-start">
                 <motion.div
                     style={{ opacity: opacityHero, y: yHero, pointerEvents: pointerEventsHero }}
                     className="absolute inset-0 w-full h-full flex flex-col justify-end items-start px-6 sm:px-12 md:px-16 lg:px-24 pb-8 sm:pb-12 md:pb-16 animate-[fadeIn_0.5s_ease-out]"
                 >
-                    {/* Primary & Secondary Hero CTAs in Bottom Left Corner */}
                     <div className="flex flex-wrap items-center gap-3 sm:gap-4">
                         {/* Primary CTA: REACH OUT */}
                         <button
@@ -284,6 +288,27 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
                     </div>
                 </motion.div>
             </div>
+
+            {/* 1327 Brand Logo Pop-Up Card in Center on Scroll */}
+            <motion.div
+                style={{
+                    opacity: logoOpacity,
+                    scale: logoScale,
+                    y: logoY,
+                }}
+                className="absolute inset-0 z-20 pointer-events-none m-auto flex flex-col items-center justify-center p-6 select-none"
+            >
+                <div className="bg-[#105233] text-white p-8 sm:p-12 md:p-14 border border-white/20 shadow-[0_25px_60px_rgba(0,0,0,0.6)] flex flex-col items-center justify-center gap-3.5 max-w-sm sm:max-w-md w-full text-center">
+                    {/* 1327 Header Text */}
+                    <span className="font-heading font-black text-6xl sm:text-7xl md:text-8xl tracking-tight text-white leading-none">
+                        1327
+                    </span>
+                    <div className="w-full h-1 bg-white my-1" />
+                    <span className="font-mono text-xs sm:text-sm font-bold tracking-[0.25em] uppercase text-white">
+                        THIRTEEN TWENTYSEVEN
+                    </span>
+                </div>
+            </motion.div>
 
             <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
         </>
