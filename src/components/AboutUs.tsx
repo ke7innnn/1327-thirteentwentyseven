@@ -276,7 +276,7 @@ export default function AboutUs() {
                 {/* ─── KICKER & HEADER BAR (CLEAR STICKY NAV) ───────────────────────── */}
                 <div className="w-full mb-6 sm:mb-8">
                     <div className="flex justify-between items-center font-mono text-xs font-bold tracking-[0.25em] uppercase text-[#EDEBE3]/45 pb-3 border-b border-[#EDEBE3]/15">
-                        <span>&#123; 02 &#125; / THE CODE</span>
+                        <span>&#123; 02 &#125; THE CODE</span>
                         <span className="hidden sm:inline">MALAD WEST, BOMBAY</span>
                     </div>
                 </div>

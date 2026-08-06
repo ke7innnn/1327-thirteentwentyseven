@@ -18,7 +18,7 @@ export default function SectionMarker({ sectionKey, className = "", align = "lef
     return (
         <div className={`flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.25em] text-[#105233] ${alignClass} ${className}`}>
             <span className="text-[#105233] font-bold">{section.marker}</span>
-            <span>/ {section.kicker}</span>
+            <span>{section.kicker}</span>
         </div>
     );
 }
