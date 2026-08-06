@@ -34,6 +34,7 @@ export default function Header() {
         { label: "About Us", href: "#about" },
         { label: "Services", href: "#services" },
         { label: "Clients", href: "#clients" },
+        { label: "Place Order", href: "#order" },
         { label: "Location", href: "#location" },
         { label: "Contact", href: "#contact" },
     ];

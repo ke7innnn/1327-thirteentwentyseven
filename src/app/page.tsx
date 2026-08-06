@@ -6,6 +6,7 @@ import Services from "@/components/Services";
 import Process from "@/components/Process";
 import SocialFeed from "@/components/SocialFeed";
 import HappyClients from "@/components/HappyClients";
+import OrderForm from "@/components/OrderForm";
 import Notes from "@/components/Notes";
 import LocationMap from "@/components/LocationMap";
 import Footer from "@/components/Footer";
@@ -24,6 +25,7 @@ export default function Home() {
       <Process />
       <SocialFeed />
       <HappyClients />
+      <OrderForm />
       <Notes />
       <LocationMap />
       <Footer />
