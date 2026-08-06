@@ -262,16 +262,16 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
                         </h1>
 
                         {/* Primary & Secondary Hero CTAs */}
-                        <div className="flex flex-wrap items-center gap-4 sm:gap-6 mt-4 sm:mt-6">
+                        <div className="flex flex-wrap items-center gap-3 sm:gap-4 mt-3 sm:mt-5">
                             {/* Primary CTA: REACH OUT */}
                             <button
                                 onClick={() => setIsContactOpen(true)}
-                                className="group relative inline-flex items-center gap-3 px-7 sm:px-8 py-3.5 sm:py-4 rounded-full bg-[#4FB47E] text-[#0D1712] font-heading font-bold text-sm sm:text-base tracking-wider uppercase overflow-hidden shadow-lg hover:shadow-[0_0_25px_rgba(79,180,126,0.5)] transition-all duration-300 transform active:scale-95"
+                                className="group relative inline-flex items-center gap-2.5 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[#4FB47E] text-[#0D1712] font-heading font-bold text-xs sm:text-sm tracking-wider uppercase overflow-hidden shadow-md hover:shadow-[0_0_20px_rgba(79,180,126,0.5)] transition-all duration-300 transform active:scale-95"
                             >
-                                <span className="relative z-10 flex items-center gap-3">
+                                <span className="relative z-10 flex items-center gap-2.5">
                                     <span>REACH OUT</span>
-                                    <span className="flex items-center justify-center w-7 h-7 rounded-full bg-[#0D1712] text-[#4FB47E] group-hover:rotate-45 transition-transform duration-300">
-                                        <ArrowUpRight className="w-4 h-4" />
+                                    <span className="flex items-center justify-center w-5.5 h-5.5 sm:w-6 sm:h-6 rounded-full bg-[#0D1712] text-[#4FB47E] group-hover:rotate-45 transition-transform duration-300">
+                                        <ArrowUpRight className="w-3.5 h-3.5" />
                                     </span>
                                 </span>
                                 <span className="absolute inset-0 bg-white scale-0 group-hover:scale-100 transition-transform duration-300 origin-center rounded-full" />
@@ -280,12 +280,12 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
                             {/* Secondary CTA: SEE THE WORK */}
                             <button
                                 onClick={handleScrollToNext}
-                                className="group relative inline-flex items-center gap-3 px-7 sm:px-8 py-3.5 sm:py-4 rounded-full border-2 border-[#4FB47E]/60 bg-black/40 backdrop-blur-md text-[#F2F9F4] font-heading font-bold text-sm sm:text-base tracking-wider uppercase overflow-hidden hover:border-[#4FB47E] transition-all duration-300 transform active:scale-95"
+                                className="group relative inline-flex items-center gap-2.5 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full border-2 border-[#4FB47E]/60 bg-black/40 backdrop-blur-md text-[#F2F9F4] font-heading font-bold text-xs sm:text-sm tracking-wider uppercase overflow-hidden hover:border-[#4FB47E] transition-all duration-300 transform active:scale-95"
                             >
-                                <span className="relative z-10 flex items-center gap-3 group-hover:text-[#0D1712] transition-colors duration-300">
+                                <span className="relative z-10 flex items-center gap-2.5 group-hover:text-[#0D1712] transition-colors duration-300">
                                     <span>SEE THE WORK</span>
-                                    <span className="flex items-center justify-center w-7 h-7 rounded-full bg-[#4FB47E]/20 text-[#4FB47E] group-hover:bg-[#0D1712] group-hover:text-[#4FB47E] transition-colors duration-300">
-                                        <ArrowDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform duration-300" />
+                                    <span className="flex items-center justify-center w-5.5 h-5.5 sm:w-6 sm:h-6 rounded-full bg-[#4FB47E]/20 text-[#4FB47E] group-hover:bg-[#0D1712] group-hover:text-[#4FB47E] transition-colors duration-300">
+                                        <ArrowDown className="w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform duration-300" />
                                     </span>
                                 </span>
                                 <span className="absolute inset-0 bg-[#4FB47E] scale-0 group-hover:scale-100 transition-transform duration-300 origin-center rounded-full" />
