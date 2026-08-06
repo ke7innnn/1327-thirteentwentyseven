@@ -59,6 +59,31 @@ export default function OrderForm() {
         }
     };
 
+    const constructWhatsAppUrl = (
+        id: string,
+        fn: string,
+        ln: string,
+        em: string,
+        mob: string,
+        addr: string,
+        sz: string
+    ) => {
+        const text =
+            `🛍️ *NEW ORDER — 1327 THIRTEEN TWENTYSEVEN*\n` +
+            `-----------------------------------------\n` +
+            `🆔 *ORDER REF:* #${id}\n` +
+            `👤 *NAME:* ${fn} ${ln}\n` +
+            `📧 *EMAIL:* ${em}\n` +
+            `📱 *MOBILE:* ${mob}\n` +
+            `📏 *SIZE:* ${sz} (Regular Fit)\n` +
+            `📍 *SHIPPING ADDRESS:* ${addr}\n` +
+            `💳 *PAYMENT:* Completed via UPI (Payment Proof Screenshot Attached)\n` +
+            `-----------------------------------------\n` +
+            `Hi 1327! I have placed an order on the site and attached my payment proof.`;
+
+        return `https://wa.me/918082845721?text=${encodeURIComponent(text)}`;
+    };
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!firstName || !email || !mobile || !address || !selectedSize || !paymentScreenshot) {
@@ -68,11 +93,13 @@ export default function OrderForm() {
 
         setStatus("submitting");
         const generatedId = `1327-ORD-${Math.floor(100000 + Math.random() * 900000)}`;
+        setOrderId(generatedId);
 
         setTimeout(() => {
-            setOrderId(generatedId);
             setStatus("success");
-        }, 1200);
+            const waUrl = constructWhatsAppUrl(generatedId, firstName, lastName, email, mobile, address, selectedSize);
+            window.open(waUrl, "_blank");
+        }, 1000);
     };
 
     return (
@@ -125,13 +152,13 @@ export default function OrderForm() {
                         </div>
                         <div className="flex flex-col gap-2">
                             <span className="font-mono text-xs font-bold text-[#1EA86E] tracking-[0.25em] uppercase">
-                                ORDER CONFIRMED &amp; RECEIVED
+                                ORDER CONFIRMED &amp; READY TO SEND
                             </span>
                             <h3 className="font-heading font-black text-3xl sm:text-4xl text-white uppercase">
                                 THANK YOU, {firstName.toUpperCase()}!
                             </h3>
                             <p className="font-mono text-xs text-[#F7F5F0]/70 tracking-widest mt-1">
-                                REF ID: <span className="text-[#1EA86E] font-bold">{orderId}</span>
+                                REF ID: <span className="text-[#1EA86E] font-bold">#{orderId}</span>
                             </p>
                         </div>
 
@@ -155,14 +182,24 @@ export default function OrderForm() {
                             <div className="flex justify-between pb-1">
                                 <span className="text-[#F7F5F0]/60">PAYMENT STATUS</span>
                                 <span className="font-bold text-[#1EA86E] flex items-center gap-1">
-                                    <ShieldCheck size={14} /> PROOF SUBMITTED
+                                    <ShieldCheck size={14} /> PROOF ATTACHED
                                 </span>
                             </div>
                         </div>
 
                         <p className="font-sans text-xs sm:text-sm text-[#F7F5F0]/80 font-light leading-relaxed">
-                            We have received your order details and payment screenshot. Our production team will verify your payment and start crafting your apparel right away.
+                            Your order details have been generated. Click below to open WhatsApp and send your order summary and payment receipt to our production desk.
                         </p>
+
+                        <a
+                            href={constructWhatsAppUrl(orderId, firstName, lastName, email, mobile, address, selectedSize)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full py-4 bg-[#25D366] text-[#0D1712] font-mono text-xs sm:text-sm font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-white transition-colors shadow-lg cursor-pointer"
+                        >
+                            <span>SEND ORDER ON WHATSAPP (+91 80828 45721)</span>
+                            <ArrowRight size={16} />
+                        </a>
 
                         <button
                             onClick={() => {
@@ -175,7 +212,7 @@ export default function OrderForm() {
                                 setMobile("");
                                 setAddress("");
                             }}
-                            className="mt-2 px-8 py-3.5 bg-[#1EA86E] text-[#0D1712] font-mono text-xs font-bold uppercase tracking-[0.2em] hover:bg-white transition-colors"
+                            className="text-xs font-mono text-[#F7F5F0]/50 hover:text-white underline cursor-pointer mt-1"
                         >
                             PLACE ANOTHER ORDER
                         </button>
