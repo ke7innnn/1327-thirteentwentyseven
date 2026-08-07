@@ -19,14 +19,17 @@ export default function Home() {
       </h1>
       <p className="sr-only">1327 Thirteen Twenty Seven — Custom T-Shirts, Uniforms &amp; Apparel in Mumbai, Malad.</p>
       <Mission />
-      <AboutUs />
-      <Services />
-      <Process />
-      <SocialFeed />
-      <HappyClients />
-      <Notes />
-      <LocationMap />
-      <Footer />
+      {/* relative z-10 — creates stacking context above fixed hero (z-[1]) */}
+      <div className="relative z-10">
+        <AboutUs />
+        <Services />
+        <Process />
+        <SocialFeed />
+        <HappyClients />
+        <Notes />
+        <LocationMap />
+        <Footer />
+      </div>
     </main>
   );
 }

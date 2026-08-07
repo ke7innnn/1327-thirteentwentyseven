@@ -26,19 +26,18 @@ export default function Mission() {
         offset: ["start start", "end end"]
     });
 
-    // Hero fades out at the very end of the scroll-lock sequence
-    const heroOpacity = useTransform(scrollYProgress, [0, 0.93, 1], [1, 1, 0]);
+    // Disable pointer events after animation so user can interact with sections below
     const heroPointerEvents = useTransform(scrollYProgress, (v: number) => v >= 0.95 ? "none" : "auto");
 
     return (
-        <div id="mission" className="relative w-full z-10 bg-[#105233]">
+        <div id="mission" className="relative w-full z-10">
             {/* ═══ SCROLL SPACER — invisible, provides 200vh of locked scroll distance ═══ */}
-            <div ref={spacerRef} className="relative w-full h-[300vh] bg-[#105233]" />
+            <div ref={spacerRef} className="relative w-full h-[300vh]" />
 
-            {/* ═══ FIXED HERO — covers viewport during spacer scroll, fades out at end ═══ */}
+            {/* ═══ FIXED HERO — stays fully visible; sections scroll over it (z-30 > z-1) ═══ */}
             <motion.div
-                style={{ opacity: heroOpacity, pointerEvents: heroPointerEvents }}
-                className="fixed top-0 left-0 w-full h-screen overflow-hidden z-20 bg-[#105233]"
+                style={{ pointerEvents: heroPointerEvents }}
+                className="fixed top-0 left-0 w-full h-screen overflow-hidden z-[1]"
             >
                 {/* Instant fallback frame 1 for 0ms initial render before JS canvas hydration */}
                 <NextImage
@@ -61,7 +60,7 @@ export default function Mission() {
                 <HeroContent scrollProgress={scrollYProgress} />
             </motion.div>
 
-            {/* ─── PLACE ORDER CTA BANNER — appears right after spacer, zero gap ───── */}
+            {/* ─── PLACE ORDER CTA BANNER — solid bg slides over the fixed hero ───── */}
             <div className="relative z-30 w-full bg-[#105233] border-y border-[#1EA86E]/40 py-6 sm:py-8 px-6 sm:px-12 shadow-2xl">
                 <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-5 text-center md:text-left">
                     <div className="flex flex-col gap-1">
@@ -87,11 +86,14 @@ export default function Mission() {
                 </div>
             </div>
 
-            {/* Transition: Scroll-driven 1327 Brand Tag */}
-            <BrandTagTransition />
+            {/* z-30 wrapper — covers fixed hero; each section has its own bg */}
+            <div className="relative z-30">
+                {/* Transition: Scroll-driven 1327 Brand Tag */}
+                <BrandTagTransition />
 
-            {/* Manifesto Section */}
-            <ManifestoSection />
+                {/* Manifesto Section */}
+                <ManifestoSection />
+            </div>
         </div>
     );
 }
@@ -470,7 +472,7 @@ function ManifestoSection() {
         <section
             ref={sectionRef}
             id="manifesto"
-            className="relative z-20 bg-[#eae6df] text-[#0a0a0a] py-20 md:py-32 border-b border-black/10 w-full overflow-hidden select-none rounded-none"
+            className="relative z-30 bg-[#eae6df] text-[#0a0a0a] py-20 md:py-32 border-b border-black/10 w-full overflow-hidden select-none rounded-none"
         >
             {/* Woven Linen Apparel Fabric Texture Overlay */}
             <div
