@@ -27,10 +27,10 @@ export default function Mission() {
     });
 
     return (
-        <div id="mission" className="relative w-full z-10">
+        <div id="mission" className="relative w-full z-10 bg-[#105233]">
             {/* Smooth Hero sequence container with tight 140vh sticky scroll pin length */}
-            <div ref={heroRef} className="relative w-full h-[140vh] sm:h-[150vh]">
-                <section className="sticky top-0 w-full h-screen overflow-hidden">
+            <div ref={heroRef} className="relative w-full h-[140vh] sm:h-[150vh] bg-[#105233]">
+                <section className="sticky top-0 w-full h-screen overflow-hidden bg-[#105233]">
                     {/* Instant fallback frame 1 for 0ms initial render before JS canvas hydratation */}
                     <NextImage
                         src="/sequence/ezgif-frame-001.jpg"
@@ -44,7 +44,10 @@ export default function Mission() {
                     {/* Scroll-driven frame animation background */}
                     <FrameCanvas scrollProgress={scrollYProgress} />
                     {/* Dark overlay for text readability */}
-                    <div className="absolute inset-0 bg-black/40 z-[2]" />
+                    <div className="absolute inset-0 bg-black/35 z-[2]" />
+
+                    {/* Bottom gradient mask — seamlessly blends hero frame into #105233 brand green */}
+                    <div className="absolute bottom-0 left-0 right-0 h-40 sm:h-56 bg-gradient-to-t from-[#105233] via-[#105233]/90 to-transparent z-[5] pointer-events-none" />
 
                     <HeroContent scrollProgress={scrollYProgress} />
                 </section>
