@@ -20,16 +20,26 @@ function getFramePath(index: number): string {
 }
 
 export default function Mission() {
-    const heroRef = useRef<HTMLDivElement>(null);
+    const spacerRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
-        target: heroRef,
-        offset: ["start start", "end start"]
+        target: spacerRef,
+        offset: ["start start", "end end"]
     });
+
+    // Hero fades out at the very end of the scroll-lock sequence
+    const heroOpacity = useTransform(scrollYProgress, [0, 0.93, 1], [1, 1, 0]);
+    const heroPointerEvents = useTransform(scrollYProgress, (v: number) => v >= 0.95 ? "none" : "auto");
 
     return (
         <div id="mission" className="relative w-full z-10 bg-[#105233]">
-            {/* Hero section — exactly one viewport tall, no sticky needed (first element on page) */}
-            <div ref={heroRef} className="relative w-full h-screen overflow-hidden bg-[#105233]">
+            {/* ═══ SCROLL SPACER — invisible, provides 200vh of locked scroll distance ═══ */}
+            <div ref={spacerRef} className="relative w-full h-[300vh] bg-[#105233]" />
+
+            {/* ═══ FIXED HERO — covers viewport during spacer scroll, fades out at end ═══ */}
+            <motion.div
+                style={{ opacity: heroOpacity, pointerEvents: heroPointerEvents }}
+                className="fixed top-0 left-0 w-full h-screen overflow-hidden z-20 bg-[#105233]"
+            >
                 {/* Instant fallback frame 1 for 0ms initial render before JS canvas hydration */}
                 <NextImage
                     src="/sequence/ezgif-frame-001.jpg"
@@ -49,9 +59,9 @@ export default function Mission() {
                 <div className="absolute bottom-0 left-0 right-0 h-40 sm:h-56 bg-gradient-to-t from-[#105233] via-[#105233]/90 to-transparent z-[5] pointer-events-none" />
 
                 <HeroContent scrollProgress={scrollYProgress} />
-            </div>
+            </motion.div>
 
-            {/* ─── PLACE ORDER CTA BANNER — directly after hero, zero gap ───── */}
+            {/* ─── PLACE ORDER CTA BANNER — appears right after spacer, zero gap ───── */}
             <div className="relative z-30 w-full bg-[#105233] border-y border-[#1EA86E]/40 py-6 sm:py-8 px-6 sm:px-12 shadow-2xl">
                 <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-5 text-center md:text-left">
                     <div className="flex flex-col gap-1">
@@ -231,8 +241,8 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }
         }
     }, [canvasSize, drawFrame]);
 
-    // Scroll-driven frame transform (First 80% of scroll for 240 frames)
-    const frameIndex = useTransform(scrollProgress, [0, 0.8], [0, TOTAL_FRAMES - 1], { clamp: true });
+    // Scroll-driven frame transform — all 240 frames play in first 90% of scroll-lock
+    const frameIndex = useTransform(scrollProgress, [0, 0.9], [0, TOTAL_FRAMES - 1], { clamp: true });
 
     useMotionValueEvent(frameIndex, "change", (latest) => {
         if (isScrolling.current) {
@@ -256,9 +266,9 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }
 function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
     const [isContactOpen, setIsContactOpen] = useState(false);
 
-    // Hero text stays visible while in viewport, fades out as hero scrolls away (last 20%)
-    const opacityHero = useTransform(scrollProgress, [0, 0.6, 1.0], [1, 1, 0]);
-    const yHero = useTransform(scrollProgress, [0, 0.6, 1.0], [0, 0, -60]);
+    // Hero text stays fully visible during scroll-lock, fades out near the end
+    const opacityHero = useTransform(scrollProgress, [0, 0.85, 1.0], [1, 1, 0]);
+    const yHero = useTransform(scrollProgress, [0, 0.85, 1.0], [0, 0, -40]);
     const pointerEventsHero = useTransform(scrollProgress, (latest: number) => latest > 0.9 ? "none" : "auto");
 
     const handleScrollToNext = () => {
