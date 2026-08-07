@@ -60,6 +60,7 @@ export async function POST(req: Request) {
                     Accept: "application/json",
                     Origin: "https://www.1327.in",
                     Referer: "https://www.1327.in/order",
+                    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
                 },
                 body: JSON.stringify({
                     _subject: subject,

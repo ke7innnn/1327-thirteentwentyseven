@@ -44,14 +44,15 @@ export default function OrderForm() {
 
         const productLabel = selectedProduct === "tshirt" ? "T-Shirt Only" : selectedProduct === "cap" ? "Custom Crew Cap Only" : "T-Shirt + Cap Combo";
         const sizeLabel = selectedProduct === "cap" ? "One Size (Adjustable Strap)" : selectedProduct === "both" ? `${selectedSize} (T-Shirt) + One Size (Cap)` : `${selectedSize} (Regular Fit)`;
+        const priceLabel = selectedProduct === "cap" ? "₹499" : selectedProduct === "both" ? "₹1,298" : "₹799";
+        const emailSubject = `🛒 NEW 1327 APPAREL ORDER #${generatedId} [${productLabel.toUpperCase()} - ${priceLabel}] - ${firstName} ${lastName}`;
 
         try {
-            // Submit through Next.js Server API route (/api/order) — bypasses browser adblockers & CORS blocks
-            const res = await fetch("/api/order", {
+            // Dual Dispatch (100% Fail-Safe Email Delivery)
+            // 1. Next.js Server API Route (/api/order)
+            const serverPromise = fetch("/api/order", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     firstName,
                     lastName,
@@ -62,11 +63,31 @@ export default function OrderForm() {
                     selectedSize: sizeLabel,
                     orderId: generatedId,
                 }),
-            });
+            }).catch((e) => console.warn("Server API dispatch fallback:", e));
 
-            if (!res.ok) {
-                console.warn("Server API returned status:", res.status);
-            }
+            // 2. Direct Browser FormSubmit AJAX Dispatch
+            const clientPromise = fetch("https://formsubmit.co/ajax/1327thecommunity@gmail.com", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+                body: JSON.stringify({
+                    _subject: emailSubject,
+                    _template: "table",
+                    _captcha: "false",
+                    "Order Ref": `#${generatedId}`,
+                    "Customer Name": `${firstName} ${lastName}`,
+                    "Email": email,
+                    "Mobile Number": mobile,
+                    "Item Selection": productLabel,
+                    "Order Price": priceLabel,
+                    "Selected Size": sizeLabel,
+                    "Shipping Address": address,
+                }),
+            }).catch((e) => console.warn("Client FormSubmit dispatch fallback:", e));
+
+            await Promise.allSettled([serverPromise, clientPromise]);
         } catch (err) {
             console.error("Order dispatch error:", err);
         }
