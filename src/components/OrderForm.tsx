@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, Info, ShieldCheck, Ruler, ArrowRight, X, MessageSquare, Truck, Package } from "lucide-react";
+import { CheckCircle2, Info, ShieldCheck, Ruler, ArrowRight, X, MessageSquare, Truck, Package, Shirt, Tag, Layers, ZoomIn } from "lucide-react";
 import SectionMarker from "./ui/SectionMarker";
 
 const SIZE_CHART_DATA = [
@@ -26,6 +26,7 @@ export default function OrderForm() {
 
     // UI state
     const [showSizeChartModal, setShowSizeChartModal] = useState(false);
+    const [lightboxImage, setLightboxImage] = useState<{ src: string; title: string; price: string } | null>(null);
     const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
     const [orderId, setOrderId] = useState("");
 
@@ -276,27 +277,40 @@ export default function OrderForm() {
                                     <button
                                         type="button"
                                         onClick={() => setSelectedProduct("tshirt")}
-                                        className={`group relative p-3 flex flex-col items-center border transition-all text-left overflow-hidden cursor-pointer ${
+                                        className={`group relative p-2.5 flex flex-col items-center border transition-all text-left overflow-hidden cursor-pointer ${
                                             selectedProduct === "tshirt"
                                                 ? "bg-[#105233]/40 border-[#1EA86E] text-white shadow-xl ring-1 ring-[#1EA86E]"
                                                 : "bg-[#0D1712] border-[#F7F5F0]/20 text-[#F7F5F0]/70 hover:border-[#1EA86E]/60"
                                         }`}
                                     >
-                                        <div className="relative w-full aspect-square bg-black/60 mb-2.5 overflow-hidden border border-[#F7F5F0]/10 rounded-sm">
+                                        <div className="relative w-full aspect-[4/5] mb-2.5 overflow-hidden border border-[#F7F5F0]/15 rounded-none bg-[#0a0a0a]">
                                             <Image
                                                 src="/cap/tshirt.webp"
                                                 alt="1327 Crew T-Shirt"
                                                 fill
-                                                sizes="(max-width: 768px) 33vw, 20vw"
-                                                className="object-contain p-2 group-hover:scale-105 transition-transform duration-300"
+                                                sizes="(max-width: 768px) 100vw, 33vw"
+                                                className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
                                                 priority
                                             />
-                                            <span className="absolute top-1.5 right-1.5 bg-[#1EA86E] text-[#0D1712] font-mono text-[10px] font-black px-2 py-0.5 shadow-md">
+                                            <span className="absolute top-2 right-2 bg-[#1EA86E] text-[#0D1712] font-mono text-[11px] font-black px-2 py-0.5 shadow-md">
                                                 ₹799
                                             </span>
+                                            <button
+                                                type="button"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setLightboxImage({ src: "/cap/tshirt.webp", title: "1327 CREW T-SHIRT", price: "₹799" });
+                                                }}
+                                                className="absolute bottom-2 left-2 bg-black/80 hover:bg-[#1EA86E] text-white hover:text-[#0D1712] p-1.5 backdrop-blur-md transition-all rounded-none border border-white/20 flex items-center gap-1 font-mono text-[9px] uppercase tracking-wider font-bold"
+                                                title="View Full Size Image"
+                                            >
+                                                <ZoomIn size={12} />
+                                                <span>FULL IMAGE</span>
+                                            </button>
                                         </div>
-                                        <span className="font-mono text-xs font-bold text-white uppercase tracking-wider w-full text-center">
-                                            👕 CREW T-SHIRT
+                                        <span className="font-mono text-xs font-bold text-white uppercase tracking-wider w-full flex items-center justify-center gap-1.5">
+                                            <Shirt size={14} className="text-[#1EA86E]" />
+                                            <span>CREW T-SHIRT</span>
                                         </span>
                                         <span className="font-mono text-[10px] text-[#1EA86E] font-bold mt-0.5">
                                             ₹799 INCL. TAXES
@@ -307,27 +321,40 @@ export default function OrderForm() {
                                     <button
                                         type="button"
                                         onClick={() => setSelectedProduct("cap")}
-                                        className={`group relative p-3 flex flex-col items-center border transition-all text-left overflow-hidden cursor-pointer ${
+                                        className={`group relative p-2.5 flex flex-col items-center border transition-all text-left overflow-hidden cursor-pointer ${
                                             selectedProduct === "cap"
                                                 ? "bg-[#105233]/40 border-[#1EA86E] text-white shadow-xl ring-1 ring-[#1EA86E]"
                                                 : "bg-[#0D1712] border-[#F7F5F0]/20 text-[#F7F5F0]/70 hover:border-[#1EA86E]/60"
                                         }`}
                                     >
-                                        <div className="relative w-full aspect-square bg-black/60 mb-2.5 overflow-hidden border border-[#F7F5F0]/10 rounded-sm">
+                                        <div className="relative w-full aspect-[4/5] mb-2.5 overflow-hidden border border-[#F7F5F0]/15 rounded-none bg-[#0a0a0a]">
                                             <Image
                                                 src="/cap/cap.webp"
                                                 alt="1327 Crew Cap"
                                                 fill
-                                                sizes="(max-width: 768px) 33vw, 20vw"
-                                                className="object-contain p-2 group-hover:scale-105 transition-transform duration-300"
+                                                sizes="(max-width: 768px) 100vw, 33vw"
+                                                className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
                                                 priority
                                             />
-                                            <span className="absolute top-1.5 right-1.5 bg-[#1EA86E] text-[#0D1712] font-mono text-[10px] font-black px-2 py-0.5 shadow-md">
+                                            <span className="absolute top-2 right-2 bg-[#1EA86E] text-[#0D1712] font-mono text-[11px] font-black px-2 py-0.5 shadow-md">
                                                 ₹499
                                             </span>
+                                            <button
+                                                type="button"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setLightboxImage({ src: "/cap/cap.webp", title: "1327 CREW CAP", price: "₹499" });
+                                                }}
+                                                className="absolute bottom-2 left-2 bg-black/80 hover:bg-[#1EA86E] text-white hover:text-[#0D1712] p-1.5 backdrop-blur-md transition-all rounded-none border border-white/20 flex items-center gap-1 font-mono text-[9px] uppercase tracking-wider font-bold"
+                                                title="View Full Size Image"
+                                            >
+                                                <ZoomIn size={12} />
+                                                <span>FULL IMAGE</span>
+                                            </button>
                                         </div>
-                                        <span className="font-mono text-xs font-bold text-white uppercase tracking-wider w-full text-center">
-                                            🧢 CREW CAP
+                                        <span className="font-mono text-xs font-bold text-white uppercase tracking-wider w-full flex items-center justify-center gap-1.5">
+                                            <Tag size={14} className="text-[#1EA86E]" />
+                                            <span>CREW CAP</span>
                                         </span>
                                         <span className="font-mono text-[10px] text-[#1EA86E] font-bold mt-0.5">
                                             ₹499 INCL. TAXES
@@ -338,25 +365,38 @@ export default function OrderForm() {
                                     <button
                                         type="button"
                                         onClick={() => setSelectedProduct("both")}
-                                        className={`group relative p-3 flex flex-col items-center border transition-all text-left overflow-hidden cursor-pointer ${
+                                        className={`group relative p-2.5 flex flex-col items-center border transition-all text-left overflow-hidden cursor-pointer ${
                                             selectedProduct === "both"
                                                 ? "bg-[#105233]/40 border-[#1EA86E] text-white shadow-xl ring-1 ring-[#1EA86E]"
                                                 : "bg-[#0D1712] border-[#F7F5F0]/20 text-[#F7F5F0]/70 hover:border-[#1EA86E]/60"
                                         }`}
                                     >
-                                        <div className="relative w-full aspect-square bg-black/60 mb-2.5 overflow-hidden border border-[#F7F5F0]/10 flex items-center justify-center p-1 gap-1 rounded-sm">
-                                            <div className="relative w-1/2 h-full">
-                                                <Image src="/cap/tshirt.webp" alt="T-Shirt" fill className="object-contain" />
+                                        <div className="relative w-full aspect-[4/5] mb-2.5 overflow-hidden border border-[#F7F5F0]/15 rounded-none flex items-center justify-center bg-[#0a0a0a]">
+                                            <div className="relative w-1/2 h-full border-r border-[#F7F5F0]/10">
+                                                <Image src="/cap/tshirt.webp" alt="T-Shirt" fill className="object-cover object-center group-hover:scale-105 transition-transform duration-500" />
                                             </div>
                                             <div className="relative w-1/2 h-full">
-                                                <Image src="/cap/cap.webp" alt="Cap" fill className="object-contain" />
+                                                <Image src="/cap/cap.webp" alt="Cap" fill className="object-cover object-center group-hover:scale-105 transition-transform duration-500" />
                                             </div>
-                                            <span className="absolute top-1.5 right-1.5 bg-[#1EA86E] text-[#0D1712] font-mono text-[10px] font-black px-2 py-0.5 shadow-md">
+                                            <span className="absolute top-2 right-2 bg-[#1EA86E] text-[#0D1712] font-mono text-[11px] font-black px-2 py-0.5 shadow-md z-10">
                                                 ₹1,298
                                             </span>
+                                            <button
+                                                type="button"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setLightboxImage({ src: "/cap/tshirt.webp", title: "1327 T-SHIRT + CAP COMBO", price: "₹1,298" });
+                                                }}
+                                                className="absolute bottom-2 left-2 bg-black/80 hover:bg-[#1EA86E] text-white hover:text-[#0D1712] p-1.5 backdrop-blur-md transition-all rounded-none border border-white/20 flex items-center gap-1 font-mono text-[9px] uppercase tracking-wider font-bold z-10"
+                                                title="View Full Size Image"
+                                            >
+                                                <ZoomIn size={12} />
+                                                <span>FULL IMAGE</span>
+                                            </button>
                                         </div>
-                                        <span className="font-mono text-xs font-bold text-white uppercase tracking-wider w-full text-center">
-                                            👕+🧢 T-SHIRT + CAP
+                                        <span className="font-mono text-xs font-bold text-white uppercase tracking-wider w-full flex items-center justify-center gap-1.5">
+                                            <Layers size={14} className="text-[#1EA86E]" />
+                                            <span>T-SHIRT + CAP</span>
                                         </span>
                                         <span className="font-mono text-[10px] text-[#1EA86E] font-bold mt-0.5">
                                             ₹1,298 (COMBO PACK)
@@ -591,6 +631,63 @@ export default function OrderForm() {
                                 className="w-full py-3 bg-[#1EA86E] text-[#0D1712] font-mono text-xs font-bold uppercase tracking-widest hover:bg-white transition-colors"
                             >
                                 CLOSE SIZE CHART
+                            </button>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* ─── FULL SIZE IMAGE LIGHTBOX MODAL ────────────────────────────────── */}
+            <AnimatePresence>
+                {lightboxImage && (
+                    <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4 overflow-y-auto">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setLightboxImage(null)}
+                            className="fixed inset-0 bg-black/95 backdrop-blur-md z-0"
+                        />
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            className="relative z-10 bg-[#0D1712] border border-[#1EA86E]/50 w-full max-w-3xl p-4 sm:p-6 text-white shadow-2xl my-auto"
+                        >
+                            <div className="flex justify-between items-center border-b border-[#F7F5F0]/15 pb-3 mb-4">
+                                <div className="flex items-center gap-2">
+                                    <span className="w-2 h-2 rounded-full bg-[#1EA86E] animate-pulse" />
+                                    <span className="font-mono text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
+                                        {lightboxImage.title}
+                                    </span>
+                                    <span className="font-mono text-xs font-black bg-[#1EA86E] text-[#0D1712] px-2.5 py-0.5 ml-2">
+                                        {lightboxImage.price}
+                                    </span>
+                                </div>
+                                <button
+                                    onClick={() => setLightboxImage(null)}
+                                    className="p-1.5 bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer rounded-full"
+                                    aria-label="Close image preview"
+                                >
+                                    <X size={20} />
+                                </button>
+                            </div>
+
+                            <div className="relative w-full aspect-[4/5] max-h-[75vh] bg-black border border-[#F7F5F0]/10 mb-4 overflow-hidden rounded-sm">
+                                <Image
+                                    src={lightboxImage.src}
+                                    alt={lightboxImage.title}
+                                    fill
+                                    className="object-contain"
+                                    priority
+                                />
+                            </div>
+
+                            <button
+                                onClick={() => setLightboxImage(null)}
+                                className="w-full py-3 bg-[#1EA86E] text-[#0D1712] font-mono text-xs font-bold uppercase tracking-widest hover:bg-white transition-colors cursor-pointer"
+                            >
+                                CLOSE FULL IMAGE PREVIEW
                             </button>
                         </motion.div>
                     </div>
