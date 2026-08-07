@@ -182,10 +182,10 @@ export default function OrderForm() {
                         {/* ─── LEFT COLUMN: CUSTOMER & SIZE DETAILS (7 COLS) ──────────── */}
                         <div className="lg:col-span-7 flex flex-col gap-6 sm:gap-8 bg-[#14140F] p-4 sm:p-10 border border-[#F7F5F0]/15">
                             <div className="flex items-center justify-between border-b border-[#F7F5F0]/15 pb-4">
-                                <span className="font-mono text-xs font-bold tracking-[0.2em] text-[#1EA86E] uppercase">
-                                    01 / SHIPPING &amp; CUSTOMER INFO
+                                <span className="font-heading font-black text-lg sm:text-xl tracking-tight text-white uppercase flex items-center gap-2">
+                                    <span className="text-[#1EA86E]">01 /</span> SHIPPING &amp; CUSTOMER INFO
                                 </span>
-                                <span className="font-mono text-[10px] text-[#F7F5F0]/50 tracking-widest">
+                                <span className="font-mono text-[10px] text-[#1EA86E] tracking-widest font-bold">
                                     REQUIRED *
                                 </span>
                             </div>
@@ -193,7 +193,7 @@ export default function OrderForm() {
                             {/* Name Fields */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                                 <div className="flex flex-col gap-2">
-                                    <label className="font-mono text-xs text-[#F7F5F0]/80 font-bold uppercase tracking-wider">
+                                    <label className="font-mono text-xs text-[#1EA86E] font-bold uppercase tracking-[0.15em]">
                                         FIRST NAME *
                                     </label>
                                     <input
@@ -202,11 +202,11 @@ export default function OrderForm() {
                                         value={firstName}
                                         onChange={(e) => setFirstName(e.target.value)}
                                         placeholder="Enter first name"
-                                        className="w-full bg-[#0D1712] border border-[#F7F5F0]/20 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-white focus:outline-none focus:border-[#1EA86E] focus:ring-1 focus:ring-[#1EA86E] transition-colors font-sans rounded-none"
+                                        className="w-full bg-[#080E0A] border border-[#1EA86E]/30 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-white focus:outline-none focus:border-[#1EA86E] focus:ring-1 focus:ring-[#1EA86E] transition-colors font-mono tracking-wide placeholder:text-[#F7F5F0]/30 rounded-none"
                                     />
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <label className="font-mono text-xs text-[#F7F5F0]/80 font-bold uppercase tracking-wider">
+                                    <label className="font-mono text-xs text-[#1EA86E] font-bold uppercase tracking-[0.15em]">
                                         LAST NAME *
                                     </label>
                                     <input
@@ -215,7 +215,7 @@ export default function OrderForm() {
                                         value={lastName}
                                         onChange={(e) => setLastName(e.target.value)}
                                         placeholder="Enter last name"
-                                        className="w-full bg-[#0D1712] border border-[#F7F5F0]/20 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-white focus:outline-none focus:border-[#1EA86E] focus:ring-1 focus:ring-[#1EA86E] transition-colors font-sans rounded-none"
+                                        className="w-full bg-[#080E0A] border border-[#1EA86E]/30 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-white focus:outline-none focus:border-[#1EA86E] focus:ring-1 focus:ring-[#1EA86E] transition-colors font-mono tracking-wide placeholder:text-[#F7F5F0]/30 rounded-none"
                                     />
                                 </div>
                             </div>
@@ -223,7 +223,7 @@ export default function OrderForm() {
                             {/* Contact Fields */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                                 <div className="flex flex-col gap-2">
-                                    <label className="font-mono text-xs text-[#F7F5F0]/80 font-bold uppercase tracking-wider">
+                                    <label className="font-mono text-xs text-[#1EA86E] font-bold uppercase tracking-[0.15em]">
                                         EMAIL ID *
                                     </label>
                                     <input
@@ -232,11 +232,11 @@ export default function OrderForm() {
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         placeholder="name@example.com"
-                                        className="w-full bg-[#0D1712] border border-[#F7F5F0]/20 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-white focus:outline-none focus:border-[#1EA86E] focus:ring-1 focus:ring-[#1EA86E] transition-colors font-sans rounded-none"
+                                        className="w-full bg-[#080E0A] border border-[#1EA86E]/30 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-white focus:outline-none focus:border-[#1EA86E] focus:ring-1 focus:ring-[#1EA86E] transition-colors font-mono tracking-wide placeholder:text-[#F7F5F0]/30 rounded-none"
                                     />
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <label className="font-mono text-xs text-[#F7F5F0]/80 font-bold uppercase tracking-wider">
+                                    <label className="font-mono text-xs text-[#1EA86E] font-bold uppercase tracking-[0.15em]">
                                         MOBILE NUMBER *
                                     </label>
                                     <input
@@ -245,14 +245,14 @@ export default function OrderForm() {
                                         value={mobile}
                                         onChange={(e) => setMobile(e.target.value)}
                                         placeholder="+91 98765 43210"
-                                        className="w-full bg-[#0D1712] border border-[#F7F5F0]/20 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-white focus:outline-none focus:border-[#1EA86E] focus:ring-1 focus:ring-[#1EA86E] transition-colors font-sans rounded-none"
+                                        className="w-full bg-[#080E0A] border border-[#1EA86E]/30 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-white focus:outline-none focus:border-[#1EA86E] focus:ring-1 focus:ring-[#1EA86E] transition-colors font-mono tracking-wide placeholder:text-[#F7F5F0]/30 rounded-none"
                                     />
                                 </div>
                             </div>
 
                             {/* Shipping Address */}
                             <div className="flex flex-col gap-2">
-                                <label className="font-mono text-xs text-[#F7F5F0]/80 font-bold uppercase tracking-wider">
+                                <label className="font-mono text-xs text-[#1EA86E] font-bold uppercase tracking-[0.15em]">
                                     SHIPPING ADDRESS &amp; PINCODE *
                                 </label>
                                 <textarea
@@ -261,7 +261,7 @@ export default function OrderForm() {
                                     value={address}
                                     onChange={(e) => setAddress(e.target.value)}
                                     placeholder="House/Flat No., Building Name, Street, Landmark, City, State, Pincode"
-                                    className="w-full bg-[#0D1712] border border-[#F7F5F0]/20 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-white focus:outline-none focus:border-[#1EA86E] focus:ring-1 focus:ring-[#1EA86E] transition-colors font-sans resize-none rounded-none"
+                                    className="w-full bg-[#080E0A] border border-[#1EA86E]/30 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-white focus:outline-none focus:border-[#1EA86E] focus:ring-1 focus:ring-[#1EA86E] transition-colors font-mono tracking-wide placeholder:text-[#F7F5F0]/30 resize-none rounded-none"
                                 />
                             </div>
 
@@ -501,10 +501,10 @@ export default function OrderForm() {
                         {/* ─── RIGHT COLUMN: ORDER SUMMARY & SUBMIT (5 COLS) ────────── */}
                         <div className="lg:col-span-5 flex flex-col gap-6 bg-[#14140F] p-6 sm:p-8 border border-[#F7F5F0]/15">
                             <div className="flex items-center justify-between border-b border-[#F7F5F0]/15 pb-4">
-                                <span className="font-mono text-xs font-bold tracking-[0.2em] text-[#1EA86E] uppercase">
-                                    02 / ORDER SUMMARY
+                                <span className="font-heading font-black text-lg sm:text-xl tracking-tight text-white uppercase flex items-center gap-2">
+                                    <span className="text-[#1EA86E]">02 /</span> ORDER SUMMARY
                                 </span>
-                                <span className="font-mono text-[10px] text-[#F7F5F0]/50 tracking-widest">
+                                <span className="font-mono text-[10px] text-[#1EA86E] tracking-widest font-bold">
                                     CONFIRMATION
                                 </span>
                             </div>
@@ -524,7 +524,7 @@ export default function OrderForm() {
                                         <span className="font-mono text-xs font-bold tracking-widest text-[#1EA86E] uppercase">
                                             {selectedProduct === "tshirt" ? "1327 CREW T-SHIRT" : selectedProduct === "cap" ? "1327 CREW CAP" : "T-SHIRT + CAP COMBO"}
                                         </span>
-                                        <span className="font-heading font-black text-xl text-white mt-0.5">
+                                        <span className="font-heading font-black text-2xl text-white mt-0.5">
                                             {selectedProduct === "tshirt" ? "₹799" : selectedProduct === "cap" ? "₹499" : "₹1,298"}
                                         </span>
                                     </div>
@@ -569,14 +569,14 @@ export default function OrderForm() {
                             <button
                                 type="submit"
                                 disabled={status === "submitting"}
-                                className="w-full py-4 px-6 bg-[#1EA86E] text-[#0D1712] font-mono text-xs sm:text-sm font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 border border-[#1EA86E] transition-all hover:bg-white hover:border-white shadow-lg cursor-pointer disabled:opacity-50 mt-2 active:scale-[0.98] touch-manipulation min-h-[48px]"
+                                className="w-full py-4 px-6 bg-[#1EA86E] text-[#0D1712] font-heading font-bold text-sm sm:text-base uppercase tracking-wider flex items-center justify-center gap-2 border border-[#1EA86E] transition-all hover:bg-white hover:border-white shadow-lg cursor-pointer disabled:opacity-50 mt-2 active:scale-[0.98] touch-manipulation min-h-[48px]"
                             >
                                 {status === "submitting" ? (
                                     <span>GENERATING ORDER...</span>
                                 ) : (
                                     <>
                                         <span>CONFIRM &amp; SUBMIT ORDER</span>
-                                        <ArrowRight size={16} />
+                                        <ArrowRight size={18} />
                                     </>
                                 )}
                             </button>
