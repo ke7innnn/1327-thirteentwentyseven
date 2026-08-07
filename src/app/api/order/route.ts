@@ -3,14 +3,15 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { firstName, lastName, email, mobile, address, selectedSize, orderId } = body;
+        const { firstName, lastName, email, mobile, address, selectedSize, selectedProduct, orderId } = body;
 
-        if (!firstName || !email || !mobile || !address || !selectedSize) {
+        if (!firstName || !email || !mobile || !address) {
             return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
         }
 
         const targetEmail = process.env.ORDER_NOTIFICATION_EMAIL || "1327thecommunity@gmail.com";
-        const subject = `🛒 NEW 1327 APPAREL ORDER #${orderId} - ${firstName} ${lastName}`;
+        const itemType = selectedProduct || "T-Shirt Only";
+        const subject = `🛒 NEW 1327 APPAREL ORDER #${orderId} [${itemType.toUpperCase()}] - ${firstName} ${lastName}`;
 
         // Option A: If RESEND_API_KEY environment variable is configured in Vercel
         if (process.env.RESEND_API_KEY) {
@@ -32,6 +33,7 @@ export async function POST(req: Request) {
                                 <p><strong>Customer:</strong> ${firstName} ${lastName}</p>
                                 <p><strong>Email:</strong> ${email}</p>
                                 <p><strong>Mobile:</strong> ${mobile}</p>
+                                <p><strong>Item Selection:</strong> ${itemType}</p>
                                 <p><strong>Size Selected:</strong> <span style="color: #1EA86E; font-size: 16px;">${selectedSize}</span></p>
                                 <p><strong>Shipping Address:</strong> ${address}</p>
                             </div>
@@ -65,7 +67,8 @@ export async function POST(req: Request) {
                     "Customer Name": `${firstName} ${lastName}`,
                     "Email": email,
                     "Mobile Number": mobile,
-                    "Selected Size": `${selectedSize} (Regular Fit)`,
+                    "Item Selection": itemType,
+                    "Selected Size": selectedSize,
                     "Shipping Address": address,
                 }),
             });
@@ -100,7 +103,8 @@ export async function POST(req: Request) {
                     "Customer Name": `${firstName} ${lastName}`,
                     "Email": email,
                     "Mobile Number": mobile,
-                    "Selected Size": `${selectedSize} (Regular Fit)`,
+                    "Item Selection": itemType,
+                    "Selected Size": selectedSize,
                     "Shipping Address": address,
                 }),
             });

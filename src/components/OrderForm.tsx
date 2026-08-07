@@ -21,6 +21,7 @@ export default function OrderForm() {
     const [email, setEmail] = useState("");
     const [mobile, setMobile] = useState("");
     const [address, setAddress] = useState("");
+    const [selectedProduct, setSelectedProduct] = useState<"tshirt" | "cap" | "both">("tshirt");
     const [selectedSize, setSelectedSize] = useState<string>("M");
 
     // UI state
@@ -30,7 +31,7 @@ export default function OrderForm() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!firstName || !email || !mobile || !address || !selectedSize) {
+        if (!firstName || !email || !mobile || !address) {
             alert("Please complete all required fields.");
             return;
         }
@@ -38,6 +39,9 @@ export default function OrderForm() {
         setStatus("submitting");
         const generatedId = `1327-ORD-${Math.floor(100000 + Math.random() * 900000)}`;
         setOrderId(generatedId);
+
+        const productLabel = selectedProduct === "tshirt" ? "T-Shirt Only" : selectedProduct === "cap" ? "Custom Crew Cap Only" : "T-Shirt + Cap Combo";
+        const sizeLabel = selectedProduct === "cap" ? "One Size (Adjustable Strap)" : selectedProduct === "both" ? `${selectedSize} (T-Shirt) + One Size (Cap)` : `${selectedSize} (Regular Fit)`;
 
         try {
             // Submit through Next.js Server API route (/api/order) — bypasses browser adblockers & CORS blocks
@@ -52,7 +56,8 @@ export default function OrderForm() {
                     email,
                     mobile,
                     address,
-                    selectedSize,
+                    selectedProduct: productLabel,
+                    selectedSize: sizeLabel,
                     orderId: generatedId,
                 }),
             });
@@ -259,72 +264,141 @@ export default function OrderForm() {
                                 />
                             </div>
 
-                            {/* ─── SIZE SELECTION ACCORDING TO 1327 SIZE CHART ────────── */}
-                            <div className="pt-4 border-t border-[#F7F5F0]/15 flex flex-col gap-4">
-                                <div className="flex flex-wrap justify-between items-center gap-2">
-                                    <label className="font-mono text-xs font-bold text-[#1EA86E] uppercase tracking-wider flex items-center gap-2">
-                                        <Ruler size={16} />
-                                        SIZE ACCORDING TO 1327 SIZE CHART *
-                                    </label>
+                            {/* ─── PRODUCT TYPE SELECTION (T-SHIRT / CAP / BOTH) ────────── */}
+                            <div className="pt-4 border-t border-[#F7F5F0]/15 flex flex-col gap-3">
+                                <label className="font-mono text-xs font-bold text-[#1EA86E] uppercase tracking-wider flex items-center gap-2">
+                                    <Package size={16} />
+                                    SELECT ITEM TYPE *
+                                </label>
+
+                                <div className="grid grid-cols-3 gap-2">
                                     <button
                                         type="button"
-                                        onClick={() => setShowSizeChartModal(true)}
-                                        className="font-mono text-[11px] text-[#1EA86E] underline hover:text-white transition-colors cursor-pointer flex items-center gap-1"
+                                        onClick={() => setSelectedProduct("tshirt")}
+                                        className={`py-3 px-2 flex flex-col items-center justify-center border font-mono transition-all text-xs font-bold uppercase ${
+                                            selectedProduct === "tshirt"
+                                                ? "bg-[#1EA86E] border-[#1EA86E] text-[#0D1712] shadow-lg"
+                                                : "bg-[#0D1712] border-[#F7F5F0]/20 text-white hover:border-[#1EA86E]/60"
+                                        }`}
                                     >
-                                        <Info size={13} /> VIEW FULL CHART
+                                        <span>👕 T-SHIRT</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setSelectedProduct("cap")}
+                                        className={`py-3 px-2 flex flex-col items-center justify-center border font-mono transition-all text-xs font-bold uppercase ${
+                                            selectedProduct === "cap"
+                                                ? "bg-[#1EA86E] border-[#1EA86E] text-[#0D1712] shadow-lg"
+                                                : "bg-[#0D1712] border-[#F7F5F0]/20 text-white hover:border-[#1EA86E]/60"
+                                        }`}
+                                    >
+                                        <span>🧢 CAP</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setSelectedProduct("both")}
+                                        className={`py-3 px-2 flex flex-col items-center justify-center border font-mono transition-all text-xs font-bold uppercase ${
+                                            selectedProduct === "both"
+                                                ? "bg-[#1EA86E] border-[#1EA86E] text-[#0D1712] shadow-lg"
+                                                : "bg-[#0D1712] border-[#F7F5F0]/20 text-white hover:border-[#1EA86E]/60"
+                                        }`}
+                                    >
+                                        <span>👕+🧢 BOTH</span>
                                     </button>
                                 </div>
-
-                                {/* Size Selector Buttons */}
-                                <div className="grid grid-cols-5 gap-1.5 sm:gap-3">
-                                    {SIZE_CHART_DATA.map((item) => (
-                                        <button
-                                            key={item.size}
-                                            type="button"
-                                            onClick={() => setSelectedSize(item.size)}
-                                            className={`py-2.5 sm:py-3.5 px-1 flex flex-col items-center justify-center border font-mono transition-all ${
-                                                selectedSize === item.size
-                                                    ? "bg-[#1EA86E] border-[#1EA86E] text-[#0D1712] font-black shadow-lg"
-                                                    : "bg-[#0D1712] border-[#F7F5F0]/20 text-white hover:border-[#1EA86E]/60"
-                                            }`}
-                                        >
-                                            <span className="text-sm sm:text-lg font-bold">{item.size}</span>
-                                            <span className="text-[8px] sm:text-[9px] opacity-80 mt-0.5">{item.width} W</span>
-                                        </button>
-                                    ))}
-                                </div>
-
-                                {/* Inline Mini Size Chart Table */}
-                                <div className="bg-[#0D1712] border border-[#F7F5F0]/10 p-4 mt-1">
-                                    <div className="flex justify-between items-center mb-2 pb-2 border-b border-[#F7F5F0]/10">
-                                        <span className="font-mono text-[10px] font-bold text-[#F7F5F0]/70 uppercase tracking-widest">
-                                            1327 REGULAR FIT T-SHIRTS (INCHES)
-                                        </span>
-                                        <span className="font-mono text-[10px] text-[#1EA86E] font-bold">
-                                            SELECTED: {selectedSize}
-                                        </span>
-                                    </div>
-                                    <div className="grid grid-cols-3 text-center font-mono text-xs py-1 font-bold text-[#1EA86E] uppercase border-b border-[#F7F5F0]/10">
-                                        <span>SIZE</span>
-                                        <span>WIDTH</span>
-                                        <span>LENGTH</span>
-                                    </div>
-                                    {SIZE_CHART_DATA.map((r) => (
-                                        <div
-                                            key={r.size}
-                                            className={`grid grid-cols-3 text-center font-mono text-xs py-1.5 border-b border-[#F7F5F0]/5 transition-colors ${
-                                                selectedSize === r.size
-                                                    ? "bg-[#1EA86E]/20 text-[#1EA86E] font-bold"
-                                                    : "text-[#F7F5F0]/70"
-                                            }`}
-                                        >
-                                            <span>{r.size}</span>
-                                            <span>{r.width}</span>
-                                            <span>{r.length}</span>
-                                        </div>
-                                    ))}
-                                </div>
                             </div>
+
+                            {/* ─── CONDITIONAL SIZE SELECTION (T-SHIRT VS CAP) ────────── */}
+                            {selectedProduct === "cap" ? (
+                                /* CAP ONLY — NO SIZE CHART NEEDED (UNIVERSAL ADJUSTABLE FIT) */
+                                <div className="bg-[#0D1712] border border-[#1EA86E]/40 p-4 sm:p-5 flex flex-col gap-2">
+                                    <div className="flex items-center justify-between">
+                                        <span className="font-mono text-xs font-bold text-[#1EA86E] uppercase tracking-wider flex items-center gap-2">
+                                            🧢 1327 CREW CAP SIZING
+                                        </span>
+                                        <span className="font-mono text-[10px] font-black bg-[#1EA86E] text-[#0D1712] px-2 py-0.5 uppercase tracking-wider">
+                                            ONE SIZE FITS ALL
+                                        </span>
+                                    </div>
+                                    <p className="font-mono text-xs text-[#F7F5F0]/80 leading-relaxed pt-1">
+                                        Custom embroidered 1327 Crew Caps come in one universal adjustable fit with an ergonomic metal back strap. No size chart required.
+                                    </p>
+                                </div>
+                            ) : (
+                                /* T-SHIRT OR T-SHIRT + CAP COMBO — SIZE CHART SELECTOR */
+                                <div className="pt-2 flex flex-col gap-4">
+                                    <div className="flex flex-wrap justify-between items-center gap-2">
+                                        <label className="font-mono text-xs font-bold text-[#1EA86E] uppercase tracking-wider flex items-center gap-2">
+                                            <Ruler size={16} />
+                                            {selectedProduct === "both" ? "SELECT T-SHIRT SIZE *" : "SIZE ACCORDING TO 1327 SIZE CHART *"}
+                                        </label>
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowSizeChartModal(true)}
+                                            className="font-mono text-[11px] text-[#1EA86E] underline hover:text-white transition-colors cursor-pointer flex items-center gap-1"
+                                        >
+                                            <Info size={13} /> VIEW FULL CHART
+                                        </button>
+                                    </div>
+
+                                    {/* Size Selector Buttons */}
+                                    <div className="grid grid-cols-5 gap-1.5 sm:gap-3">
+                                        {SIZE_CHART_DATA.map((item) => (
+                                            <button
+                                                key={item.size}
+                                                type="button"
+                                                onClick={() => setSelectedSize(item.size)}
+                                                className={`py-2.5 sm:py-3.5 px-1 flex flex-col items-center justify-center border font-mono transition-all ${
+                                                    selectedSize === item.size
+                                                        ? "bg-[#1EA86E] border-[#1EA86E] text-[#0D1712] font-black shadow-lg"
+                                                        : "bg-[#0D1712] border-[#F7F5F0]/20 text-white hover:border-[#1EA86E]/60"
+                                                }`}
+                                            >
+                                                <span className="text-sm sm:text-lg font-bold">{item.size}</span>
+                                                <span className="text-[8px] sm:text-[9px] opacity-80 mt-0.5">{item.width} W</span>
+                                            </button>
+                                        ))}
+                                    </div>
+
+                                    {selectedProduct === "both" && (
+                                        <div className="bg-[#105233]/30 border border-[#1EA86E]/40 px-3.5 py-2 text-xs font-mono text-[#1EA86E] flex items-center gap-2">
+                                            <span>🧢</span>
+                                            <span><strong>CAP INCLUDED:</strong> One Size Adjustable Strap (Universal Fit)</span>
+                                        </div>
+                                    )}
+
+                                    {/* Inline Mini Size Chart Table */}
+                                    <div className="bg-[#0D1712] border border-[#F7F5F0]/10 p-4 mt-1">
+                                        <div className="flex justify-between items-center mb-2 pb-2 border-b border-[#F7F5F0]/10">
+                                            <span className="font-mono text-[10px] font-bold text-[#F7F5F0]/70 uppercase tracking-widest">
+                                                1327 REGULAR FIT T-SHIRTS (INCHES)
+                                            </span>
+                                            <span className="font-mono text-[10px] text-[#1EA86E] font-bold">
+                                                SELECTED: {selectedSize}
+                                            </span>
+                                        </div>
+                                        <div className="grid grid-cols-3 text-center font-mono text-xs py-1 font-bold text-[#1EA86E] uppercase border-b border-[#F7F5F0]/10">
+                                            <span>SIZE</span>
+                                            <span>WIDTH</span>
+                                            <span>LENGTH</span>
+                                        </div>
+                                        {SIZE_CHART_DATA.map((r) => (
+                                            <div
+                                                key={r.size}
+                                                className={`grid grid-cols-3 text-center font-mono text-xs py-1.5 border-b border-[#F7F5F0]/5 transition-colors ${
+                                                    selectedSize === r.size
+                                                        ? "bg-[#1EA86E]/20 text-[#1EA86E] font-bold"
+                                                        : "text-[#F7F5F0]/70"
+                                                }`}
+                                            >
+                                                <span>{r.size}</span>
+                                                <span>{r.width}</span>
+                                                <span>{r.length}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         {/* ─── RIGHT COLUMN: ORDER SUMMARY & SUBMIT (5 COLS) ────────── */}
@@ -348,13 +422,17 @@ export default function OrderForm() {
                                 </div>
 
                                 <div className="flex justify-between items-center py-2 border-y border-[#F7F5F0]/10 font-mono text-xs">
-                                    <span className="text-[#F7F5F0]/60">GARMENT FIT:</span>
-                                    <span className="font-bold text-white uppercase">REGULAR FIT T-SHIRT</span>
+                                    <span className="text-[#F7F5F0]/60">ITEM SELECTION:</span>
+                                    <span className="font-bold text-white uppercase">
+                                        {selectedProduct === "tshirt" ? "T-SHIRT ONLY" : selectedProduct === "cap" ? "CUSTOM CREW CAP" : "T-SHIRT + CAP COMBO"}
+                                    </span>
                                 </div>
 
                                 <div className="flex justify-between items-center py-2 border-b border-[#F7F5F0]/10 font-mono text-xs">
                                     <span className="text-[#F7F5F0]/60">SELECTED SIZE:</span>
-                                    <span className="font-bold text-[#1EA86E] text-base">{selectedSize}</span>
+                                    <span className="font-bold text-[#1EA86E] text-sm">
+                                        {selectedProduct === "cap" ? "ONE SIZE (ADJUSTABLE)" : selectedProduct === "both" ? `${selectedSize} (T-Shirt) + One Size (Cap)` : `${selectedSize} (Regular Fit)`}
+                                    </span>
                                 </div>
 
                                 <div className="flex justify-between items-center py-2 border-b border-[#F7F5F0]/10 font-mono text-xs">
@@ -368,7 +446,9 @@ export default function OrderForm() {
                                     <span className="text-[#F7F5F0]/60 flex items-center gap-1">
                                         <Package size={14} /> FABRIC SPEC:
                                     </span>
-                                    <span className="font-bold text-[#1EA86E]">220 GSM SINGLE JERSEY COTTON</span>
+                                    <span className="font-bold text-[#1EA86E]">
+                                        {selectedProduct === "cap" ? "COTTON TWILL EMBROIDERED" : "220 GSM SINGLE JERSEY COTTON"}
+                                    </span>
                                 </div>
 
                                 <div className="p-3 bg-[#105233]/30 border border-[#1EA86E]/50 text-[11px] font-mono text-[#F7F5F0]/90 leading-relaxed rounded-none">
