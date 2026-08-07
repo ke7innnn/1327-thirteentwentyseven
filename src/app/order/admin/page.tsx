@@ -22,6 +22,8 @@ import {
     Layers,
     X,
     Printer,
+    Phone,
+    Mail,
 } from "lucide-react";
 import { OrderItem } from "@/lib/orderStore";
 
@@ -387,8 +389,126 @@ export default function AdminOrdersPage() {
                         </div>
                     </div>
 
-                    {/* INTERACTIVE DATA TABLE */}
-                    <div className="bg-[#0D1712] border border-[#1EA86E]/30 overflow-x-auto">
+                    {/* MOBILE CARD VIEW (<768px) */}
+                    <div className="md:hidden flex flex-col gap-4">
+                        {filteredOrders.length === 0 ? (
+                            <div className="bg-[#0D1712] border border-[#1EA86E]/30 p-8 text-center text-[#F7F5F0]/50 tracking-wider">
+                                NO ORDERS FOUND MATCHING YOUR SEARCH CRITERIA.
+                            </div>
+                        ) : (
+                            filteredOrders.map((o) => (
+                                <div
+                                    key={o.orderId}
+                                    className="bg-[#0D1712] border border-[#1EA86E]/30 p-4 flex flex-col gap-3 relative shadow-lg"
+                                >
+                                    {/* Card Header: Order Ref & Status */}
+                                    <div className="flex justify-between items-start border-b border-[#F7F5F0]/10 pb-2.5">
+                                        <div className="flex flex-col">
+                                            <span className="font-heading font-black text-lg text-white">
+                                                #{o.orderId}
+                                            </span>
+                                            <span className="text-[10px] text-[#F7F5F0]/60">
+                                                {new Date(o.createdAt).toLocaleString("en-IN", {
+                                                    day: "2-digit",
+                                                    month: "short",
+                                                    hour: "2-digit",
+                                                    minute: "2-digit",
+                                                })}
+                                            </span>
+                                        </div>
+                                        <span className="font-heading font-black text-lg text-[#1EA86E]">
+                                            {o.orderPrice}
+                                        </span>
+                                    </div>
+
+                                    {/* Customer & Contact Quick Actions */}
+                                    <div className="flex flex-col gap-1 text-xs">
+                                        <span className="font-bold text-white text-sm">
+                                            {o.firstName} {o.lastName}
+                                        </span>
+                                        <div className="flex flex-wrap items-center gap-2.5 pt-1">
+                                            <a
+                                                href={`tel:${o.mobile}`}
+                                                className="inline-flex items-center gap-1 text-[#1EA86E] font-bold bg-[#105233]/40 px-2 py-1 border border-[#1EA86E]/40"
+                                            >
+                                                <Phone size={12} />
+                                                <span>{o.mobile}</span>
+                                            </a>
+                                            <a
+                                                href={`mailto:${o.email}`}
+                                                className="inline-flex items-center gap-1 text-[#F7F5F0]/80 bg-black/40 px-2 py-1 border border-[#F7F5F0]/20 truncate max-w-[180px]"
+                                            >
+                                                <Mail size={12} />
+                                                <span className="truncate">{o.email}</span>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    {/* Item & Size */}
+                                    <div className="bg-[#080E0A] p-2.5 border border-[#F7F5F0]/10 flex flex-col gap-1 text-xs">
+                                        <div className="flex justify-between">
+                                            <span className="text-[#F7F5F0]/60">ITEM:</span>
+                                            <span className="font-bold text-white">{o.selectedProduct}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <span className="text-[#F7F5F0]/60">SIZE:</span>
+                                            <span className="font-bold text-[#1EA86E]">{o.selectedSize}</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Address */}
+                                    <div className="text-[11px] text-[#F7F5F0]/75 bg-black/30 p-2 border border-[#F7F5F0]/5 leading-relaxed">
+                                        <span className="font-bold text-[#1EA86E] block mb-0.5">SHIPPING ADDRESS:</span>
+                                        {o.address}
+                                    </div>
+
+                                    {/* Status Selector & Action Buttons */}
+                                    <div className="flex items-center justify-between gap-2 pt-2 border-t border-[#F7F5F0]/10">
+                                        <select
+                                            value={o.status}
+                                            onChange={(e) =>
+                                                handleStatusChange(o.orderId, e.target.value as any)
+                                            }
+                                            className={`px-2.5 py-2 text-xs font-bold uppercase border bg-[#080E0A] focus:outline-none flex-1 ${
+                                                o.status === "PENDING"
+                                                    ? "text-amber-400 border-amber-400/40"
+                                                    : o.status === "IN PRODUCTION"
+                                                    ? "text-blue-400 border-blue-400/40"
+                                                    : o.status === "DISPATCHED"
+                                                    ? "text-purple-400 border-purple-400/40"
+                                                    : "text-emerald-400 border-emerald-400/40"
+                                            }`}
+                                        >
+                                            <option value="PENDING">PENDING</option>
+                                            <option value="IN PRODUCTION">IN PRODUCTION</option>
+                                            <option value="DISPATCHED">DISPATCHED</option>
+                                            <option value="COMPLETED">COMPLETED</option>
+                                        </select>
+
+                                        <button
+                                            onClick={() => setReceiptOrder(o)}
+                                            className="px-2.5 py-2 bg-[#105233]/50 border border-[#1EA86E]/50 text-[#1EA86E] font-bold text-xs uppercase flex items-center gap-1 cursor-pointer"
+                                            title="Print PDF Receipt"
+                                        >
+                                            <FileText size={14} />
+                                            <span>RECEIPT</span>
+                                        </button>
+
+                                        <button
+                                            onClick={() => handleDeleteOrder(o.orderId)}
+                                            className="p-2 bg-red-950/40 border border-red-500/40 text-red-400 hover:bg-red-500 hover:text-white transition-all cursor-pointer"
+                                            title="Delete Order Record"
+                                        >
+                                            <Trash2 size={14} />
+                                        </button>
+                                    </div>
+                                </div>
+                            ))
+                        )}
+                    </div>
+
+                    {/* DESKTOP INTERACTIVE DATA TABLE (>=768px) */}
+                    <div className="hidden md:block bg-[#0D1712] border border-[#1EA86E]/30 overflow-x-auto">
                         <table className="w-full text-left text-xs">
                             <thead className="bg-[#105233]/40 border-b border-[#1EA86E]/40 text-[#1EA86E] font-bold uppercase tracking-wider">
                                 <tr>
