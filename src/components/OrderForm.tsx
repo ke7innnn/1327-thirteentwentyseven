@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, Upload, Copy, Check, Info, ShieldCheck, Ruler, ArrowRight, X } from "lucide-react";
+import { CheckCircle2, Info, ShieldCheck, Ruler, ArrowRight, X, MessageSquare, Truck, Package } from "lucide-react";
 import SectionMarker from "./ui/SectionMarker";
 
 const SIZE_CHART_DATA = [
@@ -22,72 +22,16 @@ export default function OrderForm() {
     const [mobile, setMobile] = useState("");
     const [address, setAddress] = useState("");
     const [selectedSize, setSelectedSize] = useState<string>("M");
-    const [paymentScreenshot, setPaymentScreenshot] = useState<File | null>(null);
-    const [screenshotPreview, setScreenshotPreview] = useState<string | null>(null);
 
     // UI state
-    const [copiedUpi, setCopiedUpi] = useState(false);
     const [showSizeChartModal, setShowSizeChartModal] = useState(false);
     const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
     const [orderId, setOrderId] = useState("");
 
-    const fileInputRef = useRef<HTMLInputElement>(null);
-
-    const handleCopyUpi = () => {
-        navigator.clipboard.writeText("dhruvianup@okaxis");
-        setCopiedUpi(true);
-        setTimeout(() => setCopiedUpi(false), 2000);
-    };
-
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            setPaymentScreenshot(file);
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setScreenshotPreview(reader.result as string);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    const handleRemoveFile = () => {
-        setPaymentScreenshot(null);
-        setScreenshotPreview(null);
-        if (fileInputRef.current) {
-            fileInputRef.current.value = "";
-        }
-    };
-
-    const constructWhatsAppUrl = (
-        id: string,
-        fn: string,
-        ln: string,
-        em: string,
-        mob: string,
-        addr: string,
-        sz: string
-    ) => {
-        const text =
-            `🛍️ *NEW ORDER — 1327 THIRTEEN TWENTYSEVEN*\n` +
-            `-----------------------------------------\n` +
-            `🆔 *ORDER REF:* #${id}\n` +
-            `👤 *NAME:* ${fn} ${ln}\n` +
-            `📧 *EMAIL:* ${em}\n` +
-            `📱 *MOBILE:* ${mob}\n` +
-            `📏 *SIZE:* ${sz} (Regular Fit)\n` +
-            `📍 *SHIPPING ADDRESS:* ${addr}\n` +
-            `💳 *PAYMENT:* Completed via UPI (Payment Proof Screenshot Attached)\n` +
-            `-----------------------------------------\n` +
-            `Hi 1327! I have placed an order on the site and attached my payment proof.`;
-
-        return `https://wa.me/918082845721?text=${encodeURIComponent(text)}`;
-    };
-
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!firstName || !email || !mobile || !address || !selectedSize || !paymentScreenshot) {
-            alert("Please complete all required fields and upload your payment screenshot.");
+        if (!firstName || !email || !mobile || !address || !selectedSize) {
+            alert("Please complete all required fields.");
             return;
         }
 
@@ -95,18 +39,38 @@ export default function OrderForm() {
         const generatedId = `1327-ORD-${Math.floor(100000 + Math.random() * 900000)}`;
         setOrderId(generatedId);
 
-        setTimeout(() => {
-            setStatus("success");
-            const waUrl = constructWhatsAppUrl(generatedId, firstName, lastName, email, mobile, address, selectedSize);
-            window.open(waUrl, "_blank");
-        }, 1000);
+        try {
+            // FormSubmit.co — Direct live endpoint targeting 1327thecommunity@gmail.com
+            await fetch("https://formsubmit.co/ajax/1327thecommunity@gmail.com", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+                body: JSON.stringify({
+                    _subject: `🛒 NEW 1327 APPAREL ORDER #${generatedId} - ${firstName} ${lastName}`,
+                    _template: "table",
+                    _captcha: "false",
+                    "Order Ref": `#${generatedId}`,
+                    "Customer Name": `${firstName} ${lastName}`,
+                    "Email": email,
+                    "Mobile Number": mobile,
+                    "Selected Size": `${selectedSize} (Regular Fit)`,
+                    "Shipping Address": address,
+                }),
+            });
+        } catch (err) {
+            console.log("Email dispatch log:", err);
+        }
+
+        setStatus("success");
     };
 
     return (
         <section
             id="order"
             aria-labelledby="order-headline"
-            className="relative bg-[#0D1712] text-[#F7F5F0] py-20 lg:py-28 border-b border-[#F7F5F0]/15 select-none"
+            className="relative bg-[#0D1712] text-[#F7F5F0] py-16 lg:py-24 border-b border-[#F7F5F0]/15 select-none"
         >
             {/* Woven Linen Apparel Fabric Texture */}
             <div
@@ -123,7 +87,7 @@ export default function OrderForm() {
                     <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#105233] text-white">
                         <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
                         <span className="font-mono text-xs font-bold uppercase tracking-[0.2em]">
-                            &#123; 1327 CHECKOUT &#125;
+                            &#123; 1327 ORDER FORM &#125;
                         </span>
                     </div>
                     <h2
@@ -136,12 +100,12 @@ export default function OrderForm() {
                         <span className="text-[#1EA86E]">ORDER.</span>
                     </h2>
                     <p className="font-mono text-xs sm:text-sm uppercase tracking-[0.2em] text-[#F7F5F0]/65 font-bold">
-                        PROVIDE YOUR SHIPPING DETAILS, SCAN UPI TO PAY, AND UPLOAD PAYMENT PROOF.
+                        PROVIDE YOUR SHIPPING DETAILS AND SIZE ACCORDING TO THE 1327 SIZE CHART.
                     </p>
                 </div>
 
                 {status === "success" ? (
-                    /* ─── SUCCESS SCREEN ──────────────────────────────────────────── */
+                    /* ─── EMAIL SUCCESS SCREEN ──────────────────────────────────────────── */
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -152,7 +116,7 @@ export default function OrderForm() {
                         </div>
                         <div className="flex flex-col gap-2">
                             <span className="font-mono text-xs font-bold text-[#1EA86E] tracking-[0.25em] uppercase">
-                                ORDER CONFIRMED &amp; READY TO SEND
+                                ORDER SUBMITTED VIA EMAIL
                             </span>
                             <h3 className="font-heading font-black text-3xl sm:text-4xl text-white uppercase">
                                 THANK YOU, {firstName.toUpperCase()}!
@@ -180,48 +144,36 @@ export default function OrderForm() {
                                 <span className="font-bold text-[#1EA86E]">{selectedSize} (REGULAR FIT)</span>
                             </div>
                             <div className="flex justify-between pb-1">
-                                <span className="text-[#F7F5F0]/60">PAYMENT STATUS</span>
+                                <span className="text-[#F7F5F0]/60">STATUS</span>
                                 <span className="font-bold text-[#1EA86E] flex items-center gap-1">
-                                    <ShieldCheck size={14} /> PROOF ATTACHED
+                                    <ShieldCheck size={14} /> EMAILED TO 1327THECOMMUNITY@GMAIL.COM
                                 </span>
                             </div>
                         </div>
 
                         <p className="font-sans text-xs sm:text-sm text-[#F7F5F0]/80 font-light leading-relaxed">
-                            Your order details have been generated. Click below to open WhatsApp and send your order summary and payment receipt to our production desk.
+                            Your order details have been successfully emailed directly to <strong className="text-[#1EA86E]">1327thecommunity@gmail.com</strong>. We will review your request and get in touch with you shortly.
                         </p>
-
-                        <a
-                            href={constructWhatsAppUrl(orderId, firstName, lastName, email, mobile, address, selectedSize)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-full py-4 bg-[#25D366] text-[#0D1712] font-mono text-xs sm:text-sm font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-white transition-colors shadow-lg cursor-pointer"
-                        >
-                            <span>SEND ORDER ON WHATSAPP (+91 80828 45721)</span>
-                            <ArrowRight size={16} />
-                        </a>
 
                         <button
                             onClick={() => {
                                 setStatus("idle");
-                                setPaymentScreenshot(null);
-                                setScreenshotPreview(null);
                                 setFirstName("");
                                 setLastName("");
                                 setEmail("");
                                 setMobile("");
                                 setAddress("");
                             }}
-                            className="text-xs font-mono text-[#F7F5F0]/50 hover:text-white underline cursor-pointer mt-1"
+                            className="w-full py-4 bg-[#1EA86E] text-[#0D1712] font-mono text-xs sm:text-sm font-bold uppercase tracking-[0.2em] hover:bg-white transition-colors cursor-pointer"
                         >
-                            PLACE ANOTHER ORDER
+                            SUBMIT ANOTHER ORDER
                         </button>
                     </motion.div>
                 ) : (
                     /* ─── MAIN ORDER FORM ──────────────────────────────────────────── */
                     <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
                         {/* ─── LEFT COLUMN: CUSTOMER & SIZE DETAILS (7 COLS) ──────────── */}
-                        <div className="lg:col-span-7 flex flex-col gap-8 bg-[#14140F] p-6 sm:p-10 border border-[#F7F5F0]/15">
+                        <div className="lg:col-span-7 flex flex-col gap-6 sm:gap-8 bg-[#14140F] p-4 sm:p-10 border border-[#F7F5F0]/15">
                             <div className="flex items-center justify-between border-b border-[#F7F5F0]/15 pb-4">
                                 <span className="font-mono text-xs font-bold tracking-[0.2em] text-[#1EA86E] uppercase">
                                     01 / SHIPPING &amp; CUSTOMER INFO
@@ -232,7 +184,7 @@ export default function OrderForm() {
                             </div>
 
                             {/* Name Fields */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                                 <div className="flex flex-col gap-2">
                                     <label className="font-mono text-xs text-[#F7F5F0]/80 font-bold uppercase tracking-wider">
                                         FIRST NAME *
@@ -243,7 +195,7 @@ export default function OrderForm() {
                                         value={firstName}
                                         onChange={(e) => setFirstName(e.target.value)}
                                         placeholder="Enter first name"
-                                        className="w-full bg-[#0D1712] border border-[#F7F5F0]/20 px-4 py-3 text-sm text-white focus:outline-none focus:border-[#1EA86E] transition-colors font-sans"
+                                        className="w-full bg-[#0D1712] border border-[#F7F5F0]/20 px-3.5 sm:px-4 py-3 text-sm text-white focus:outline-none focus:border-[#1EA86E] transition-colors font-sans"
                                     />
                                 </div>
                                 <div className="flex flex-col gap-2">
@@ -256,13 +208,13 @@ export default function OrderForm() {
                                         value={lastName}
                                         onChange={(e) => setLastName(e.target.value)}
                                         placeholder="Enter last name"
-                                        className="w-full bg-[#0D1712] border border-[#F7F5F0]/20 px-4 py-3 text-sm text-white focus:outline-none focus:border-[#1EA86E] transition-colors font-sans"
+                                        className="w-full bg-[#0D1712] border border-[#F7F5F0]/20 px-3.5 sm:px-4 py-3 text-sm text-white focus:outline-none focus:border-[#1EA86E] transition-colors font-sans"
                                     />
                                 </div>
                             </div>
 
                             {/* Contact Fields */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                                 <div className="flex flex-col gap-2">
                                     <label className="font-mono text-xs text-[#F7F5F0]/80 font-bold uppercase tracking-wider">
                                         EMAIL ID *
@@ -273,7 +225,7 @@ export default function OrderForm() {
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         placeholder="name@example.com"
-                                        className="w-full bg-[#0D1712] border border-[#F7F5F0]/20 px-4 py-3 text-sm text-white focus:outline-none focus:border-[#1EA86E] transition-colors font-sans"
+                                        className="w-full bg-[#0D1712] border border-[#F7F5F0]/20 px-3.5 sm:px-4 py-3 text-sm text-white focus:outline-none focus:border-[#1EA86E] transition-colors font-sans"
                                     />
                                 </div>
                                 <div className="flex flex-col gap-2">
@@ -286,7 +238,7 @@ export default function OrderForm() {
                                         value={mobile}
                                         onChange={(e) => setMobile(e.target.value)}
                                         placeholder="+91 98765 43210"
-                                        className="w-full bg-[#0D1712] border border-[#F7F5F0]/20 px-4 py-3 text-sm text-white focus:outline-none focus:border-[#1EA86E] transition-colors font-sans"
+                                        className="w-full bg-[#0D1712] border border-[#F7F5F0]/20 px-3.5 sm:px-4 py-3 text-sm text-white focus:outline-none focus:border-[#1EA86E] transition-colors font-sans"
                                     />
                                 </div>
                             </div>
@@ -302,13 +254,13 @@ export default function OrderForm() {
                                     value={address}
                                     onChange={(e) => setAddress(e.target.value)}
                                     placeholder="House/Flat No., Building Name, Street, Landmark, City, State, Pincode"
-                                    className="w-full bg-[#0D1712] border border-[#F7F5F0]/20 px-4 py-3 text-sm text-white focus:outline-none focus:border-[#1EA86E] transition-colors font-sans resize-none"
+                                    className="w-full bg-[#0D1712] border border-[#F7F5F0]/20 px-3.5 sm:px-4 py-3 text-sm text-white focus:outline-none focus:border-[#1EA86E] transition-colors font-sans resize-none"
                                 />
                             </div>
 
                             {/* ─── SIZE SELECTION ACCORDING TO 1327 SIZE CHART ────────── */}
                             <div className="pt-4 border-t border-[#F7F5F0]/15 flex flex-col gap-4">
-                                <div className="flex justify-between items-center">
+                                <div className="flex flex-wrap justify-between items-center gap-2">
                                     <label className="font-mono text-xs font-bold text-[#1EA86E] uppercase tracking-wider flex items-center gap-2">
                                         <Ruler size={16} />
                                         SIZE ACCORDING TO 1327 SIZE CHART *
@@ -318,25 +270,25 @@ export default function OrderForm() {
                                         onClick={() => setShowSizeChartModal(true)}
                                         className="font-mono text-[11px] text-[#1EA86E] underline hover:text-white transition-colors cursor-pointer flex items-center gap-1"
                                     >
-                                        <Info size={13} /> VIEW FULL SIZE CHART
+                                        <Info size={13} /> VIEW FULL CHART
                                     </button>
                                 </div>
 
                                 {/* Size Selector Buttons */}
-                                <div className="grid grid-cols-5 gap-3">
+                                <div className="grid grid-cols-5 gap-1.5 sm:gap-3">
                                     {SIZE_CHART_DATA.map((item) => (
                                         <button
                                             key={item.size}
                                             type="button"
                                             onClick={() => setSelectedSize(item.size)}
-                                            className={`py-3.5 flex flex-col items-center justify-center border font-mono transition-all ${
+                                            className={`py-2.5 sm:py-3.5 px-1 flex flex-col items-center justify-center border font-mono transition-all ${
                                                 selectedSize === item.size
                                                     ? "bg-[#1EA86E] border-[#1EA86E] text-[#0D1712] font-black shadow-lg"
                                                     : "bg-[#0D1712] border-[#F7F5F0]/20 text-white hover:border-[#1EA86E]/60"
                                             }`}
                                         >
-                                            <span className="text-base sm:text-lg font-bold">{item.size}</span>
-                                            <span className="text-[9px] opacity-80 mt-0.5">{item.width} W</span>
+                                            <span className="text-sm sm:text-lg font-bold">{item.size}</span>
+                                            <span className="text-[8px] sm:text-[9px] opacity-80 mt-0.5">{item.width} W</span>
                                         </button>
                                     ))}
                                 </div>
@@ -374,118 +326,53 @@ export default function OrderForm() {
                             </div>
                         </div>
 
-                        {/* ─── RIGHT COLUMN: PAYMENT & SCREENSHOT UPLOAD (5 COLS) ────── */}
+                        {/* ─── RIGHT COLUMN: ORDER SUMMARY & SUBMIT (5 COLS) ────────── */}
                         <div className="lg:col-span-5 flex flex-col gap-6 bg-[#14140F] p-6 sm:p-8 border border-[#F7F5F0]/15">
                             <div className="flex items-center justify-between border-b border-[#F7F5F0]/15 pb-4">
                                 <span className="font-mono text-xs font-bold tracking-[0.2em] text-[#1EA86E] uppercase">
-                                    02 / UPI PAYMENT &amp; PROOF
+                                    02 / ORDER SUMMARY
                                 </span>
                                 <span className="font-mono text-[10px] text-[#F7F5F0]/50 tracking-widest">
-                                    STEP 2 OF 2
+                                    CONFIRMATION
                                 </span>
                             </div>
 
-                            {/* UPI Details Box */}
-                            <div className="bg-[#0D1712] border border-[#1EA86E]/40 p-5 flex flex-col items-center gap-4 text-center">
+                            {/* Summary Card */}
+                            <div className="bg-[#0D1712] border border-[#1EA86E]/40 p-5 flex flex-col gap-4">
                                 <div className="flex items-center gap-2">
                                     <span className="w-2 h-2 rounded-full bg-[#1EA86E] animate-pulse" />
                                     <span className="font-mono text-xs font-bold tracking-widest text-[#1EA86E] uppercase">
-                                        SCAN &amp; PAY VIA ANY UPI APP
+                                        ATELIER CRAFTED APPAREL
                                     </span>
                                 </div>
 
-                                <div className="font-heading font-black text-xl text-white uppercase tracking-wide">
-                                    DHRUVI SHAH
+                                <div className="flex justify-between items-center py-2 border-y border-[#F7F5F0]/10 font-mono text-xs">
+                                    <span className="text-[#F7F5F0]/60">GARMENT FIT:</span>
+                                    <span className="font-bold text-white uppercase">REGULAR FIT T-SHIRT</span>
                                 </div>
 
-                                {/* QR Code Display */}
-                                <div className="relative w-48 h-48 bg-white p-2 border-2 border-[#1EA86E]/40 shadow-xl">
-                                    <Image
-                                        src="/order/payment-qr.png"
-                                        alt="Dhruvi Shah UPI Payment QR Code"
-                                        fill
-                                        className="object-contain p-1"
-                                        priority
-                                    />
+                                <div className="flex justify-between items-center py-2 border-b border-[#F7F5F0]/10 font-mono text-xs">
+                                    <span className="text-[#F7F5F0]/60">SELECTED SIZE:</span>
+                                    <span className="font-bold text-[#1EA86E] text-base">{selectedSize}</span>
                                 </div>
 
-                                {/* UPI ID Copy Box */}
-                                <div className="w-full flex items-center justify-between bg-[#14140F] border border-[#F7F5F0]/20 px-3.5 py-2.5 rounded-none font-mono text-xs">
-                                    <span className="text-[#F7F5F0]/70">UPI ID:</span>
-                                    <span className="font-bold text-[#1EA86E]">dhruvianup@okaxis</span>
-                                    <button
-                                        type="button"
-                                        onClick={handleCopyUpi}
-                                        className="flex items-center gap-1 bg-[#1EA86E]/20 text-[#1EA86E] hover:bg-[#1EA86E] hover:text-[#0D1712] px-2.5 py-1 text-[10px] font-bold transition-all cursor-pointer"
-                                    >
-                                        {copiedUpi ? <Check size={12} /> : <Copy size={12} />}
-                                        {copiedUpi ? "COPIED" : "COPY"}
-                                    </button>
+                                <div className="flex justify-between items-center py-2 border-b border-[#F7F5F0]/10 font-mono text-xs">
+                                    <span className="text-[#F7F5F0]/60 flex items-center gap-1">
+                                        <Truck size={14} /> TURNAROUND:
+                                    </span>
+                                    <span className="font-bold text-white">14–21 DAYS (PAN-INDIA)</span>
                                 </div>
-                            </div>
 
-                            {/* ─── PAYMENT CONFIRMATION SCREENSHOT UPLOAD ────────────────── */}
-                            <div className="flex flex-col gap-3">
-                                <label className="font-mono text-xs font-bold text-[#1EA86E] uppercase tracking-wider flex items-center justify-between">
-                                    <span>PAYMENT SCREENSHOT *</span>
-                                    <span className="text-[10px] text-[#F7F5F0]/50 font-normal">PNG / JPG / WEBP</span>
-                                </label>
+                                <div className="flex justify-between items-center py-2 border-b border-[#F7F5F0]/10 font-mono text-xs">
+                                    <span className="text-[#F7F5F0]/60 flex items-center gap-1">
+                                        <Package size={14} /> FABRIC SPEC:
+                                    </span>
+                                    <span className="font-bold text-[#1EA86E]">320+ GSM COMBED COTTON</span>
+                                </div>
 
-                                {screenshotPreview ? (
-                                    /* Upload Preview Box */
-                                    <div className="relative bg-[#0D1712] border border-[#1EA86E] p-4 flex items-center justify-between gap-4">
-                                        <div className="flex items-center gap-3 overflow-hidden">
-                                            <div className="relative w-14 h-14 bg-black border border-[#F7F5F0]/20 shrink-0 overflow-hidden">
-                                                <Image
-                                                    src={screenshotPreview}
-                                                    alt="Payment Screenshot Preview"
-                                                    fill
-                                                    className="object-cover"
-                                                />
-                                            </div>
-                                            <div className="flex flex-col overflow-hidden">
-                                                <span className="font-mono text-xs font-bold text-white truncate max-w-[180px]">
-                                                    {paymentScreenshot?.name}
-                                                </span>
-                                                <span className="font-mono text-[10px] text-[#1EA86E] flex items-center gap-1 mt-0.5">
-                                                    <CheckCircle2 size={12} /> Screenshot Attached
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <button
-                                            type="button"
-                                            onClick={handleRemoveFile}
-                                            className="p-2 text-[#F7F5F0]/50 hover:text-red-400 transition-colors"
-                                            title="Remove image"
-                                        >
-                                            <X size={18} />
-                                        </button>
-                                    </div>
-                                ) : (
-                                    /* Drag & Drop Upload Zone */
-                                    <div
-                                        onClick={() => fileInputRef.current?.click()}
-                                        className="bg-[#0D1712] border-2 border-dashed border-[#F7F5F0]/20 hover:border-[#1EA86E] p-6 text-center cursor-pointer transition-all flex flex-col items-center gap-2 group"
-                                    >
-                                        <div className="w-10 h-10 rounded-full bg-[#1EA86E]/10 text-[#1EA86E] flex items-center justify-center group-hover:scale-110 transition-transform">
-                                            <Upload size={20} />
-                                        </div>
-                                        <span className="font-mono text-xs font-bold text-white uppercase tracking-wider">
-                                            CLICK TO UPLOAD SCREENSHOT
-                                        </span>
-                                        <span className="font-mono text-[10px] text-[#F7F5F0]/50">
-                                            Attach GPay / PhonePe / Paytm transaction proof
-                                        </span>
-                                        <input
-                                            ref={fileInputRef}
-                                            type="file"
-                                            accept="image/*"
-                                            required
-                                            onChange={handleFileChange}
-                                            className="hidden"
-                                        />
-                                    </div>
-                                )}
+                                <div className="p-3 bg-[#105233]/20 border border-[#105233] text-[11px] font-mono text-[#F7F5F0]/80 leading-relaxed">
+                                    Submitting this form will generate your order summary and open WhatsApp to dispatch your order details directly to our Malad production desk.
+                                </div>
                             </div>
 
                             {/* Submit Order Button */}
@@ -495,7 +382,7 @@ export default function OrderForm() {
                                 className="w-full py-4 bg-[#1EA86E] text-[#0D1712] font-mono text-xs sm:text-sm font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 border border-[#1EA86E] transition-all hover:bg-white hover:border-white shadow-lg cursor-pointer disabled:opacity-50 mt-2"
                             >
                                 {status === "submitting" ? (
-                                    <span>PROCESSING ORDER...</span>
+                                    <span>GENERATING ORDER...</span>
                                 ) : (
                                     <>
                                         <span>CONFIRM &amp; SUBMIT ORDER</span>

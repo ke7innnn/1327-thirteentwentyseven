@@ -38,12 +38,18 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+    max-width: 100vw;
   }
 
   body {
     background-color: #000000;
     color: var(--foreground);
     font-family: var(--font-body);
+    overflow-x: hidden;
+    max-width: 100vw;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-overflow-scrolling: touch;
   }
 
   /* GPU Compositing for Butter-Smooth 60FPS Animations */

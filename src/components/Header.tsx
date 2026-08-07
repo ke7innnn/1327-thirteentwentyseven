@@ -34,7 +34,7 @@ export default function Header() {
         { label: "About Us", href: "#about" },
         { label: "Services", href: "#services" },
         { label: "Clients", href: "#clients" },
-        { label: "Place Order", href: "#order" },
+        { label: "Place Order", href: "/order" },
         { label: "Location", href: "#location" },
         { label: "Contact", href: "#contact" },
     ];
@@ -118,9 +118,24 @@ export default function Header() {
                             animate={{ x: 0 }}
                             exit={{ x: "-100%" }}
                             transition={{ duration: DURATION.slow, ease: EASING }}
-                            className="fixed top-0 left-0 bottom-0 w-full md:w-[400px] z-50 bg-[#0a0a0a] border-r border-white/10 flex flex-col justify-center px-12"
+                            className="fixed top-0 left-0 bottom-0 w-full sm:w-[380px] md:w-[420px] z-50 bg-[#0a0a0a] border-r border-white/10 flex flex-col justify-between p-6 sm:p-10 shadow-2xl overflow-y-auto"
                         >
-                            <nav className="flex flex-col gap-8">
+                            <div className="flex items-center justify-between pb-6 border-b border-white/10">
+                                <div className="flex items-center gap-2">
+                                    <span className="w-2 h-2 rounded-full bg-[#1EA86E] animate-pulse" />
+                                    <span className="font-mono text-xs font-bold tracking-[0.2em] text-[#1EA86E] uppercase">
+                                        1327 NAVIGATION
+                                    </span>
+                                </div>
+                                <button
+                                    onClick={toggleMenu}
+                                    className="p-2 text-white/70 hover:text-white transition-colors font-mono text-xs font-bold tracking-widest border border-white/10 px-3 py-1 bg-white/5"
+                                >
+                                    CLOSE ✕
+                                </button>
+                            </div>
+
+                            <nav className="flex flex-col gap-6 sm:gap-8 my-auto py-8">
                                 {menuItems.map((item, index) => (
                                     <motion.div
                                         key={item.href}
@@ -143,13 +158,18 @@ export default function Header() {
                                                     toggleMenu();
                                                 }
                                             }}
-                                            className="text-3xl md:text-5xl font-heading font-black uppercase tracking-tight text-white hover:text-[#1EA86E] transition-transform duration-180 ease-out hover:translate-x-3 block"
+                                            className="text-2xl sm:text-4xl md:text-5xl font-heading font-black uppercase tracking-tight text-white hover:text-[#1EA86E] transition-transform duration-180 ease-out hover:translate-x-3 block"
                                         >
                                             {item.label}
                                         </Link>
                                     </motion.div>
                                 ))}
                             </nav>
+
+                            <div className="pt-6 border-t border-white/10 flex flex-col gap-1 font-mono text-[10px] text-white/50 tracking-widest uppercase">
+                                <span>MALAD WEST · MUMBAI</span>
+                                <span className="text-[#1EA86E]">THIRTEEN TWENTYSEVEN</span>
+                            </div>
                         </motion.div>
                     </>
                 )}
