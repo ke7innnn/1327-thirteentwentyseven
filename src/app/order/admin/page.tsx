@@ -278,7 +278,7 @@ export default function AdminOrdersPage() {
                                 autoFocus
                                 value={passkey}
                                 onChange={(e) => setPasskey(e.target.value)}
-                                placeholder="Enter admin passkey (e.g. 1327admin)"
+                                placeholder="Enter admin passkey..."
                                 className="w-full bg-[#080E0A] border border-[#1EA86E]/40 px-4 py-3.5 text-sm text-white focus:outline-none focus:border-[#1EA86E] focus:ring-1 focus:ring-[#1EA86E] transition-colors rounded-none placeholder:text-[#F7F5F0]/30"
                             />
                         </div>
