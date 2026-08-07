@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { addOrder } from "@/lib/orderStore";
 
 export async function POST(req: Request) {
     try {
@@ -12,7 +13,24 @@ export async function POST(req: Request) {
         const targetEmail = process.env.ORDER_NOTIFICATION_EMAIL || "1327thecommunity@gmail.com";
         const itemType = selectedProduct || "T-Shirt Only";
         const orderPrice = itemType.includes("Cap Only") ? "₹499" : itemType.includes("Combo") ? "₹1,298" : "₹799";
-        const subject = `🛒 NEW 1327 APPAREL ORDER #${orderId} [${itemType.toUpperCase()} - ${orderPrice}] - ${firstName} ${lastName}`;
+        const generatedOrderId = orderId || `1327-ORD-${Math.floor(100000 + Math.random() * 900000)}`;
+
+        // Record order to server store for Admin Panel (/order/admin)
+        addOrder({
+            orderId: generatedOrderId,
+            createdAt: new Date().toISOString(),
+            firstName: firstName || "",
+            lastName: lastName || "",
+            email: email || "",
+            mobile: mobile || "",
+            address: address || "",
+            selectedProduct: itemType,
+            selectedSize: selectedSize || "M",
+            orderPrice: orderPrice,
+            status: "PENDING",
+        });
+
+        const subject = `🛒 NEW 1327 APPAREL ORDER #${generatedOrderId} [${itemType.toUpperCase()} - ${orderPrice}] - ${firstName} ${lastName}`;
 
         const resendApiKey = process.env.RESEND_API_KEY;
 
