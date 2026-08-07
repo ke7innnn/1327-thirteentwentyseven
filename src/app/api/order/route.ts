@@ -14,14 +14,16 @@ export async function POST(req: Request) {
         const orderPrice = itemType.includes("Cap Only") ? "₹499" : itemType.includes("Combo") ? "₹1,298" : "₹799";
         const subject = `🛒 NEW 1327 APPAREL ORDER #${orderId} [${itemType.toUpperCase()} - ${orderPrice}] - ${firstName} ${lastName}`;
 
-        // Option A: If RESEND_API_KEY environment variable is configured in Vercel
-        if (process.env.RESEND_API_KEY) {
+        const resendApiKey = process.env.RESEND_API_KEY;
+
+        // Option A: Primary Dispatch via Resend API
+        if (resendApiKey) {
             try {
                 const resendRes = await fetch("https://api.resend.com/emails", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+                        Authorization: `Bearer ${resendApiKey}`,
                     },
                     body: JSON.stringify({
                         from: process.env.RESEND_FROM_EMAIL || "1327 Apparel <onboarding@resend.dev>",
@@ -47,7 +49,7 @@ export async function POST(req: Request) {
                     return NextResponse.json({ success: true, provider: "Resend", orderId });
                 }
             } catch (e) {
-                console.error("Resend delivery failed, falling back:", e);
+                console.error("Resend delivery failed, falling back to FormSubmit:", e);
             }
         }
 
