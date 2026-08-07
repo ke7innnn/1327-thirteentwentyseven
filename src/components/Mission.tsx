@@ -290,11 +290,16 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
 
 
                     {/* Unified Left-Aligned Hero Typography Stack */}
-                    <div className="w-full max-w-5xl flex flex-col items-start text-left gap-3 sm:gap-5 my-auto pt-6">
-                        {/* Giant 1327 Header */}
-                        <h1 className="font-heading font-black text-[18vw] sm:text-[14vw] md:text-[12vw] lg:text-[11rem] xl:text-[13rem] leading-[0.82] tracking-tighter text-[#F2F9F4] select-none -ml-1 sm:-ml-2">
-                            1327
-                        </h1>
+                    <div className="w-full max-w-5xl flex flex-col items-start text-left gap-2 sm:gap-3 my-auto pt-6">
+                        {/* Giant 1327 Header & THIRTEEN TWENTYSEVEN Logo Typography Signature */}
+                        <div className="flex flex-col items-start">
+                            <h1 className="font-heading font-black text-[20vw] sm:text-[15vw] md:text-[13vw] lg:text-[12rem] xl:text-[14rem] leading-[0.8] tracking-tighter text-[#F2F9F4] select-none -ml-1 sm:-ml-2">
+                                1327
+                            </h1>
+                            <span className="font-mono text-xs sm:text-sm md:text-lg font-bold uppercase tracking-[0.3em] sm:tracking-[0.45em] text-[#1EA86E] pl-1 select-none mt-1 sm:mt-2">
+                                THIRTEEN TWENTYSEVEN
+                            </span>
+                        </div>
 
                         {/* Primary & Secondary Hero CTAs */}
                         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-6 mt-4 sm:mt-6 w-full sm:w-auto">
