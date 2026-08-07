@@ -15,8 +15,8 @@ export async function POST(req: Request) {
         const orderPrice = itemType.includes("Cap Only") ? "₹499" : itemType.includes("Combo") ? "₹1,298" : "₹799";
         const generatedOrderId = orderId || `1327-ORD-${Math.floor(100000 + Math.random() * 900000)}`;
 
-        // Record order to server store for Admin Panel (/order/admin)
-        addOrder({
+        // Record order permanently to Upstash Redis / in-memory fallback for Admin Panel (/order/admin)
+        await addOrder({
             orderId: generatedOrderId,
             createdAt: new Date().toISOString(),
             firstName: firstName || "",

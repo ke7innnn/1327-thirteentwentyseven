@@ -1,3 +1,5 @@
+import { Redis } from "@upstash/redis";
+
 export interface OrderItem {
     orderId: string;
     createdAt: string;
@@ -12,56 +14,85 @@ export interface OrderItem {
     status: "PENDING" | "IN PRODUCTION" | "DISPATCHED" | "COMPLETED";
 }
 
-// Default initial demo order records for immediate testing
-const INITIAL_ORDERS: OrderItem[] = [
-    {
-        orderId: "1327-ORD-892104",
-        createdAt: new Date().toISOString(),
-        firstName: "Rohit",
-        lastName: "Sharma",
-        email: "rohit.sharma@example.com",
-        mobile: "+91 98200 13270",
-        address: "Flat 402, Orlem Park, Link Road, Malad West, Mumbai, MH 400064",
-        selectedProduct: "T-Shirt + Cap Combo",
-        selectedSize: "L (T-Shirt) + One Size (Cap)",
-        orderPrice: "₹1,298",
-        status: "IN PRODUCTION",
-    },
-    {
-        orderId: "1327-ORD-573912",
-        createdAt: new Date(Date.now() - 3600000 * 24).toISOString(),
-        firstName: "Priya",
-        lastName: "Mehta",
-        email: "priya.mehta@example.com",
-        mobile: "+91 98190 54321",
-        address: "12 Bandra Reclamation, Opp. Salt Water Cafe, Bandra West, Mumbai 400050",
-        selectedProduct: "1327 Crew T-Shirt Only",
-        selectedSize: "M (Regular Fit)",
-        orderPrice: "₹799",
-        status: "PENDING",
-    },
-];
+// ─── Upstash Redis Client (auto-configured via Vercel Upstash integration) ──
+// When KV_REST_API_URL and KV_REST_API_TOKEN are set (auto-added by Vercel),
+// orders persist permanently in the cloud forever.
+// Falls back to in-memory store if not configured (local dev / missing env).
+let redis: Redis | null = null;
 
-// Server-side in-memory cache to persist orders during application runtime
-let memoryOrders: OrderItem[] = [...INITIAL_ORDERS];
+try {
+    if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+        redis = new Redis({
+            url: process.env.KV_REST_API_URL,
+            token: process.env.KV_REST_API_TOKEN,
+        });
+    }
+} catch (e) {
+    console.warn("Upstash Redis not configured, using in-memory fallback.");
+}
 
-export function getOrders(): OrderItem[] {
+const REDIS_KEY = "1327:orders";
+
+// ─── In-memory fallback store ───────────────────────────────────────────────
+let memoryOrders: OrderItem[] = [];
+
+// ─── Core helpers ────────────────────────────────────────────────────────────
+
+export async function getOrders(): Promise<OrderItem[]> {
+    if (redis) {
+        try {
+            const raw = await redis.get<OrderItem[]>(REDIS_KEY);
+            return raw || [];
+        } catch (e) {
+            console.error("Redis getOrders failed, falling back to memory:", e);
+        }
+    }
     return memoryOrders;
 }
 
-export function addOrder(newOrder: OrderItem): OrderItem {
-    // Check if order already exists to prevent duplication
+export async function addOrder(newOrder: OrderItem): Promise<OrderItem> {
+    if (redis) {
+        try {
+            const existing = await redis.get<OrderItem[]>(REDIS_KEY) || [];
+            const existingIndex = existing.findIndex(o => o.orderId === newOrder.orderId);
+            if (existingIndex >= 0) {
+                existing[existingIndex] = { ...existing[existingIndex], ...newOrder };
+            } else {
+                existing.unshift(newOrder);
+            }
+            await redis.set(REDIS_KEY, existing);
+            return newOrder;
+        } catch (e) {
+            console.error("Redis addOrder failed, falling back to memory:", e);
+        }
+    }
+
+    // In-memory fallback
     const existingIndex = memoryOrders.findIndex(o => o.orderId === newOrder.orderId);
     if (existingIndex >= 0) {
         memoryOrders[existingIndex] = { ...memoryOrders[existingIndex], ...newOrder };
-        return memoryOrders[existingIndex];
+    } else {
+        memoryOrders.unshift(newOrder);
     }
-    
-    memoryOrders.unshift(newOrder);
     return newOrder;
 }
 
-export function updateOrderStatus(orderId: string, status: OrderItem["status"]): OrderItem | null {
+export async function updateOrderStatus(orderId: string, status: OrderItem["status"]): Promise<OrderItem | null> {
+    if (redis) {
+        try {
+            const existing = await redis.get<OrderItem[]>(REDIS_KEY) || [];
+            const order = existing.find(o => o.orderId === orderId);
+            if (order) {
+                order.status = status;
+                await redis.set(REDIS_KEY, existing);
+                return order;
+            }
+            return null;
+        } catch (e) {
+            console.error("Redis updateOrderStatus failed:", e);
+        }
+    }
+
     const order = memoryOrders.find(o => o.orderId === orderId);
     if (order) {
         order.status = status;
@@ -70,7 +101,21 @@ export function updateOrderStatus(orderId: string, status: OrderItem["status"]):
     return null;
 }
 
-export function deleteOrder(orderId: string): boolean {
+export async function deleteOrder(orderId: string): Promise<boolean> {
+    if (redis) {
+        try {
+            const existing = await redis.get<OrderItem[]>(REDIS_KEY) || [];
+            const filtered = existing.filter(o => o.orderId !== orderId);
+            if (filtered.length < existing.length) {
+                await redis.set(REDIS_KEY, filtered);
+                return true;
+            }
+            return false;
+        } catch (e) {
+            console.error("Redis deleteOrder failed:", e);
+        }
+    }
+
     const initialLength = memoryOrders.length;
     memoryOrders = memoryOrders.filter(o => o.orderId !== orderId);
     return memoryOrders.length < initialLength;
