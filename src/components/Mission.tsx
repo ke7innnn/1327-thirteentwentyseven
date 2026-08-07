@@ -289,14 +289,19 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
                 >
 
 
-                    {/* Unified Left-Aligned Hero Typography Stack */}
-                    <div className="w-full max-w-5xl flex flex-col items-start text-left gap-2 sm:gap-3 my-auto pt-6">
-                        {/* Giant 1327 Header & THIRTEEN TWENTYSEVEN Logo Typography Signature */}
-                        <div className="flex flex-col items-start">
-                            <h1 className="font-heading font-black text-[20vw] sm:text-[15vw] md:text-[13vw] lg:text-[12rem] xl:text-[14rem] leading-[0.8] tracking-tighter text-[#F2F9F4] select-none -ml-1 sm:-ml-2">
+                    {/* Hero Logo Typography Stack matching official logo artwork */}
+                    <div className="w-full max-w-5xl flex flex-col items-start text-left gap-4 sm:gap-5 my-auto pt-6">
+                        {/* Giant 1327 Header + Solid White Bar + White Centered THIRTEEN TWENTYSEVEN */}
+                        <div className="flex flex-col items-center sm:items-start w-fit">
+                            <h1 className="font-heading font-black text-[22vw] sm:text-[15vw] md:text-[13vw] lg:text-[11.5rem] xl:text-[13.5rem] leading-[0.78] tracking-tighter text-white select-none">
                                 1327
                             </h1>
-                            <span className="font-mono text-xs sm:text-sm md:text-lg font-bold uppercase tracking-[0.3em] sm:tracking-[0.45em] text-[#1EA86E] pl-1 select-none mt-1 sm:mt-2">
+                            
+                            {/* Solid white underline bar matching logo */}
+                            <div className="w-full h-1.5 sm:h-2 md:h-2.5 bg-white my-1.5 sm:my-2.5 rounded-none" />
+
+                            {/* THIRTEEN TWENTYSEVEN in white centered text matching logo */}
+                            <span className="font-mono text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-[0.35em] sm:tracking-[0.45em] text-white select-none text-center w-full">
                                 THIRTEEN TWENTYSEVEN
                             </span>
                         </div>
