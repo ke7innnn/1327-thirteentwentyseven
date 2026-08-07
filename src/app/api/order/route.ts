@@ -11,7 +11,8 @@ export async function POST(req: Request) {
 
         const targetEmail = process.env.ORDER_NOTIFICATION_EMAIL || "1327thecommunity@gmail.com";
         const itemType = selectedProduct || "T-Shirt Only";
-        const subject = `🛒 NEW 1327 APPAREL ORDER #${orderId} [${itemType.toUpperCase()}] - ${firstName} ${lastName}`;
+        const orderPrice = itemType.includes("Cap Only") ? "₹499" : itemType.includes("Combo") ? "₹1,298" : "₹799";
+        const subject = `🛒 NEW 1327 APPAREL ORDER #${orderId} [${itemType.toUpperCase()} - ${orderPrice}] - ${firstName} ${lastName}`;
 
         // Option A: If RESEND_API_KEY environment variable is configured in Vercel
         if (process.env.RESEND_API_KEY) {
@@ -34,6 +35,7 @@ export async function POST(req: Request) {
                                 <p><strong>Email:</strong> ${email}</p>
                                 <p><strong>Mobile:</strong> ${mobile}</p>
                                 <p><strong>Item Selection:</strong> ${itemType}</p>
+                                <p><strong>Price:</strong> <span style="color: #1EA86E; font-size: 16px; font-weight: bold;">${orderPrice}</span></p>
                                 <p><strong>Size Selected:</strong> <span style="color: #1EA86E; font-size: 16px;">${selectedSize}</span></p>
                                 <p><strong>Shipping Address:</strong> ${address}</p>
                             </div>
@@ -68,6 +70,7 @@ export async function POST(req: Request) {
                     "Email": email,
                     "Mobile Number": mobile,
                     "Item Selection": itemType,
+                    "Order Price": orderPrice,
                     "Selected Size": selectedSize,
                     "Shipping Address": address,
                 }),
@@ -104,6 +107,7 @@ export async function POST(req: Request) {
                     "Email": email,
                     "Mobile Number": mobile,
                     "Item Selection": itemType,
+                    "Order Price": orderPrice,
                     "Selected Size": selectedSize,
                     "Shipping Address": address,
                 }),

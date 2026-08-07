@@ -264,46 +264,103 @@ export default function OrderForm() {
                                 />
                             </div>
 
-                            {/* ─── PRODUCT TYPE SELECTION (T-SHIRT / CAP / BOTH) ────────── */}
+                            {/* ─── PRODUCT SELECTION CARDS WITH IMAGES & PRICES ────────── */}
                             <div className="pt-4 border-t border-[#F7F5F0]/15 flex flex-col gap-3">
                                 <label className="font-mono text-xs font-bold text-[#1EA86E] uppercase tracking-wider flex items-center gap-2">
                                     <Package size={16} />
-                                    SELECT ITEM TYPE *
+                                    SELECT ITEM &amp; VIEW PRICING *
                                 </label>
 
-                                <div className="grid grid-cols-3 gap-2">
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                    {/* T-Shirt Card */}
                                     <button
                                         type="button"
                                         onClick={() => setSelectedProduct("tshirt")}
-                                        className={`py-3 px-2 flex flex-col items-center justify-center border font-mono transition-all text-xs font-bold uppercase ${
+                                        className={`group relative p-3 flex flex-col items-center border transition-all text-left overflow-hidden cursor-pointer ${
                                             selectedProduct === "tshirt"
-                                                ? "bg-[#1EA86E] border-[#1EA86E] text-[#0D1712] shadow-lg"
-                                                : "bg-[#0D1712] border-[#F7F5F0]/20 text-white hover:border-[#1EA86E]/60"
+                                                ? "bg-[#105233]/40 border-[#1EA86E] text-white shadow-xl ring-1 ring-[#1EA86E]"
+                                                : "bg-[#0D1712] border-[#F7F5F0]/20 text-[#F7F5F0]/70 hover:border-[#1EA86E]/60"
                                         }`}
                                     >
-                                        <span>👕 T-SHIRT</span>
+                                        <div className="relative w-full aspect-square bg-black/60 mb-2.5 overflow-hidden border border-[#F7F5F0]/10 rounded-sm">
+                                            <Image
+                                                src="/cap/tshirt.webp"
+                                                alt="1327 Crew T-Shirt"
+                                                fill
+                                                sizes="(max-width: 768px) 33vw, 20vw"
+                                                className="object-contain p-2 group-hover:scale-105 transition-transform duration-300"
+                                                priority
+                                            />
+                                            <span className="absolute top-1.5 right-1.5 bg-[#1EA86E] text-[#0D1712] font-mono text-[10px] font-black px-2 py-0.5 shadow-md">
+                                                ₹799
+                                            </span>
+                                        </div>
+                                        <span className="font-mono text-xs font-bold text-white uppercase tracking-wider w-full text-center">
+                                            👕 CREW T-SHIRT
+                                        </span>
+                                        <span className="font-mono text-[10px] text-[#1EA86E] font-bold mt-0.5">
+                                            ₹799 INCL. TAXES
+                                        </span>
                                     </button>
+
+                                    {/* Cap Card */}
                                     <button
                                         type="button"
                                         onClick={() => setSelectedProduct("cap")}
-                                        className={`py-3 px-2 flex flex-col items-center justify-center border font-mono transition-all text-xs font-bold uppercase ${
+                                        className={`group relative p-3 flex flex-col items-center border transition-all text-left overflow-hidden cursor-pointer ${
                                             selectedProduct === "cap"
-                                                ? "bg-[#1EA86E] border-[#1EA86E] text-[#0D1712] shadow-lg"
-                                                : "bg-[#0D1712] border-[#F7F5F0]/20 text-white hover:border-[#1EA86E]/60"
+                                                ? "bg-[#105233]/40 border-[#1EA86E] text-white shadow-xl ring-1 ring-[#1EA86E]"
+                                                : "bg-[#0D1712] border-[#F7F5F0]/20 text-[#F7F5F0]/70 hover:border-[#1EA86E]/60"
                                         }`}
                                     >
-                                        <span>🧢 CAP</span>
+                                        <div className="relative w-full aspect-square bg-black/60 mb-2.5 overflow-hidden border border-[#F7F5F0]/10 rounded-sm">
+                                            <Image
+                                                src="/cap/cap.webp"
+                                                alt="1327 Crew Cap"
+                                                fill
+                                                sizes="(max-width: 768px) 33vw, 20vw"
+                                                className="object-contain p-2 group-hover:scale-105 transition-transform duration-300"
+                                                priority
+                                            />
+                                            <span className="absolute top-1.5 right-1.5 bg-[#1EA86E] text-[#0D1712] font-mono text-[10px] font-black px-2 py-0.5 shadow-md">
+                                                ₹499
+                                            </span>
+                                        </div>
+                                        <span className="font-mono text-xs font-bold text-white uppercase tracking-wider w-full text-center">
+                                            🧢 CREW CAP
+                                        </span>
+                                        <span className="font-mono text-[10px] text-[#1EA86E] font-bold mt-0.5">
+                                            ₹499 INCL. TAXES
+                                        </span>
                                     </button>
+
+                                    {/* Both Combo Card */}
                                     <button
                                         type="button"
                                         onClick={() => setSelectedProduct("both")}
-                                        className={`py-3 px-2 flex flex-col items-center justify-center border font-mono transition-all text-xs font-bold uppercase ${
+                                        className={`group relative p-3 flex flex-col items-center border transition-all text-left overflow-hidden cursor-pointer ${
                                             selectedProduct === "both"
-                                                ? "bg-[#1EA86E] border-[#1EA86E] text-[#0D1712] shadow-lg"
-                                                : "bg-[#0D1712] border-[#F7F5F0]/20 text-white hover:border-[#1EA86E]/60"
+                                                ? "bg-[#105233]/40 border-[#1EA86E] text-white shadow-xl ring-1 ring-[#1EA86E]"
+                                                : "bg-[#0D1712] border-[#F7F5F0]/20 text-[#F7F5F0]/70 hover:border-[#1EA86E]/60"
                                         }`}
                                     >
-                                        <span>👕+🧢 BOTH</span>
+                                        <div className="relative w-full aspect-square bg-black/60 mb-2.5 overflow-hidden border border-[#F7F5F0]/10 flex items-center justify-center p-1 gap-1 rounded-sm">
+                                            <div className="relative w-1/2 h-full">
+                                                <Image src="/cap/tshirt.webp" alt="T-Shirt" fill className="object-contain" />
+                                            </div>
+                                            <div className="relative w-1/2 h-full">
+                                                <Image src="/cap/cap.webp" alt="Cap" fill className="object-contain" />
+                                            </div>
+                                            <span className="absolute top-1.5 right-1.5 bg-[#1EA86E] text-[#0D1712] font-mono text-[10px] font-black px-2 py-0.5 shadow-md">
+                                                ₹1,298
+                                            </span>
+                                        </div>
+                                        <span className="font-mono text-xs font-bold text-white uppercase tracking-wider w-full text-center">
+                                            👕+🧢 T-SHIRT + CAP
+                                        </span>
+                                        <span className="font-mono text-[10px] text-[#1EA86E] font-bold mt-0.5">
+                                            ₹1,298 (COMBO PACK)
+                                        </span>
                                     </button>
                                 </div>
                             </div>
@@ -414,17 +471,29 @@ export default function OrderForm() {
 
                             {/* Summary Card */}
                             <div className="bg-[#0D1712] border border-[#1EA86E]/40 p-5 flex flex-col gap-4">
-                                <div className="flex items-center gap-2">
-                                    <span className="w-2 h-2 rounded-full bg-[#1EA86E] animate-pulse" />
-                                    <span className="font-mono text-xs font-bold tracking-widest text-[#1EA86E] uppercase">
-                                        ATELIER CRAFTED APPAREL
-                                    </span>
+                                <div className="flex items-center gap-3 border-b border-[#F7F5F0]/10 pb-3">
+                                    <div className="relative w-16 h-16 bg-black border border-[#1EA86E]/40 overflow-hidden shrink-0">
+                                        <Image
+                                            src={selectedProduct === "cap" ? "/cap/cap.webp" : "/cap/tshirt.webp"}
+                                            alt="Selected Item Preview"
+                                            fill
+                                            className="object-contain p-1"
+                                        />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <span className="font-mono text-xs font-bold tracking-widest text-[#1EA86E] uppercase">
+                                            {selectedProduct === "tshirt" ? "1327 CREW T-SHIRT" : selectedProduct === "cap" ? "1327 CREW CAP" : "T-SHIRT + CAP COMBO"}
+                                        </span>
+                                        <span className="font-heading font-black text-xl text-white mt-0.5">
+                                            {selectedProduct === "tshirt" ? "₹799" : selectedProduct === "cap" ? "₹499" : "₹1,298"}
+                                        </span>
+                                    </div>
                                 </div>
 
-                                <div className="flex justify-between items-center py-2 border-y border-[#F7F5F0]/10 font-mono text-xs">
+                                <div className="flex justify-between items-center py-2 border-b border-[#F7F5F0]/10 font-mono text-xs">
                                     <span className="text-[#F7F5F0]/60">ITEM SELECTION:</span>
                                     <span className="font-bold text-white uppercase">
-                                        {selectedProduct === "tshirt" ? "T-SHIRT ONLY" : selectedProduct === "cap" ? "CUSTOM CREW CAP" : "T-SHIRT + CAP COMBO"}
+                                        {selectedProduct === "tshirt" ? "T-SHIRT ONLY (₹799)" : selectedProduct === "cap" ? "CREW CAP (₹499)" : "T-SHIRT + CAP (₹1,298)"}
                                     </span>
                                 </div>
 
