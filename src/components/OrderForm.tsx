@@ -361,14 +361,14 @@ export default function OrderForm() {
                                     <span className="text-[#F7F5F0]/60 flex items-center gap-1">
                                         <Truck size={14} /> TURNAROUND:
                                     </span>
-                                    <span className="font-bold text-white">14–21 DAYS (PAN-INDIA)</span>
+                                    <span className="font-bold text-white">6–7 DAYS (PAN-INDIA)</span>
                                 </div>
 
                                 <div className="flex justify-between items-center py-2 border-b border-[#F7F5F0]/10 font-mono text-xs">
                                     <span className="text-[#F7F5F0]/60 flex items-center gap-1">
                                         <Package size={14} /> FABRIC SPEC:
                                     </span>
-                                    <span className="font-bold text-[#1EA86E]">320+ GSM COMBED COTTON</span>
+                                    <span className="font-bold text-[#1EA86E]">220 GSM SINGLE JERSEY COTTON</span>
                                 </div>
 
                                 <div className="p-3 bg-[#105233]/30 border border-[#1EA86E]/50 text-[11px] font-mono text-[#F7F5F0]/90 leading-relaxed rounded-none">
