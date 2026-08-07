@@ -195,7 +195,7 @@ export default function OrderForm() {
                                         value={firstName}
                                         onChange={(e) => setFirstName(e.target.value)}
                                         placeholder="Enter first name"
-                                        className="w-full bg-[#0D1712] border border-[#F7F5F0]/20 px-3.5 sm:px-4 py-3 text-sm text-white focus:outline-none focus:border-[#1EA86E] transition-colors font-sans"
+                                        className="w-full bg-[#0D1712] border border-[#F7F5F0]/20 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-white focus:outline-none focus:border-[#1EA86E] focus:ring-1 focus:ring-[#1EA86E] transition-colors font-sans rounded-none"
                                     />
                                 </div>
                                 <div className="flex flex-col gap-2">
@@ -208,7 +208,7 @@ export default function OrderForm() {
                                         value={lastName}
                                         onChange={(e) => setLastName(e.target.value)}
                                         placeholder="Enter last name"
-                                        className="w-full bg-[#0D1712] border border-[#F7F5F0]/20 px-3.5 sm:px-4 py-3 text-sm text-white focus:outline-none focus:border-[#1EA86E] transition-colors font-sans"
+                                        className="w-full bg-[#0D1712] border border-[#F7F5F0]/20 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-white focus:outline-none focus:border-[#1EA86E] focus:ring-1 focus:ring-[#1EA86E] transition-colors font-sans rounded-none"
                                     />
                                 </div>
                             </div>
@@ -225,7 +225,7 @@ export default function OrderForm() {
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         placeholder="name@example.com"
-                                        className="w-full bg-[#0D1712] border border-[#F7F5F0]/20 px-3.5 sm:px-4 py-3 text-sm text-white focus:outline-none focus:border-[#1EA86E] transition-colors font-sans"
+                                        className="w-full bg-[#0D1712] border border-[#F7F5F0]/20 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-white focus:outline-none focus:border-[#1EA86E] focus:ring-1 focus:ring-[#1EA86E] transition-colors font-sans rounded-none"
                                     />
                                 </div>
                                 <div className="flex flex-col gap-2">
@@ -238,7 +238,7 @@ export default function OrderForm() {
                                         value={mobile}
                                         onChange={(e) => setMobile(e.target.value)}
                                         placeholder="+91 98765 43210"
-                                        className="w-full bg-[#0D1712] border border-[#F7F5F0]/20 px-3.5 sm:px-4 py-3 text-sm text-white focus:outline-none focus:border-[#1EA86E] transition-colors font-sans"
+                                        className="w-full bg-[#0D1712] border border-[#F7F5F0]/20 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-white focus:outline-none focus:border-[#1EA86E] focus:ring-1 focus:ring-[#1EA86E] transition-colors font-sans rounded-none"
                                     />
                                 </div>
                             </div>
@@ -254,7 +254,7 @@ export default function OrderForm() {
                                     value={address}
                                     onChange={(e) => setAddress(e.target.value)}
                                     placeholder="House/Flat No., Building Name, Street, Landmark, City, State, Pincode"
-                                    className="w-full bg-[#0D1712] border border-[#F7F5F0]/20 px-3.5 sm:px-4 py-3 text-sm text-white focus:outline-none focus:border-[#1EA86E] transition-colors font-sans resize-none"
+                                    className="w-full bg-[#0D1712] border border-[#F7F5F0]/20 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-white focus:outline-none focus:border-[#1EA86E] focus:ring-1 focus:ring-[#1EA86E] transition-colors font-sans resize-none rounded-none"
                                 />
                             </div>
 
@@ -370,8 +370,8 @@ export default function OrderForm() {
                                     <span className="font-bold text-[#1EA86E]">320+ GSM COMBED COTTON</span>
                                 </div>
 
-                                <div className="p-3 bg-[#105233]/20 border border-[#105233] text-[11px] font-mono text-[#F7F5F0]/80 leading-relaxed">
-                                    Submitting this form will generate your order summary and open WhatsApp to dispatch your order details directly to our Malad production desk.
+                                <div className="p-3 bg-[#105233]/30 border border-[#1EA86E]/50 text-[11px] font-mono text-[#F7F5F0]/90 leading-relaxed rounded-none">
+                                    Submitting this form will dispatch your custom order details directly to our 1327 Malad production desk (<span className="text-[#1EA86E] font-bold">1327thecommunity@gmail.com</span>).
                                 </div>
                             </div>
 
@@ -379,7 +379,7 @@ export default function OrderForm() {
                             <button
                                 type="submit"
                                 disabled={status === "submitting"}
-                                className="w-full py-4 bg-[#1EA86E] text-[#0D1712] font-mono text-xs sm:text-sm font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 border border-[#1EA86E] transition-all hover:bg-white hover:border-white shadow-lg cursor-pointer disabled:opacity-50 mt-2"
+                                className="w-full py-4 px-6 bg-[#1EA86E] text-[#0D1712] font-mono text-xs sm:text-sm font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 border border-[#1EA86E] transition-all hover:bg-white hover:border-white shadow-lg cursor-pointer disabled:opacity-50 mt-2 active:scale-[0.98] touch-manipulation min-h-[48px]"
                             >
                                 {status === "submitting" ? (
                                     <span>GENERATING ORDER...</span>
