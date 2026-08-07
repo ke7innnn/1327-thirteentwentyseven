@@ -26,11 +26,16 @@ export default function Mission() {
         offset: ["start start", "end end"]
     });
 
+    // CTA banner fades in near the end of the hero scroll sequence
+    const ctaOpacity = useTransform(scrollYProgress, [0.7, 0.9], [0, 1]);
+    const ctaY = useTransform(scrollYProgress, [0.7, 0.9], [40, 0]);
+
     return (
         <div id="mission" className="relative w-full z-10 bg-[#105233]">
-            {/* Smooth Hero sequence container with tight 140vh sticky scroll pin length */}
-            <div ref={heroRef} className="relative w-full h-[140vh] sm:h-[150vh] bg-[#105233]">
-                <section className="sticky top-0 w-full h-screen overflow-hidden bg-[#105233]">
+            {/* Hero scroll container — 300vh gives 200vh of locked scroll for smooth 240-frame animation */}
+            <div ref={heroRef} className="relative w-full h-[300vh] bg-[#105233]">
+                {/* Sticky hero section — stays pinned at top while frames animate */}
+                <section className="sticky top-0 w-full h-screen overflow-hidden bg-[#105233] z-10">
                     {/* Instant fallback frame 1 for 0ms initial render before JS canvas hydratation */}
                     <NextImage
                         src="/sequence/ezgif-frame-001.jpg"
@@ -51,32 +56,35 @@ export default function Mission() {
 
                     <HeroContent scrollProgress={scrollYProgress} />
                 </section>
-            </div>
 
-            {/* ─── BETWEEN HERO & CARD SPINNING SECTION: PLACE ORDER CTA BANNER ───── */}
-            <div className="relative z-30 w-full bg-[#105233] border-y border-[#1EA86E]/40 py-6 sm:py-8 px-6 sm:px-12 shadow-2xl">
-                <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-5 text-center md:text-left">
-                    <div className="flex flex-col gap-1">
-                        <span className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-[#1EA86E] flex items-center justify-center md:justify-start gap-2">
-                            <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-                            1327 OFFICIAL APPAREL ORDER
-                        </span>
-                        <h3 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl uppercase tracking-tight text-white">
-                            READY TO ORDER YOUR CUSTOM CREW GEAR?
-                        </h3>
-                    </div>
-                    <Link
-                        href="/order"
-                        className="group relative inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-4 bg-[#F2F9F4] text-[#105233] font-heading font-bold text-sm sm:text-base uppercase tracking-wider overflow-hidden shadow-xl hover:bg-black hover:text-white transition-all duration-300 transform active:scale-95 shrink-0 w-full md:w-auto"
-                    >
-                        <span className="relative z-10 flex items-center gap-3">
-                            <span>PLACE YOUR ORDER NOW</span>
-                            <span className="flex items-center justify-center w-7 h-7 rounded-full bg-[#105233] text-white group-hover:bg-white group-hover:text-[#105233] transition-all duration-300">
-                                ↗
+                {/* ─── CTA BANNER: Sticks to bottom of viewport, fades in near end of hero scroll ───── */}
+                <motion.div
+                    style={{ opacity: ctaOpacity, y: ctaY }}
+                    className="sticky bottom-0 z-30 w-full bg-[#105233] border-y border-[#1EA86E]/40 py-6 sm:py-8 px-6 sm:px-12 shadow-2xl"
+                >
+                    <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-5 text-center md:text-left">
+                        <div className="flex flex-col gap-1">
+                            <span className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-[#1EA86E] flex items-center justify-center md:justify-start gap-2">
+                                <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                                1327 OFFICIAL APPAREL ORDER
                             </span>
-                        </span>
-                    </Link>
-                </div>
+                            <h3 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl uppercase tracking-tight text-white">
+                                READY TO ORDER YOUR CUSTOM CREW GEAR?
+                            </h3>
+                        </div>
+                        <Link
+                            href="/order"
+                            className="group relative inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-4 bg-[#F2F9F4] text-[#105233] font-heading font-bold text-sm sm:text-base uppercase tracking-wider overflow-hidden shadow-xl hover:bg-black hover:text-white transition-all duration-300 transform active:scale-95 shrink-0 w-full md:w-auto"
+                        >
+                            <span className="relative z-10 flex items-center gap-3">
+                                <span>PLACE YOUR ORDER NOW</span>
+                                <span className="flex items-center justify-center w-7 h-7 rounded-full bg-[#105233] text-white group-hover:bg-white group-hover:text-[#105233] transition-all duration-300">
+                                    ↗
+                                </span>
+                            </span>
+                        </Link>
+                    </div>
+                </motion.div>
             </div>
 
             {/* Transition: Scroll-driven 1327 Brand Tag */}
