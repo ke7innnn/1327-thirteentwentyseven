@@ -23,68 +23,58 @@ export default function Mission() {
     const heroRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
         target: heroRef,
-        offset: ["start start", "end end"]
+        offset: ["start start", "end start"]
     });
-
-    // CTA banner fades in near the end of the hero scroll sequence
-    const ctaOpacity = useTransform(scrollYProgress, [0.7, 0.9], [0, 1]);
-    const ctaY = useTransform(scrollYProgress, [0.7, 0.9], [40, 0]);
 
     return (
         <div id="mission" className="relative w-full z-10 bg-[#105233]">
-            {/* Hero scroll container — 300vh gives 200vh of locked scroll for smooth 240-frame animation */}
-            <div ref={heroRef} className="relative w-full h-[300vh] bg-[#105233]">
-                {/* Sticky hero section — stays pinned at top while frames animate */}
-                <section className="sticky top-0 w-full h-screen overflow-hidden bg-[#105233] z-10">
-                    {/* Instant fallback frame 1 for 0ms initial render before JS canvas hydratation */}
-                    <NextImage
-                        src="/sequence/ezgif-frame-001.jpg"
-                        alt="1327 Hero Frame 1"
-                        fill
-                        priority
-                        unoptimized
-                        className="object-cover object-center z-0 pointer-events-none"
-                    />
+            {/* Hero section — exactly one viewport tall, no sticky needed (first element on page) */}
+            <div ref={heroRef} className="relative w-full h-screen overflow-hidden bg-[#105233]">
+                {/* Instant fallback frame 1 for 0ms initial render before JS canvas hydration */}
+                <NextImage
+                    src="/sequence/ezgif-frame-001.jpg"
+                    alt="1327 Hero Frame 1"
+                    fill
+                    priority
+                    unoptimized
+                    className="object-cover object-center z-0 pointer-events-none"
+                />
 
-                    {/* Scroll-driven frame animation background */}
-                    <FrameCanvas scrollProgress={scrollYProgress} />
-                    {/* Dark overlay for text readability */}
-                    <div className="absolute inset-0 bg-black/35 z-[2]" />
+                {/* Scroll-driven frame animation background */}
+                <FrameCanvas scrollProgress={scrollYProgress} />
+                {/* Dark overlay for text readability */}
+                <div className="absolute inset-0 bg-black/35 z-[2]" />
 
-                    {/* Bottom gradient mask — seamlessly blends hero frame into #105233 brand green */}
-                    <div className="absolute bottom-0 left-0 right-0 h-40 sm:h-56 bg-gradient-to-t from-[#105233] via-[#105233]/90 to-transparent z-[5] pointer-events-none" />
+                {/* Bottom gradient mask — seamlessly blends hero frame into #105233 brand green */}
+                <div className="absolute bottom-0 left-0 right-0 h-40 sm:h-56 bg-gradient-to-t from-[#105233] via-[#105233]/90 to-transparent z-[5] pointer-events-none" />
 
-                    <HeroContent scrollProgress={scrollYProgress} />
-                </section>
+                <HeroContent scrollProgress={scrollYProgress} />
+            </div>
 
-                {/* ─── CTA BANNER: Sticks to bottom of viewport, fades in near end of hero scroll ───── */}
-                <motion.div
-                    style={{ opacity: ctaOpacity, y: ctaY }}
-                    className="sticky bottom-0 z-30 w-full bg-[#105233] border-y border-[#1EA86E]/40 py-6 sm:py-8 px-6 sm:px-12 shadow-2xl"
-                >
-                    <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-5 text-center md:text-left">
-                        <div className="flex flex-col gap-1">
-                            <span className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-[#1EA86E] flex items-center justify-center md:justify-start gap-2">
-                                <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-                                1327 OFFICIAL APPAREL ORDER
-                            </span>
-                            <h3 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl uppercase tracking-tight text-white">
-                                READY TO ORDER YOUR CUSTOM CREW GEAR?
-                            </h3>
-                        </div>
-                        <Link
-                            href="/order"
-                            className="group relative inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-4 bg-[#F2F9F4] text-[#105233] font-heading font-bold text-sm sm:text-base uppercase tracking-wider overflow-hidden shadow-xl hover:bg-black hover:text-white transition-all duration-300 transform active:scale-95 shrink-0 w-full md:w-auto"
-                        >
-                            <span className="relative z-10 flex items-center gap-3">
-                                <span>PLACE YOUR ORDER NOW</span>
-                                <span className="flex items-center justify-center w-7 h-7 rounded-full bg-[#105233] text-white group-hover:bg-white group-hover:text-[#105233] transition-all duration-300">
-                                    ↗
-                                </span>
-                            </span>
-                        </Link>
+            {/* ─── PLACE ORDER CTA BANNER — directly after hero, zero gap ───── */}
+            <div className="relative z-30 w-full bg-[#105233] border-y border-[#1EA86E]/40 py-6 sm:py-8 px-6 sm:px-12 shadow-2xl">
+                <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-5 text-center md:text-left">
+                    <div className="flex flex-col gap-1">
+                        <span className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-[#1EA86E] flex items-center justify-center md:justify-start gap-2">
+                            <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                            1327 OFFICIAL APPAREL ORDER
+                        </span>
+                        <h3 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl uppercase tracking-tight text-white">
+                            READY TO ORDER YOUR CUSTOM CREW GEAR?
+                        </h3>
                     </div>
-                </motion.div>
+                    <Link
+                        href="/order"
+                        className="group relative inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-4 bg-[#F2F9F4] text-[#105233] font-heading font-bold text-sm sm:text-base uppercase tracking-wider overflow-hidden shadow-xl hover:bg-black hover:text-white transition-all duration-300 transform active:scale-95 shrink-0 w-full md:w-auto"
+                    >
+                        <span className="relative z-10 flex items-center gap-3">
+                            <span>PLACE YOUR ORDER NOW</span>
+                            <span className="flex items-center justify-center w-7 h-7 rounded-full bg-[#105233] text-white group-hover:bg-white group-hover:text-[#105233] transition-all duration-300">
+                                ↗
+                            </span>
+                        </span>
+                    </Link>
+                </div>
             </div>
 
             {/* Transition: Scroll-driven 1327 Brand Tag */}
@@ -98,15 +88,13 @@ export default function Mission() {
 
 function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const imagesRef = useRef<(HTMLImageElement | null)[]>(new Array(TOTAL_FRAMES).fill(null));
+    const imagesRef = useRef<HTMLImageElement[]>(new Array(TOTAL_FRAMES));
     const lastDrawnFrame = useRef(-1);
     const autoPlayFrame = useRef(0);
-    const lastScrollTime = useRef(0);
     const isScrolling = useRef(false);
 
-    const [canvasSize, setCanvasSize] = useState(() =>
-        typeof window !== "undefined" ? { width: window.innerWidth, height: window.innerHeight } : { width: 1920, height: 1080 }
-    );
+    // Fixed initial size to avoid hydration mismatch — updated in useEffect
+    const [canvasSize, setCanvasSize] = useState({ width: 1920, height: 1080 });
 
     // Draw a frame with cover-style scaling
     const drawFrame = useCallback((frameIndex: number) => {
@@ -118,83 +106,70 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }
         ctx.imageSmoothingQuality = "medium";
 
         let img = imagesRef.current[frameIndex];
-        if (!img || !img.complete || img.naturalWidth === 0) {
-            // Find nearest loaded frame
-            for (let offset = 1; offset < 30; offset++) {
-                const prev = (frameIndex - offset + TOTAL_FRAMES) % TOTAL_FRAMES;
-                const prevImg = imagesRef.current[prev];
-                if (prevImg && prevImg.complete && prevImg.naturalWidth > 0) {
-                    img = prevImg;
-                    break;
-                }
+        if (!img || !img.complete || !img.naturalWidth) {
+            // Fallback to nearest loaded frame
+            for (let delta = 1; delta < TOTAL_FRAMES; delta++) {
+                const before = imagesRef.current[frameIndex - delta];
+                if (before?.complete && before.naturalWidth) { img = before; break; }
+                const after = imagesRef.current[frameIndex + delta];
+                if (after?.complete && after.naturalWidth) { img = after; break; }
             }
         }
-        if (!img || !img.complete || img.naturalWidth === 0) return;
+        if (!img?.complete || !img.naturalWidth) return;
 
-        const cw = canvas.width;
-        const ch = canvas.height;
-        const iw = img.naturalWidth;
-        const ih = img.naturalHeight;
-
-        const scale = Math.max(cw / iw, ch / ih);
-        const sw = cw / scale;
-        const sh = ch / scale;
-        const sx = (iw - sw) / 2;
-        const sy = (ih - sh) / 2;
-
-        ctx.drawImage(img, sx, sy, sw, sh, 0, 0, cw, ch);
         lastDrawnFrame.current = frameIndex;
+        const cw = canvas.width, ch = canvas.height;
+        const iw = img.naturalWidth, ih = img.naturalHeight;
+        const scale = Math.max(cw / iw, ch / ih);
+        const dw = iw * scale, dh = ih * scale;
+        ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
     }, []);
 
-    // Scroll listener to detect active scrolling
+    // Autoplay RAF loop
+    const prefersReduced = useReducedMotion();
     useEffect(() => {
-        let scrollTimer: ReturnType<typeof setTimeout>;
-        const handleScroll = () => {
+        if (prefersReduced) return;
+        let raf: number;
+        let lastTime = 0;
+        const FPS = 25;
+        const interval = 1000 / FPS;
+
+        function loop(time: number) {
+            raf = requestAnimationFrame(loop);
+            if (isScrolling.current) return;
+            if (time - lastTime < interval) return;
+            lastTime = time;
+            const next = (autoPlayFrame.current + 1) % TOTAL_FRAMES;
+            autoPlayFrame.current = next;
+            drawFrame(next);
+        }
+        raf = requestAnimationFrame(loop);
+        return () => cancelAnimationFrame(raf);
+    }, [drawFrame, prefersReduced]);
+
+    // Scroll tracking — pause autoplay while user is scrolling
+    useEffect(() => {
+        let timeout: ReturnType<typeof setTimeout>;
+        function onScroll() {
             isScrolling.current = true;
-            lastScrollTime.current = Date.now();
-            clearTimeout(scrollTimer);
-            scrollTimer = setTimeout(() => {
-                isScrolling.current = false;
-            }, 300);
-        };
-        window.addEventListener("scroll", handleScroll, { passive: true });
+            clearTimeout(timeout);
+            timeout = setTimeout(() => { isScrolling.current = false; }, 200);
+        }
+        window.addEventListener("scroll", onScroll, { passive: true });
         return () => {
-            clearTimeout(scrollTimer);
-            window.removeEventListener("scroll", handleScroll);
+            clearTimeout(timeout);
+            window.removeEventListener("scroll", onScroll);
         };
     }, []);
 
-    // Continuous Autoplay RAF loop (~25 FPS) when standing still
+    // Preload images in batches
     useEffect(() => {
-        let rafId: number;
-        let lastTimestamp = 0;
-        const frameInterval = 1000 / 25; // 25 FPS video playback
-
-        const loop = (timestamp: number) => {
-            if (!lastTimestamp) lastTimestamp = timestamp;
-            const elapsed = timestamp - lastTimestamp;
-
-            if (!isScrolling.current && elapsed >= frameInterval) {
-                lastTimestamp = timestamp;
-                autoPlayFrame.current = (autoPlayFrame.current + 1) % TOTAL_FRAMES;
-                drawFrame(autoPlayFrame.current);
-            }
-
-            rafId = requestAnimationFrame(loop);
-        };
-
-        rafId = requestAnimationFrame(loop);
-        return () => cancelAnimationFrame(rafId);
-    }, [drawFrame]);
-
-    // Preload all 240 frames eagerly
-    useEffect(() => {
-        let mounted = true;
         const images = imagesRef.current;
+        let mounted = true;
 
-        for (let i = 0; i < TOTAL_FRAMES; i++) {
+        // First batch (critical — loads first 50 frames immediately)
+        for (let i = 0; i < FIRST_BATCH && i < TOTAL_FRAMES; i++) {
             const img = new Image();
-            img.decoding = "async";
             img.src = getFramePath(i);
             img.onload = () => {
                 if (mounted) {
@@ -204,12 +179,27 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }
             };
         }
 
+        // Remaining frames after first batch
+        const timer = setTimeout(() => {
+            for (let i = FIRST_BATCH; i < TOTAL_FRAMES; i++) {
+                const img = new Image();
+                img.src = getFramePath(i);
+                img.onload = () => {
+                    if (mounted) {
+                        images[i] = img;
+                        if (i === 0) drawFrame(0);
+                    }
+                };
+            }
+        }, 500);
+
         return () => {
             mounted = false;
+            clearTimeout(timer);
         };
     }, [drawFrame]);
 
-    // Handle canvas resize
+    // Handle canvas resize — runs on client only, fixing hydration
     useEffect(() => {
         let timeout: ReturnType<typeof setTimeout>;
         function handleResize() {
@@ -221,11 +211,10 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }
                 });
             }, 100);
         }
-        requestAnimationFrame(() => {
-            setCanvasSize({
-                width: window.innerWidth,
-                height: window.innerHeight
-            });
+        // Set correct size on mount
+        setCanvasSize({
+            width: window.innerWidth,
+            height: window.innerHeight
         });
         window.addEventListener("resize", handleResize, { passive: true });
         return () => {
@@ -242,8 +231,8 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }
         }
     }, [canvasSize, drawFrame]);
 
-    // Scroll-driven frame transform when scrolling
-    const frameIndex = useTransform(scrollProgress, [0, 1], [0, TOTAL_FRAMES - 1], { clamp: true });
+    // Scroll-driven frame transform (First 80% of scroll for 240 frames)
+    const frameIndex = useTransform(scrollProgress, [0, 0.8], [0, TOTAL_FRAMES - 1], { clamp: true });
 
     useMotionValueEvent(frameIndex, "change", (latest) => {
         if (isScrolling.current) {
@@ -267,10 +256,9 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }
 function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
     const [isContactOpen, setIsContactOpen] = useState(false);
 
-    // Hero Section Overlay (1327 DESIGNED FOR THE BOLD): Stays 100% visible on screen
-    // while locked, and unpins smoothly as user scrolls down into Manifesto
-    const opacityHero = useTransform(scrollProgress, [0, 0.85, 1.0], [1, 1, 0]);
-    const yHero = useTransform(scrollProgress, [0, 0.85, 1.0], [0, 0, -30]);
+    // Hero text stays visible while in viewport, fades out as hero scrolls away (last 20%)
+    const opacityHero = useTransform(scrollProgress, [0, 0.6, 1.0], [1, 1, 0]);
+    const yHero = useTransform(scrollProgress, [0, 0.6, 1.0], [0, 0, -60]);
     const pointerEventsHero = useTransform(scrollProgress, (latest: number) => latest > 0.9 ? "none" : "auto");
 
     const handleScrollToNext = () => {
