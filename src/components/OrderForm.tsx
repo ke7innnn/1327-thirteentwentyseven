@@ -40,27 +40,28 @@ export default function OrderForm() {
         setOrderId(generatedId);
 
         try {
-            // FormSubmit.co — Direct live endpoint targeting 1327thecommunity@gmail.com
-            await fetch("https://formsubmit.co/ajax/1327thecommunity@gmail.com", {
+            // Submit through Next.js Server API route (/api/order) — bypasses browser adblockers & CORS blocks
+            const res = await fetch("/api/order", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Accept: "application/json",
                 },
                 body: JSON.stringify({
-                    _subject: `🛒 NEW 1327 APPAREL ORDER #${generatedId} - ${firstName} ${lastName}`,
-                    _template: "table",
-                    _captcha: "false",
-                    "Order Ref": `#${generatedId}`,
-                    "Customer Name": `${firstName} ${lastName}`,
-                    "Email": email,
-                    "Mobile Number": mobile,
-                    "Selected Size": `${selectedSize} (Regular Fit)`,
-                    "Shipping Address": address,
+                    firstName,
+                    lastName,
+                    email,
+                    mobile,
+                    address,
+                    selectedSize,
+                    orderId: generatedId,
                 }),
             });
+
+            if (!res.ok) {
+                console.warn("Server API returned status:", res.status);
+            }
         } catch (err) {
-            console.log("Email dispatch log:", err);
+            console.error("Order dispatch error:", err);
         }
 
         setStatus("success");
