@@ -28,8 +28,8 @@ export default function Mission() {
 
     return (
         <div id="mission" className="relative w-full z-10">
-            {/* Smooth Hero sequence container with 250vh sticky scroll pin length */}
-            <div ref={heroRef} className="relative w-full h-[250vh]">
+            {/* Smooth Hero sequence container with tight 140vh sticky scroll pin length */}
+            <div ref={heroRef} className="relative w-full h-[140vh] sm:h-[150vh]">
                 <section className="sticky top-0 w-full h-screen overflow-hidden">
                     {/* Instant fallback frame 1 for 0ms initial render before JS canvas hydratation */}
                     <NextImage
@@ -45,9 +45,6 @@ export default function Mission() {
                     <FrameCanvas scrollProgress={scrollYProgress} />
                     {/* Dark overlay for text readability */}
                     <div className="absolute inset-0 bg-black/40 z-[2]" />
-
-                    {/* Bottom gradient mask — blends green video frame background to 100% pitch black */}
-                    <div className="absolute bottom-0 left-0 right-0 h-48 sm:h-64 bg-gradient-to-t from-[#105233] via-[#105233]/95 to-transparent z-[5] pointer-events-none" />
 
                     <HeroContent scrollProgress={scrollYProgress} />
                 </section>
@@ -261,9 +258,9 @@ function HeroContent({ scrollProgress }: { scrollProgress: MotionValue<number> }
 
     // Hero Section Overlay (1327 DESIGNED FOR THE BOLD): Stays 100% visible on screen
     // while locked, and unpins smoothly as user scrolls down into Manifesto
-    const opacityHero = useTransform(scrollProgress, [0, 0.7, 1.0], [1, 1, 0]);
-    const yHero = useTransform(scrollProgress, [0, 0.7, 1.0], [0, 0, -40]);
-    const pointerEventsHero = useTransform(scrollProgress, (latest: number) => latest > 0.8 ? "none" : "auto");
+    const opacityHero = useTransform(scrollProgress, [0, 0.85, 1.0], [1, 1, 0]);
+    const yHero = useTransform(scrollProgress, [0, 0.85, 1.0], [0, 0, -30]);
+    const pointerEventsHero = useTransform(scrollProgress, (latest: number) => latest > 0.9 ? "none" : "auto");
 
     const handleScrollToNext = () => {
         const nextSec = document.getElementById("manifesto");
