@@ -97,7 +97,14 @@ export default function Footer() {
                             transition={{ duration: 0.9, delay: 0.3, ease: "easeOut" }}
                             className="hidden sm:block absolute -top-2 left-1/2 -translate-x-1/2 md:-translate-x-3/4 w-64 md:w-80 h-24 z-40 pointer-events-none -rotate-6"
                         >
-                            <KeithShahSignature className="w-full h-full text-[#F7F5F0]" />
+                            <div className="relative w-full h-full">
+                                <Image
+                                    src="/sign/sign-white.webp"
+                                    alt="1327 Founders Real Signature"
+                                    fill
+                                    className="object-contain"
+                                />
+                            </div>
                         </motion.div>
 
                         <h2 className="font-heading font-black uppercase text-center leading-[0.82] tracking-[-0.02em] text-[#F7F5F0]">
@@ -205,6 +212,24 @@ export default function Footer() {
                                 </div>
                             </div>
                         </div>
+
+                        {/* ─── LAYER 00: REAL FOUNDERS SIGNATURE WATERMARK BACKGROUND ──────────────── */}
+                        <motion.div
+                            initial={reduced ? false : { opacity: 0, scale: 0.9 }}
+                            whileInView={{ opacity: 0.25, scale: 1 }}
+                            viewport={{ once: true, margin: "-10% 0px" }}
+                            transition={{ duration: 0.8, ease: "easeOut" }}
+                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 w-[85vw] md:w-[680px] h-[220px] pointer-events-none select-none"
+                            aria-hidden="true"
+                        >
+                            <Image
+                                src="/sign/sign-white.webp"
+                                alt="1327 Founders Signature"
+                                fill
+                                className="object-contain"
+                                priority={false}
+                            />
+                        </motion.div>
 
                         {/* ─── LAYER 20: CUT-OUT HOODIE FIGURE (DEAD CENTRE) ───────────── */}
                         <motion.div

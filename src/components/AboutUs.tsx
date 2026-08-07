@@ -321,15 +321,21 @@ export default function AboutUs() {
                             })}
                         </ol>
 
-                        {/* Bottom-Left Quadrant: Keith Shah Founder Signature & Atelier Creed */}
+                        {/* Bottom-Left Quadrant: Founders Real Signature & Atelier Creed */}
                         <div className="flex flex-col items-center text-center gap-2 pt-4 border-t border-[#EDEBE3]/15 w-full max-w-sm">
-                            {/* Keith Shah Signature Vector in #4FB47E Green */}
-                            <div className="w-44 sm:w-52 h-12 relative opacity-90">
-                                <KeithShahSignatureGreen className="w-full h-full" />
+                            {/* 1327 Founders Real Signature Image */}
+                            <div className="w-52 sm:w-60 h-16 relative my-1">
+                                <Image
+                                    src="/sign/sign-green.webp"
+                                    alt="1327 Founders Signature"
+                                    fill
+                                    className="object-contain"
+                                    priority
+                                />
                             </div>
 
                             <span className="font-mono text-xs uppercase tracking-[0.25em] text-[#4FB47E] font-bold">
-                                KEITH SHAH — FOUNDER
+                                FOUNDERS — 1327 ATELIER
                             </span>
 
                             {/* Founder Creed Statement */}
