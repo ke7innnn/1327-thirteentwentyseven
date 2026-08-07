@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, Info, ShieldCheck, Ruler, ArrowRight, X, MessageSquare, Truck, Package, Shirt, Tag, Layers, ZoomIn } from "lucide-react";
+import { CheckCircle2, Info, ShieldCheck, Ruler, ArrowRight, ArrowLeft, X, MessageSquare, Truck, Package, Shirt, Tag, Layers, ZoomIn } from "lucide-react";
 import SectionMarker from "./ui/SectionMarker";
 
 const SIZE_CHART_DATA = [
@@ -91,11 +92,21 @@ export default function OrderForm() {
             <div className="max-w-7xl mx-auto px-6 sm:px-12 relative z-10">
                 {/* ─── SECTION TITLE ─────────────────────────────────────────────── */}
                 <div className="flex flex-col items-start gap-4 mb-12 border-b border-[#F7F5F0]/15 pb-8">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#105233] text-white">
-                        <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-                        <span className="font-mono text-xs font-bold uppercase tracking-[0.2em]">
-                            &#123; 1327 ORDER FORM &#125;
-                        </span>
+                    <div className="flex flex-wrap items-center justify-between w-full gap-4">
+                        <Link
+                            href="/"
+                            className="inline-flex items-center gap-2 font-mono text-xs font-bold tracking-[0.2em] uppercase text-[#1EA86E] hover:text-white transition-colors group"
+                        >
+                            <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+                            <span>BACK TO HOME</span>
+                        </Link>
+
+                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#105233] text-white">
+                            <span className="w-2 h-2 rounded-full bg-[#1EA86E] animate-pulse" />
+                            <span className="font-mono text-xs font-bold uppercase tracking-[0.2em]">
+                                &#123; 1327 ORDER FORM &#125;
+                            </span>
+                        </div>
                     </div>
                     <h2
                         id="order-headline"
