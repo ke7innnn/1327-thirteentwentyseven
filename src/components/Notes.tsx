@@ -13,7 +13,7 @@ export default function Notes() {
                 <div
                     className="absolute inset-0 bg-repeat"
                     style={{
-                        backgroundImage: "url('/bg/clothing_fabric_bg.png')",
+                        backgroundImage: "url('/bg/clothing_fabric_bg.webp')",
                         backgroundSize: "450px 450px",
                     }}
                 />

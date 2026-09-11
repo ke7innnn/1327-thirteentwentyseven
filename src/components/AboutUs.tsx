@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useReducedMotion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -29,28 +29,28 @@ const VALUES_DATA = [
         num: "01",
         title: "COMMUNITY",
         slug: "community",
-        image: "/clients/client-1.png",
+        image: "/clients/client-1.webp",
         alt: "Bisou Bisou crew wearing custom 1327 apparel",
     },
     {
         num: "02",
         title: "TRUST",
         slug: "trust",
-        image: "/clients/client-2.png",
+        image: "/clients/client-2.webp",
         alt: "What's The Rush team in custom 1327 uniforms",
     },
     {
         num: "03",
         title: "RESPECT",
         slug: "respect",
-        image: "/clients/client-3.jpeg",
+        image: "/clients/client-3.webp",
         alt: "Masa Bakery staff in custom 1327 embroidered apparel",
     },
     {
         num: "04",
         title: "LOYALTY",
         slug: "loyalty",
-        image: "/clients/client-4.jpeg",
+        image: "/clients/client-4.webp",
         alt: "Croissant Café team in custom 1327 polo t-shirts",
     },
 ];
@@ -111,7 +111,10 @@ function InteractiveImageCard({
     yParallax: any;
 }) {
     const cardRef = useRef<HTMLAnchorElement>(null);
-    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+    const springX = useSpring(mouseX, { stiffness: 200, damping: 20 });
+    const springY = useSpring(mouseY, { stiffness: 200, damping: 20 });
     const [isHovered, setIsHovered] = useState(false);
 
     const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -119,7 +122,8 @@ function InteractiveImageCard({
         const rect = cardRef.current.getBoundingClientRect();
         const x = (e.clientX - rect.left) / rect.width - 0.5;
         const y = (e.clientY - rect.top) / rect.height - 0.5;
-        setMousePos({ x, y });
+        mouseX.set(x * 24);
+        mouseY.set(y * 24);
     };
 
     const handleMouseEnter = () => {
@@ -129,7 +133,8 @@ function InteractiveImageCard({
 
     const handleMouseLeave = () => {
         setIsHovered(false);
-        setMousePos({ x: 0, y: 0 });
+        mouseX.set(0);
+        mouseY.set(0);
     };
 
     return (
@@ -158,9 +163,11 @@ function InteractiveImageCard({
                 >
                     <motion.div
                         className="w-full h-full relative"
+                        style={{
+                            x: springX,
+                            y: springY,
+                        }}
                         animate={{
-                            x: isHovered ? mousePos.x * 24 : 0,
-                            y: isHovered ? mousePos.y * 24 : 0,
                             scale: isActive || isHovered ? 1.12 : 1,
                         }}
                         transition={{ type: "spring", stiffness: 200, damping: 20 }}

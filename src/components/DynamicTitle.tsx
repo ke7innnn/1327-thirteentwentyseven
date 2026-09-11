@@ -4,18 +4,17 @@ import { useEffect } from "react";
 
 export default function DynamicTitle() {
     useEffect(() => {
-        const originalTitle = "1327";
-        const altTitle = "🔥 Don't forget to reach out";
-        let isOriginal = true;
+        const originalTitle = "1327 — Custom T-Shirts & Uniforms | Mumbai";
+        const altTitle = "🔥 Don't forget to reach out — 1327";
 
-        const intervalId = setInterval(() => {
-            document.title = isOriginal ? altTitle : originalTitle;
-            isOriginal = !isOriginal;
-        }, 2000);
+        const handleVisibilityChange = () => {
+            document.title = document.hidden ? altTitle : originalTitle;
+        };
 
+        document.addEventListener("visibilitychange", handleVisibilityChange);
         return () => {
-            clearInterval(intervalId);
-            document.title = originalTitle; // Restore on unmount
+            document.removeEventListener("visibilitychange", handleVisibilityChange);
+            document.title = originalTitle;
         };
     }, []);
 

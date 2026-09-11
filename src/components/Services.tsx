@@ -56,7 +56,7 @@ const FAMILIES: Family[] = [
                 spec: "240–270 GSM",
                 moqNum: "50",
                 copy: "Heavyweight, drop-shoulder blanks that hold their shape wash after wash. Built to carry print and embroidery — and to get borrowed, not returned.",
-                image: "/servicepics/newovwersized.jpg",
+                image: "/servicepics/newovwersized.webp",
                 caption: "1327 — SAMPLE SWATCH",
                 specStrip: [
                     { label: "Weight", value: "240–270 GSM" },
@@ -72,7 +72,7 @@ const FAMILIES: Family[] = [
                 spec: "140–180 GSM",
                 moqNum: "50",
                 copy: "Clean, lightweight staples for full-crew rollouts — easy to wear, easy to scale, sharp in any colourway.",
-                image: "/servicepics/straightfit.png",
+                image: "/servicepics/straightfit.webp",
                 caption: "1327 — SAMPLE SWATCH",
                 specStrip: [
                     { label: "Weight", value: "140–180 GSM" },
@@ -87,7 +87,7 @@ const FAMILIES: Family[] = [
                 spec: "190–200 GSM",
                 moqNum: "50",
                 copy: "Crisp piqué polos for front-of-house teams — collar-sharp, breathable and comfortable through the longest shifts.",
-                image: "/servicepics/newpolo.png",
+                image: "/servicepics/newpolo.webp",
                 caption: "1327 — SAMPLE SWATCH",
                 specStrip: [
                     { label: "Weight", value: "190–200 GSM" },
@@ -102,7 +102,7 @@ const FAMILIES: Family[] = [
                 spec: "320–380 GSM",
                 moqNum: "50",
                 copy: "Thick-weight fleece hoodies built to last. Screen-printed or embroidered — made for the ones who stay late and show up early.",
-                image: "/servicepics/hoodie.png",
+                image: "/servicepics/hoodie.webp",
                 caption: "1327 — HEAVYWEIGHT HOODIE",
                 specStrip: [
                     { label: "Weight", value: "320–380 GSM" },
@@ -123,7 +123,7 @@ const FAMILIES: Family[] = [
                 spec: "Custom Embroidery",
                 moqNum: "30",
                 copy: "Full, half and vest cuts for real kitchens — finished with your mark in tight, dense stitchwork that survives every service.",
-                image: "/servicepics/apron-full.jpg",
+                image: "/servicepics/apron-full.webp",
                 caption: "BISOU BISOU — FULL APRON",
                 specStrip: [
                     { label: "Cut Type", value: "Full Bib Cut" },
@@ -136,7 +136,7 @@ const FAMILIES: Family[] = [
                         id: "full",
                         label: "Full Apron",
                         spec: "FULL BIB CUT",
-                        image: "/servicepics/apron-full.jpg",
+                        image: "/servicepics/apron-full.webp",
                         caption: "BISOU BISOU — FULL APRON",
                         specStrip: [
                             { label: "Cut Type", value: "Full Bib Cut" },
@@ -149,7 +149,7 @@ const FAMILIES: Family[] = [
                         id: "half",
                         label: "Half Apron",
                         spec: "WAIST WRAP",
-                        image: "/servicepics/apron-half.jpg",
+                        image: "/servicepics/apron-half.webp",
                         caption: "CAFÉ 578 — HALF APRON",
                         specStrip: [
                             { label: "Cut Type", value: "Half / Waist Wrap" },
@@ -162,7 +162,7 @@ const FAMILIES: Family[] = [
                         id: "vest",
                         label: "Vest Apron",
                         spec: "VEST CUT",
-                        image: "/servicepics/apron-vest.jpg",
+                        image: "/servicepics/apron-vest.webp",
                         caption: "BENNE — VEST APRON",
                         specStrip: [
                             { label: "Cut Type", value: "Vest Apron" },
@@ -179,7 +179,7 @@ const FAMILIES: Family[] = [
                 spec: "Custom Cut",
                 moqNum: "100",
                 copy: "Bottom wear built for crews on their feet — cut to your spec, stitched to last, no off-the-shelf compromises.",
-                image: "/servicepics/straightfit.png",
+                image: "/servicepics/straightfit.webp",
                 caption: "1327 — SAMPLE SWATCH",
                 specStrip: [
                     { label: "Technique", value: "Custom Cut & Sew" },
@@ -198,7 +198,7 @@ const FAMILIES: Family[] = [
                 spec: "3D Embroidery",
                 moqNum: "30",
                 copy: "Structured or unstructured, snapback or fitted. The brand goes on the front; the quality goes into how it sits.",
-                image: "/servicepics/newcap.png",
+                image: "/servicepics/newcap.webp",
                 caption: "1327 — SAMPLE SWATCH",
                 specStrip: [
                     { label: "Style", value: "Structured · Unstructured" },
@@ -212,7 +212,7 @@ const FAMILIES: Family[] = [
                 spec: "Canvas Print",
                 moqNum: "50",
                 copy: "Natural canvas tote bags. Screen-printed flat or all-over in any colourway — they carry your brand everywhere they go.",
-                image: "/servicepics/totebag.png",
+                image: "/servicepics/totebag.webp",
                 caption: "1327 — SAMPLE SWATCH",
                 specStrip: [
                     { label: "Material", value: "Natural Canvas" },
@@ -226,7 +226,7 @@ const FAMILIES: Family[] = [
                 spec: "Custom Emboss",
                 moqNum: "25",
                 copy: "Plant-based leather hospitality accessories — placemats, cutlery pouches, coasters, bill folders and menu covers. Debossed, embossed or foil-stamped with your mark.",
-                image: "/servicepics/veganleather-main.jpg",
+                image: "/servicepics/veganleather-main.webp",
                 caption: "SMERA — TABLEWARE SET",
                 specStrip: [
                     { label: "Material", value: "Plant-Based Leather" },
@@ -236,7 +236,7 @@ const FAMILIES: Family[] = [
                 ],
                 gallery: [
                     {
-                        image: "/servicepics/veganleather-main.jpg",
+                        image: "/servicepics/veganleather-main.webp",
                         caption: "SMERA — TABLEWARE & COASTER SET",
                         spec: "TABLEWARE SET",
                         specStrip: [
@@ -247,7 +247,7 @@ const FAMILIES: Family[] = [
                         ],
                     },
                     {
-                        image: "/servicepics/veganleather-pouches.jpg",
+                        image: "/servicepics/veganleather-pouches.webp",
                         caption: "PISCO / MONSERRY — CUTLERY POUCHES",
                         spec: "CUTLERY POUCH",
                         specStrip: [
@@ -258,7 +258,7 @@ const FAMILIES: Family[] = [
                         ],
                     },
                     {
-                        image: "/servicepics/veganleather-coasters.jpg",
+                        image: "/servicepics/veganleather-coasters.webp",
                         caption: "BEVERAGE COASTER SETS — MULTI-COLOUR",
                         spec: "COASTER SETS",
                         specStrip: [
@@ -269,7 +269,7 @@ const FAMILIES: Family[] = [
                         ],
                     },
                     {
-                        image: "/servicepics/veganleather-sleeves.jpg",
+                        image: "/servicepics/veganleather-sleeves.webp",
                         caption: "DINING BILL & MENU HOLDERS",
                         spec: "BILL FOLDERS",
                         specStrip: [
@@ -280,7 +280,7 @@ const FAMILIES: Family[] = [
                         ],
                     },
                     {
-                        image: "/servicepics/veganleather-placemats.jpg",
+                        image: "/servicepics/veganleather-placemats.webp",
                         caption: "ROUND PLACEMAT & CUTLERY HOLDER",
                         spec: "PLACEMAT SET",
                         specStrip: [

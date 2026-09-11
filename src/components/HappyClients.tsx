@@ -7,13 +7,13 @@ import BrandCarousel from "./BrandCarousel";
 import SectionMarker from "./ui/SectionMarker";
 
 const clients = [
-    { src: "/clients/client-1.png", title: "Bisou Bisou — Bakery & Café", alt: "Happy client wearing custom 1327 branded t-shirt", tag: "Custom Crew Apparel · Embroidery" },
-    { src: "/clients/client-2.png", title: "What's The Rush — Custom Rollout", alt: "Business team in custom uniforms by 1327 Mumbai", tag: "Heavyweight Printed Blanks" },
-    { src: "/clients/client-3.jpeg", title: "Masa Bakery — Custom Apparel", alt: "Restaurant staff in custom 1327 embroidered aprons", tag: "Heavyweight Oversized T-Shirts" },
-    { src: "/clients/client-4.jpeg", title: "Croissant Café — Front-of-House", alt: "Client showcasing custom polo t-shirts by 1327", tag: "Custom Embroidered Caps" },
-    { src: "/clients/client-5.jpeg", title: "The Bandstand Pantry — Crew Uniforms", alt: "Corporate team wearing custom 1327 uniforms Mumbai", tag: "Team Hoodies & Sweatshirts" },
-    { src: "/clients/client-6.jpeg", title: "Subko Coffee — Store Rollout", alt: "Custom branded caps by 1327 Thirteen Twenty Seven", tag: "Embroidered Staff Uniforms" },
-    { src: "/clients/client-7.jpeg", title: "Monstery — Hospitality Merch", alt: "Happy customer with custom apparel from 1327 Malad", tag: "Custom Merchandise & Leatherette" },
+    { src: "/clients/client-1.webp", title: "Bisou Bisou — Bakery & Café", alt: "Happy client wearing custom 1327 branded t-shirt", tag: "Custom Crew Apparel · Embroidery" },
+    { src: "/clients/client-2.webp", title: "What's The Rush — Custom Rollout", alt: "Business team in custom uniforms by 1327 Mumbai", tag: "Heavyweight Printed Blanks" },
+    { src: "/clients/client-3.webp", title: "Masa Bakery — Custom Apparel", alt: "Restaurant staff in custom 1327 embroidered aprons", tag: "Heavyweight Oversized T-Shirts" },
+    { src: "/clients/client-4.webp", title: "Croissant Café — Front-of-House", alt: "Client showcasing custom polo t-shirts by 1327", tag: "Custom Embroidered Caps" },
+    { src: "/clients/client-5.webp", title: "The Bandstand Pantry — Crew Uniforms", alt: "Corporate team wearing custom 1327 uniforms Mumbai", tag: "Team Hoodies & Sweatshirts" },
+    { src: "/clients/client-6.webp", title: "Subko Coffee — Store Rollout", alt: "Custom branded caps by 1327 Thirteen Twenty Seven", tag: "Embroidered Staff Uniforms" },
+    { src: "/clients/client-7.webp", title: "Monstery — Hospitality Merch", alt: "Happy customer with custom apparel from 1327 Malad", tag: "Custom Merchandise & Leatherette" },
 ];
 
 export default function HappyClients() {
@@ -49,7 +49,7 @@ export default function HappyClients() {
                 <div
                     className="absolute inset-0 opacity-[0.25] mix-blend-multiply bg-repeat"
                     style={{
-                        backgroundImage: "url('/bg/clothing_fabric_bg.png')",
+                        backgroundImage: "url('/bg/clothing_fabric_bg.webp')",
                         backgroundSize: "400px 400px",
                     }}
                 />

@@ -10,17 +10,17 @@ const WHATSAPP_FOOTER_URL =
     "https://wa.me/919819001327?text=Hi%201327%2C%20I%27m%20looking%20to%20place%20an%20order%20for%20custom%20uniforms.";
 
 const CLIENT_LOGOS = [
-    { name: "Berlin Brew", src: "/client logo/BERLIN BREW LOGO-1.png" },
-    { name: "East", src: "/client logo/east.png" },
-    { name: "Home", src: "/client logo/home.png" },
-    { name: "Katha", src: "/client logo/katha.png" },
-    { name: "Magari", src: "/client logo/magari.png" },
-    { name: "Nana", src: "/client logo/nana.png" },
-    { name: "Unscripted", src: "/client logo/unscripted.png" },
-    { name: "Benne", src: "/client logo/benne.png" },
-    { name: "Jaago", src: "/client logo/jaago.png" },
-    { name: "Nadda", src: "/client logo/nadda.png" },
-    { name: "Tiger", src: "/client logo/tiger.png" },
+    { name: "Berlin Brew", src: "/client logo/BERLIN BREW LOGO-1.webp" },
+    { name: "East", src: "/client logo/east.webp" },
+    { name: "Home", src: "/client logo/home.webp" },
+    { name: "Katha", src: "/client logo/katha.webp" },
+    { name: "Magari", src: "/client logo/magari.webp" },
+    { name: "Nana", src: "/client logo/nana.webp" },
+    { name: "Unscripted", src: "/client logo/unscripted.webp" },
+    { name: "Benne", src: "/client logo/benne.webp" },
+    { name: "Jaago", src: "/client logo/jaago.webp" },
+    { name: "Nadda", src: "/client logo/nadda.webp" },
+    { name: "Tiger", src: "/client logo/tiger.webp" },
 ];
 
 const PAGES_LINKS = [
@@ -228,7 +228,7 @@ export default function Footer() {
                             aria-hidden="true"
                         >
                             <Image
-                                src="/footer/hooded_figure.png"
+                                src="/footer/hooded_figure.webp"
                                 alt=""
                                 fill
                                 sizes="(max-width: 1024px) 70vw, 34vw"
@@ -306,7 +306,7 @@ export default function Footer() {
                             rel="noopener noreferrer"
                             className="group relative w-full sm:w-[300px] h-[60px] sm:h-[64px] bg-[#F7F5F0] text-[#105233] font-mono text-xs sm:text-sm font-bold uppercase tracking-[0.2em] rounded-none flex items-center justify-center gap-2 border border-[#F7F5F0] transition-all duration-200 ease-out hover:bg-[#105233] hover:text-[#F7F5F0] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F7F5F0] focus-visible:ring-offset-2 focus-visible:ring-offset-[#105233]"
                         >
-                            <span>START AN ORDER</span>
+                            <span>GET A QUOTE</span>
                             <span className="transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-1">
                                 ↗
                             </span>

@@ -16,7 +16,7 @@ const FIRST_BATCH = 50;
 
 function getFramePath(index: number): string {
     const num = String(index + 1).padStart(3, "0");
-    return `/sequence/ezgif-frame-${num}.jpg`;
+    return `/sequence/ezgif-frame-${num}.webp`;
 }
 
 export default function Mission() {
@@ -41,7 +41,7 @@ export default function Mission() {
             >
                 {/* Instant fallback frame 1 for 0ms initial render before JS canvas hydration */}
                 <NextImage
-                    src="/sequence/ezgif-frame-001.jpg"
+                    src="/sequence/ezgif-frame-001.webp"
                     alt="1327 Hero Frame 1"
                     fill
                     priority
@@ -59,32 +59,6 @@ export default function Mission() {
 
                 <HeroContent scrollProgress={scrollYProgress} />
             </motion.div>
-
-            {/* ─── PLACE ORDER CTA BANNER — solid bg slides over the fixed hero ───── */}
-            <div className="relative z-30 w-full bg-[#105233] border-y border-[#1EA86E]/40 py-6 sm:py-8 px-6 sm:px-12 shadow-2xl">
-                <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-5 text-center md:text-left">
-                    <div className="flex flex-col gap-1">
-                        <span className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-[#1EA86E] flex items-center justify-center md:justify-start gap-2">
-                            <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-                            1327 OFFICIAL APPAREL ORDER
-                        </span>
-                        <h3 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl uppercase tracking-tight text-white">
-                            READY TO ORDER YOUR CUSTOM CREW GEAR?
-                        </h3>
-                    </div>
-                    <Link
-                        href="/order"
-                        className="group relative inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-4 bg-[#F2F9F4] text-[#105233] font-heading font-bold text-sm sm:text-base uppercase tracking-wider overflow-hidden shadow-xl hover:bg-black hover:text-white transition-all duration-300 transform active:scale-95 shrink-0 w-full md:w-auto"
-                    >
-                        <span className="relative z-10 flex items-center gap-3">
-                            <span>PLACE YOUR ORDER NOW</span>
-                            <span className="flex items-center justify-center w-7 h-7 rounded-full bg-[#105233] text-white group-hover:bg-white group-hover:text-[#105233] transition-all duration-300">
-                                ↗
-                            </span>
-                        </span>
-                    </Link>
-                </div>
-            </div>
 
             {/* z-30 wrapper — covers fixed hero; each section has its own bg */}
             <div className="relative z-30">
@@ -137,7 +111,7 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }
         ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
     }, []);
 
-    // Autoplay RAF loop
+    // Autoplay RAF loop — only runs when user is at the very top and idle
     const prefersReduced = useReducedMotion();
     useEffect(() => {
         if (prefersReduced) return;
@@ -148,7 +122,8 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }
 
         function loop(time: number) {
             raf = requestAnimationFrame(loop);
-            if (isScrolling.current) return;
+            // Skip autoplay if user has scrolled or is actively scrolling
+            if (scrollProgress.get() > 0.01 || isScrolling.current) return;
             if (time - lastTime < interval) return;
             lastTime = time;
             const next = (autoPlayFrame.current + 1) % TOTAL_FRAMES;
@@ -157,7 +132,7 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }
         }
         raf = requestAnimationFrame(loop);
         return () => cancelAnimationFrame(raf);
-    }, [drawFrame, prefersReduced]);
+    }, [drawFrame, prefersReduced, scrollProgress]);
 
     // Scroll tracking — pause autoplay while user is scrolling
     useEffect(() => {
@@ -174,13 +149,14 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }
         };
     }, []);
 
-    // Preload images in batches
+    // Progressive Sliding-Window Frame Streaming
     useEffect(() => {
         const images = imagesRef.current;
         let mounted = true;
 
-        // First batch (critical — loads first 50 frames immediately)
-        for (let i = 0; i < FIRST_BATCH && i < TOTAL_FRAMES; i++) {
+        // Batch 0 (critical initial 15 frames loaded immediately)
+        const CRITICAL_COUNT = 15;
+        for (let i = 0; i < CRITICAL_COUNT && i < TOTAL_FRAMES; i++) {
             const img = new Image();
             img.src = getFramePath(i);
             img.onload = () => {
@@ -191,23 +167,31 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }
             };
         }
 
-        // Remaining frames after first batch
-        const timer = setTimeout(() => {
-            for (let i = FIRST_BATCH; i < TOTAL_FRAMES; i++) {
+        // Subsequent chunks loaded via small staggered intervals to keep network pipe smooth
+        const CHUNK_SIZE = 15;
+        let currentChunkStart = CRITICAL_COUNT;
+
+        const loadNextChunk = () => {
+            if (!mounted || currentChunkStart >= TOTAL_FRAMES) return;
+            const end = Math.min(currentChunkStart + CHUNK_SIZE, TOTAL_FRAMES);
+            for (let i = currentChunkStart; i < end; i++) {
                 const img = new Image();
                 img.src = getFramePath(i);
                 img.onload = () => {
-                    if (mounted) {
-                        images[i] = img;
-                        if (i === 0) drawFrame(0);
-                    }
+                    if (mounted) images[i] = img;
                 };
             }
-        }, 500);
+            currentChunkStart = end;
+            if (currentChunkStart < TOTAL_FRAMES) {
+                setTimeout(loadNextChunk, 80);
+            }
+        };
+
+        const initialTimer = setTimeout(loadNextChunk, 150);
 
         return () => {
             mounted = false;
-            clearTimeout(timer);
+            clearTimeout(initialTimer);
         };
     }, [drawFrame]);
 
@@ -247,11 +231,9 @@ function FrameCanvas({ scrollProgress }: { scrollProgress: MotionValue<number> }
     const frameIndex = useTransform(scrollProgress, [0, 0.9], [0, TOTAL_FRAMES - 1], { clamp: true });
 
     useMotionValueEvent(frameIndex, "change", (latest) => {
-        if (isScrolling.current) {
-            const index = Math.min(TOTAL_FRAMES - 1, Math.max(0, Math.round(latest)));
-            autoPlayFrame.current = index;
-            drawFrame(index);
-        }
+        const index = Math.min(TOTAL_FRAMES - 1, Math.max(0, Math.round(latest)));
+        autoPlayFrame.current = index;
+        drawFrame(index);
     });
 
     return (
@@ -360,7 +342,7 @@ function VideoWordIdentity({ reduced }: { reduced?: boolean }) {
     }, [reduced]);
 
     const frameNum = String(frameIndex).padStart(3, "0");
-    const framePath = `/sequence/ezgif-frame-${frameNum}.jpg`;
+    const framePath = `/sequence/ezgif-frame-${frameNum}.webp`;
 
     return (
         <span
@@ -488,7 +470,7 @@ function ManifestoSection() {
             <div
                 className="absolute inset-0 pointer-events-none opacity-[0.22] mix-blend-multiply bg-repeat z-0"
                 style={{
-                    backgroundImage: "url('/bg/clothing_fabric_bg.png')",
+                    backgroundImage: "url('/bg/clothing_fabric_bg.webp')",
                     backgroundSize: "450px 450px",
                 }}
             />

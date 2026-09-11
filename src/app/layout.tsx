@@ -280,7 +280,7 @@ export default function RootLayout({
     <html lang="en" className="dark" suppressHydrationWarning>
       <head>
         {/* Preload hero frame 1 for instant 0ms initial render */}
-        <link rel="preload" href="/sequence/ezgif-frame-001.jpg" as="image" fetchPriority="high" />
+        <link rel="preload" href="/sequence/ezgif-frame-001.webp" as="image" type="image/webp" fetchPriority="high" />
         {/* Preconnect to Google Fonts for faster loading */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

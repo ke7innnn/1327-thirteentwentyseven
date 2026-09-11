@@ -46,8 +46,8 @@ const STAGES: StageData[] = [
         title: "Artwork & Brief",
         body: "Send your logo, garment type and quantity. We come back with fabric options and a quote.",
         leadTime: "24–48 HRS",
-        image: "/feed/feed-04.jpg",
-        hoverImage: "/servicepics/veganleather-pouches.jpg",
+        image: "/feed/feed-04.webp",
+        hoverImage: "/servicepics/veganleather-pouches.webp",
         alt: "Workshop artwork proof and embroidery specification sample",
     },
     {
@@ -57,8 +57,8 @@ const STAGES: StageData[] = [
         title: "Sample & Approval",
         body: "We stitch a physical sample. You approve the fabric, the fit and the embroidery before anything scales.",
         leadTime: "3–5 DAYS",
-        image: "/feed/feed-02.jpg",
-        hoverImage: "/feed/feed-01.jpg",
+        image: "/feed/feed-02.webp",
+        hoverImage: "/feed/feed-01.webp",
         alt: "Single stitched sample cap with custom Devanagari embroidery",
     },
     {
@@ -68,8 +68,8 @@ const STAGES: StageData[] = [
         title: "Production",
         body: "Cut, print or embroider, finish, quality-check. Every piece carries a tag.",
         leadTime: "7–12 DAYS",
-        image: "/feed/feed-03.jpg",
-        hoverImage: "/servicepics/apron-full.jpg",
+        image: "/feed/feed-03.webp",
+        hoverImage: "/servicepics/apron-full.webp",
         alt: "Masa Bakery crew member in custom printed black back-graphic tee and cap",
     },
     {
@@ -79,8 +79,8 @@ const STAGES: StageData[] = [
         title: "Delivery",
         body: "Packed and delivered across Mumbai, or shipped anywhere in India.",
         leadTime: "2–4 DAYS",
-        image: "/feed/feed-05.jpg",
-        hoverImage: "/servicepics/veganleather-coasters.jpg",
+        image: "/feed/feed-05.webp",
+        hoverImage: "/servicepics/veganleather-coasters.webp",
         alt: "Packed and finished 1327 hospitality sets and apparel stock",
     },
 ];

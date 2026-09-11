@@ -40,7 +40,7 @@ const VALUES_DATA: Record<string, ValueDetail> = {
             { label: "MINIMUM ORDER", value: "30-50 Pcs Custom Rollout" },
             { label: "PARTNER CREWS", value: "Cafés, Kitchens & Studios" },
         ],
-        image: "/aboutus/about-3.png",
+        image: "/aboutus/about-3.webp",
         imageCaption: "THE WORKSHOP — MALAD WEST, MUMBAI",
         nextSlug: "trust",
         nextTitle: "02 TRUST",
@@ -64,7 +64,7 @@ const VALUES_DATA: Record<string, ValueDetail> = {
             { label: "EMBROIDERY", value: "Industrial High-Density Thread" },
             { label: "SHRINKAGE", value: "Pre-Shrunk & Fabric Washed" },
         ],
-        image: "/aboutus/about-2.png",
+        image: "/aboutus/about-2.webp",
         imageCaption: "MACRO STITCH & EMBROIDERY DETAIL",
         nextSlug: "respect",
         nextTitle: "03 RESPECT",
@@ -88,7 +88,7 @@ const VALUES_DATA: Record<string, ValueDetail> = {
             { label: "DURABILITY", value: "Tested for Heavy Wash Cycles" },
             { label: "PRODUCTION", value: "In-House Atelier Mumbai" },
         ],
-        image: "/aboutus/about-1.png",
+        image: "/aboutus/about-1.webp",
         imageCaption: "THE RANGE — SS/26 ATELIER SHOWCASE",
         nextSlug: "loyalty",
         nextTitle: "04 LOYALTY",
@@ -112,7 +112,7 @@ const VALUES_DATA: Record<string, ValueDetail> = {
             { label: "ARCHIVE", value: "Dedicated Pattern Storage" },
             { label: "SERVICE", value: "Direct Founder Consultation" },
         ],
-        image: "/aboutus/about-4.png",
+        image: "/aboutus/about-4.webp",
         imageCaption: "THE FIT — ON CREW SHOWCASE",
         nextSlug: "community",
         nextTitle: "01 COMMUNITY",
@@ -142,7 +142,7 @@ export default async function ValuePage({ params }: { params: Promise<{ slug: st
                 <div
                     className="absolute inset-0 opacity-[0.25] mix-blend-multiply bg-repeat"
                     style={{
-                        backgroundImage: "url('/bg/clothing_fabric_bg.png')",
+                        backgroundImage: "url('/bg/clothing_fabric_bg.webp')",
                         backgroundSize: "400px 400px",
                     }}
                 />

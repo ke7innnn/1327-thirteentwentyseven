@@ -105,7 +105,7 @@ export default function OrderForm() {
             <div
                 className="absolute inset-0 pointer-events-none opacity-[0.2] mix-blend-multiply bg-repeat z-0"
                 style={{
-                    backgroundImage: "url('/bg/clothing_fabric_bg.png')",
+                    backgroundImage: "url('/bg/clothing_fabric_bg.webp')",
                     backgroundSize: "400px 400px",
                 }}
             />

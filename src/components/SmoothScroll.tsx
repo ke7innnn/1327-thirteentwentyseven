@@ -27,10 +27,12 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
         <ReactLenis
             root
             options={{
-                lerp: isLowEndDevice ? 0.18 : 0.12, // Snappier response on low-spec PCs to avoid lag
+                lerp: 0.1,
+                duration: 1.0,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
                 smoothWheel: true,
                 wheelMultiplier: 1.0,
-                touchMultiplier: 1.2,
+                touchMultiplier: 1.0,
                 infinite: false,
             }}
         >
